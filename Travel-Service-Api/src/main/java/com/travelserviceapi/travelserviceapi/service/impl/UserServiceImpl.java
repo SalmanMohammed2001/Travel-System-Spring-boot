@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
             User user = mapper.map(userDto, User.class);
             exportImages(userDto, user);
             Contact contact = new Contact(user.getUserContact().getContact1(),user.getUserContact().getContact2());
-            int i = userRepo.updateUser(
+            userRepo.updateUser(
                     user.getUsername(),
                     user.getUserPassword(),
                     user.getUserAddress(),
@@ -100,6 +100,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public void deleteUser(String email) {
+        userRepo.deleteUserByUserEmail(email);
+    }
 
 
     public void exportImages(UserDto dto, User user) throws IOException {

@@ -11,5 +11,6 @@ public interface UserService {
     public ResponseUserDto findByUser(String email) throws IOException;
     public ResponseUserDto updateUser(RequestUserDto dto) throws IOException;
 
+    public void deleteUser(String email);
 
 }

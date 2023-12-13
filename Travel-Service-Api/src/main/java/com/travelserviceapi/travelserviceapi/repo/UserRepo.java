@@ -33,4 +33,6 @@ public interface UserRepo  extends JpaRepository<User,String> {
                                @Param("dob") String dob, @Param("gender") String gender, @Param("nic") String nic,
                                @Param("nicFrontImg") String nicFrontImg, @Param("nicRearImg") String nicRearImg,
                                @Param("profilePic") String profilePic , @Param("contact") Contact contact, @Param("email") String email);
+
+    public void deleteUserByUserEmail(String email);
 }
