@@ -3,6 +3,7 @@ package com.travelserviceapi.travelserviceapi.service.impl;
 import com.travelserviceapi.travelserviceapi.dto.core.UserDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestUserDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
+import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.entity.User;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
 import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
@@ -70,6 +71,35 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ResponseUserDto updateUser(RequestUserDto dto) throws IOException {
+        if(userRepo.existsByUserEmail(dto.getEmail())){
+
+            UserDto userDto = mapper.map(dto, UserDto.class);
+            User byUserEmail = userRepo.findByUserEmail(userDto.getEmail());
+            deleteImages(userDto,byUserEmail);
+            User user = mapper.map(userDto, User.class);
+            exportImages(userDto, user);
+            Contact contact = new Contact(user.getUserContact().getContact1(),user.getUserContact().getContact2());
+            userRepo.updateUser(
+                    user.getUsername(),
+                    user.getUserPassword(),
+                    user.getUserAddress(),
+                    user.getUserDob(),user.getUserGender(),
+                    user.getUserNic(),user.getUserNicFrontImg(),
+                    user.getUserNicRearImg(),
+                    user.getUserProfilePic(),
+                    new Contact(user.getUserContact().getContact1(),user.getUserContact().getContact2()),
+                    user.getUserEmail());
+
+        }else {
+            throw new EntryNotFoundException("User Not found");
+        }
+
+        return null;
+    }
+
+
 
     public void exportImages(UserDto dto, User user) throws IOException {
         String dt = LocalDate.now().toString().replace("-", "_") + "__"
@@ -123,5 +153,20 @@ public class UserServiceImpl implements UserService {
         bytes = baos.toByteArray();
         dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
         dto.setNicRearImgByte(bytes);
+    }
+
+    private void deleteImages(UserDto userDTO, User user) {
+        if (userDTO.getProfilePicByte()!=null){
+            System.out.println("not null");
+            boolean delete = new File(user.getUserProfilePic()).delete();
+        }
+        if (userDTO.getNicFrontImgByte()!=null){
+            System.out.println("not null");
+            boolean delete = new File(user.getUserNicFrontImg()).delete();
+        }
+        if (userDTO.getNicRearImgByte()!=null){
+            System.out.println("not null");
+            boolean delete = new File(user.getUserNicRearImg()).delete();
+        }
     }
 }

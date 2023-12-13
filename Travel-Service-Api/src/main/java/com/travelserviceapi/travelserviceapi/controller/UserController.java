@@ -67,4 +67,42 @@ public class UserController {
                 new StandResponse(201, "Customer saved", user), HttpStatus.CREATED
         );
     }
+
+    @PutMapping
+    public ResponseEntity<StandResponse> updateUser(
+            @RequestPart String username,
+            @RequestPart String password,
+            @RequestPart String nic,
+            @RequestPart String dob,
+            @RequestPart String gender,
+            @RequestPart String contact1,
+            @RequestPart String contact2,
+            @RequestPart String email,
+            @RequestPart String address,
+            @RequestPart byte[] nicFrontImg,
+            @RequestPart byte[] nicRearImg,
+            @RequestPart byte[] profilePic
+
+    ) throws IOException {
+        Contact contact = new Contact(contact1,contact2);
+        RequestUserDto requestUserDto = new RequestUserDto(
+                username,
+                password,
+                nic,
+                dob,
+                gender,
+                contact,
+                email,
+                address,
+                nicFrontImg,
+                nicRearImg,
+                profilePic);
+
+
+        System.out.println(requestUserDto.getEmail());
+        ResponseUserDto responseUserDto = userService.updateUser(requestUserDto);
+        return new ResponseEntity<>(
+                new StandResponse(201, "Customer update", null), HttpStatus.CREATED
+        );
+    }
 }
