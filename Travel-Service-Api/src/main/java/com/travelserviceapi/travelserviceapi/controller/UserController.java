@@ -108,9 +108,13 @@ public class UserController {
 
     @DeleteMapping(params = {"email"})
     public ResponseEntity<StandResponse> deleteUser( @RequestParam  String email){
+
         userService.deleteUser(email);
         return new ResponseEntity<>(
                 new StandResponse(201, "Customer delete", null), HttpStatus.CREATED
         );
     }
+
+
+
 }

@@ -102,6 +102,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String email) {
+
+        User user = userRepo.findByUserEmail(email);
+        deleteImagesByEmail(user);
         userRepo.deleteUserByUserEmail(email);
     }
 
@@ -174,4 +177,15 @@ public class UserServiceImpl implements UserService {
             boolean delete = new File(user.getUserNicRearImg()).delete();
         }
     }
+
+    private void deleteImagesByEmail(User user) {
+
+            boolean delete1 = new File(user.getUserProfilePic()).delete();
+
+            boolean delete2 = new File(user.getUserNicFrontImg()).delete();
+
+            boolean delete3= new File(user.getUserNicRearImg()).delete();
+        }
+
+
 }
