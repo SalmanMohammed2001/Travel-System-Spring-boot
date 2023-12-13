@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -81,15 +82,15 @@ public class UserServiceImpl implements UserService {
             User user = mapper.map(userDto, User.class);
             exportImages(userDto, user);
             Contact contact = new Contact(user.getUserContact().getContact1(),user.getUserContact().getContact2());
-            userRepo.updateUser(
+            int i = userRepo.updateUser(
                     user.getUsername(),
                     user.getUserPassword(),
                     user.getUserAddress(),
-                    user.getUserDob(),user.getUserGender(),
-                    user.getUserNic(),user.getUserNicFrontImg(),
+                    user.getUserDob(), user.getUserGender(),
+                    user.getUserNic(), user.getUserNicFrontImg(),
                     user.getUserNicRearImg(),
                     user.getUserProfilePic(),
-                    new Contact(user.getUserContact().getContact1(),user.getUserContact().getContact2()),
+                    new Contact(user.getUserContact().getContact1(), user.getUserContact().getContact2()),
                     user.getUserEmail());
 
         }else {
