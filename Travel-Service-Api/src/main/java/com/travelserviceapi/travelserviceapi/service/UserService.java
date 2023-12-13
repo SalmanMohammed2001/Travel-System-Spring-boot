@@ -7,4 +7,6 @@ import java.io.IOException;
 
 public interface UserService {
     public ResponseUserDto saveUser(RequestUserDto dto) throws IOException;
+
+    public ResponseUserDto findByUser(String email);
 }
