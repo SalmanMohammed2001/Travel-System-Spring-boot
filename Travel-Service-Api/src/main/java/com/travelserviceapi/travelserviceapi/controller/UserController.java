@@ -58,4 +58,13 @@ public class UserController {
                 new StandResponse(201, "Customer saved", responseUserDto), HttpStatus.CREATED
         );
     }
+
+    @GetMapping(path = "{email}")
+    public ResponseEntity<StandResponse> findByUserEmail(@PathVariable String email) throws IOException {
+        ResponseUserDto user = userService.findByUser(email);
+
+        return new ResponseEntity<>(
+                new StandResponse(201, "Customer saved", user), HttpStatus.CREATED
+        );
+    }
 }

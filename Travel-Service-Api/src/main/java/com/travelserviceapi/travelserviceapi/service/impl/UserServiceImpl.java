@@ -5,6 +5,7 @@ import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestUserDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
 import com.travelserviceapi.travelserviceapi.entity.User;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
+import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.UserRepo;
 import com.travelserviceapi.travelserviceapi.service.UserService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
@@ -14,12 +15,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Base64;
 
 @Service
 @Transactional
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             User save = userRepo.save(user);
             return new ResponseUserDto(save.getUserId(), save.getUsername(), save.getUserPassword(), save.getUserNic(),
                     save.getUserDob(), save.getUserGender(), save.getUserContact(), save.getUserEmail(),
-                    save.getUserAddress(), null, null, null, null);
+                    save.getUserAddress(), null, null, null, null,null,null,null);
 
         } else {
             throw new DuplicateEntryException("Duplicate Primary key");
@@ -59,8 +59,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseUserDto findByUser(String email) {
-        return null;
+    public ResponseUserDto findByUser(String email) throws IOException {
+        if(userRepo.existsByUserEmail(email)){
+            User user = userRepo.findByUserEmail(email);
+            ResponseUserDto responseUserDto = mapper.map(user, ResponseUserDto.class);
+            importImages(responseUserDto,user);
+            return responseUserDto;
+        }else {
+            throw new EntryNotFoundException("User Not found");
+        }
     }
 
 
@@ -92,5 +99,29 @@ public class UserServiceImpl implements UserService {
             user.setUserNicRearImg(outputfile2.getAbsolutePath());
         }
 
+    }
+
+    public void importImages(ResponseUserDto dto,User user) throws IOException {
+
+        BufferedImage read = ImageIO.read(new File(user.getUserProfilePic()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        byte[] bytes = baos.toByteArray();
+        dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
+        dto.setProfilePicByte(bytes);
+
+        read = ImageIO.read(new File(user.getUserNicFrontImg()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        dto.setNicFrontImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setNicFrontImgByte(bytes);
+
+        read = ImageIO.read(new File(user.getUserNicRearImg()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setNicRearImgByte(bytes);
     }
 }

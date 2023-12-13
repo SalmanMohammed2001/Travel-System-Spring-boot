@@ -24,9 +24,14 @@ public class ResponseUserDto {
     private Contact contact;
     private String email;
     private String address;
-    private byte[] nicFrontImg;
-    private byte[] nicRearImg;
-    private byte[] profilePic;
+
+    private String nicFrontImg;
+    private String nicRearImg;
+    private String profilePic;
+
+    private byte[] nicFrontImgByte;
+    private byte[] nicRearImgByte;
+    private byte[] profilePicByte;
     private List<Booking> bookings;
 
 
