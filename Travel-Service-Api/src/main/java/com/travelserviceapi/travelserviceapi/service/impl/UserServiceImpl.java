@@ -11,6 +11,7 @@ import com.travelserviceapi.travelserviceapi.repo.UserRepo;
 import com.travelserviceapi.travelserviceapi.service.UserService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,17 +48,26 @@ public class UserServiceImpl implements UserService {
         String primaryKey = generator.generatePrimaryKey("USER", generatePrefix);
         UserDto userDto = mapper.map(dto, UserDto.class);
         userDto.setUserId(primaryKey);
-        if (!userRepo.existsById(userDto.getUserId())) {
-            User user = mapper.map(userDto, User.class);
-            exportImages(userDto, user);
-            User save = userRepo.save(user);
-            return new ResponseUserDto(save.getUserId(), save.getUsername(), save.getUserPassword(), save.getUserNic(),
-                    save.getUserDob(), save.getUserGender(), save.getUserContact(), save.getUserEmail(),
-                    save.getUserAddress(), null, null, null, null,null,null,null);
 
-        } else {
-            throw new DuplicateEntryException("Duplicate Primary key");
+        if(!userRepo.existsByUserEmail(dto.getEmail())){
+
+            if (!userRepo.existsById(userDto.getUserId())) {
+                User user = mapper.map(userDto, User.class);
+                exportImages(userDto, user);
+                User save = userRepo.save(user);
+                return new ResponseUserDto(save.getUserId(), save.getUsername(), save.getUserPassword(), save.getUserNic(),
+                        save.getUserDob(), save.getUserGender(), save.getUserContact(), save.getUserEmail(),
+                        save.getUserAddress(), null, null, null, null,null,null,null);
+
+            } else {
+                throw new DuplicateEntryException("Duplicate Primary key");
+            }
+
+        }else {
+            throw new EntryNotFoundException("Duplicate email key");
         }
+
+
 
     }
 
@@ -106,6 +117,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findByUserEmail(email);
         deleteImagesByEmail(user);
         userRepo.deleteUserByUserEmail(email);
+    }
+
+    @Override
+    public List<ResponseUserDto> findAllUser() throws IOException {
+        List<User> user = userRepo.findAll();
+        /*user.forEach(data->{
+            System.out.println(data.getUserId());
+        });*/
+        List<ResponseUserDto> responseUserDtos = mapper.map(user, new TypeToken<List<ResponseUserDto>>() {}.getType());
+        List<ResponseUserDto> responseUserDtos1 = importImagesAll(responseUserDtos, user);
+        return responseUserDtos1;
     }
 
 
@@ -162,6 +184,52 @@ public class UserServiceImpl implements UserService {
         dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
         dto.setNicRearImgByte(bytes);
     }
+
+    public List<ResponseUserDto> importImagesAll(List<ResponseUserDto> dto,List<User> users) throws IOException {
+        User user = new User();
+        users.forEach(data->{
+            user.setUserProfilePic(data.getUserProfilePic());
+            user.setUserNicFrontImg(data.getUserNicFrontImg());
+            user.setUserNicRearImg(data.getUserNicRearImg());
+        });
+
+        System.out.println(user.getUserProfilePic());
+
+        ResponseUserDto responseUserDto = new ResponseUserDto();;
+
+        BufferedImage read = ImageIO.read(new File(user.getUserProfilePic()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        byte[] bytes = baos.toByteArray();
+        responseUserDto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
+        responseUserDto.setProfilePicByte(bytes);
+
+        read = ImageIO.read(new File(user.getUserNicFrontImg()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        responseUserDto.setNicFrontImg(Base64.getEncoder().encodeToString(bytes));
+        responseUserDto.setNicFrontImgByte(bytes);
+
+        read = ImageIO.read(new File(user.getUserNicRearImg()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        responseUserDto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        responseUserDto.setNicRearImgByte(bytes);
+
+        List<ResponseUserDto> response =new ArrayList<>();
+        for(ResponseUserDto dto1:dto){
+            response.add(new ResponseUserDto(dto1.getUserId(),dto1.getUsername(),dto1.getPassword(),
+                    dto1.getNic(),dto1.getDob(),dto1.getGender(),dto1.getContact(),dto1.getEmail()
+            ,dto1.getAddress(),responseUserDto.getNicFrontImg(),responseUserDto.getNicRearImg(),
+                    responseUserDto.getProfilePic(),responseUserDto.getNicFrontImgByte(),
+                    responseUserDto.getNicRearImgByte(),responseUserDto.getProfilePicByte(),null));
+        }
+
+        return  response;
+    }
+
 
     private void deleteImages(UserDto userDTO, User user) {
         if (userDTO.getProfilePicByte()!=null){

@@ -15,7 +15,7 @@ public class AppWiderExceptionHandler {
     @ExceptionHandler(EntryNotFoundException.class)
     public ResponseEntity<StandResponse> handleEntryNotFoundException(EntryNotFoundException e){
         return new ResponseEntity<>(
-                new StandResponse(404,e.getMessage(),e), HttpStatus.NOT_FOUND
+                new StandResponse(404,e.getMessage(),null), HttpStatus.NOT_FOUND
         );
 
     }
@@ -23,7 +23,7 @@ public class AppWiderExceptionHandler {
     @ExceptionHandler(DuplicateEntryException.class)
     public ResponseEntity<StandResponse> handleDuplicateEntryException(EntryNotFoundException e){
         return new ResponseEntity<>(
-                new StandResponse(404,e.getMessage(),e), HttpStatus.NOT_FOUND
+                new StandResponse(404,e.getMessage(),null), HttpStatus.NOT_FOUND
         );
 
     }

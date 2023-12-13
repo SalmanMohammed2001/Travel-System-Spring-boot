@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/users")
@@ -108,10 +109,17 @@ public class UserController {
 
     @DeleteMapping(params = {"email"})
     public ResponseEntity<StandResponse> deleteUser( @RequestParam  String email){
-
         userService.deleteUser(email);
         return new ResponseEntity<>(
                 new StandResponse(201, "Customer delete", null), HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping
+    public ResponseEntity<StandResponse> findAllUser() throws IOException {
+        List<ResponseUserDto> allUser = userService.findAllUser();
+        return new ResponseEntity<>(
+                new StandResponse(201, "Customer delete", allUser), HttpStatus.CREATED
         );
     }
 
