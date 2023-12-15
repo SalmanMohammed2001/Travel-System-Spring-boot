@@ -6,10 +6,7 @@ import com.travelserviceapi.travelserviceapi.service.VehicleService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -68,7 +65,15 @@ public class VehicleController {
 
         ResponseVehicleDto save = vehicleService.save(requestVehicleDto);
         return new ResponseEntity<>(
-                new StandResponse(201, "Customer delete", save), HttpStatus.CREATED
+                new StandResponse(201, "Customer saved", save), HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping(path = "{id}")
+    public ResponseEntity<StandResponse> findByID(@PathVariable String id) throws IOException {
+        ResponseVehicleDto byId = vehicleService.findById(id);
+        return new ResponseEntity<>(
+                new StandResponse(201, "Customer find", byId), HttpStatus.CREATED
         );
     }
 }
