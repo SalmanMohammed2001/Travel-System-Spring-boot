@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class RequestVehicleDto {
 
-    private String vehicleId;
+
     private String vehicleName;
     private double vehiclePriceFor1Km;
     private String vehicleCategory;
@@ -27,5 +27,5 @@ public class RequestVehicleDto {
     private String vehicleTransmission;
     private ArrayList<byte[]> vehicleImages;
     private int vehicleQty;
-    private Driver driver;
+
 }

@@ -42,15 +42,14 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public ResponseVehicleDto save(RequestVehicleDto dto) {
-        String primaryKey = generator.generateKey("Vehicle-");
+        String primaryKey = generator.generateKey("Vehicle");
         VehicleDto vehicleDto = mapper.map(dto, VehicleDto.class);
+        vehicleDto.setVehicleId(primaryKey);
         if(!vehicleRepo.existsById(vehicleDto.getVehicleId())){
             Vehicle vehicle = mapper.map(vehicleDto, Vehicle.class);
+
             exPortImage(vehicleDto,vehicle);
             vehicleRepo.save(vehicle);
-
-
-
         }else {
             throw new DuplicateEntryException("Vehicle Id Duplicate");
         }
@@ -70,7 +69,7 @@ public class VehicleServiceImpl implements VehicleService {
                 try {
                     InputStream is = new ByteArrayInputStream(images.get(i));
                     BufferedImage bi = ImageIO.read(is);
-                    File outputfile = new File("images/user/" + dt + "_" + i + ".jpg");
+                    File outputfile = new File("images/vehicle/" + dt + "_" + i + ".jpg");
                     ImageIO.write(bi, "jpg", outputfile);
                     pathList.add(outputfile.getAbsolutePath());
                 } catch (IOException e) {
