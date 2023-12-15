@@ -1,6 +1,7 @@
 package com.travelserviceapi.travelserviceapi.controller;
 
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 import com.travelserviceapi.travelserviceapi.service.VehicleService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class VehicleController {
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
             @RequestParam List<MultipartFile> vehicleImages
-    ) {
+    ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
         vehicleImages.forEach(data->{
             try {
@@ -65,9 +66,9 @@ public class VehicleController {
 
         );
 
-        vehicleService.save(requestVehicleDto);
+        ResponseVehicleDto save = vehicleService.save(requestVehicleDto);
         return new ResponseEntity<>(
-                new StandResponse(201, "Customer delete", null), HttpStatus.CREATED
+                new StandResponse(201, "Customer delete", save), HttpStatus.CREATED
         );
     }
 }
