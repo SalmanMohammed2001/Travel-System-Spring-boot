@@ -77,4 +77,52 @@ public class VehicleController {
                 new StandResponse(201, "Customer find", byId), HttpStatus.CREATED
         );
     }
+
+    @PutMapping
+    public ResponseEntity<StandResponse> update(
+            @RequestParam String vehicleId,
+            @RequestParam String vehicleName,
+            @RequestParam double vehiclePriceFor1Km,
+            @RequestParam String vehicleCategory,
+            @RequestParam String vehicleType,
+            @RequestParam double vehiclePriceFor100Km,
+            @RequestParam String vehicleFuelType,
+            @RequestParam int vehicleSeatCapacity,
+            @RequestParam double vehicleFuelUsage,
+            @RequestParam String vehicleHybrid,
+            @RequestParam String vehicleTransmission,
+            @RequestParam int vehicleQty,
+            @RequestParam List<MultipartFile> vehicleImages
+    ) throws IOException {
+        ArrayList<byte[]> bytes = new ArrayList<>();
+        vehicleImages.forEach(data->{
+            try {
+                bytes.add(data.getBytes());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        RequestVehicleDto requestVehicleDto = new RequestVehicleDto(
+                vehicleId,
+                vehicleName,
+                vehiclePriceFor1Km,
+                vehicleCategory,
+                vehicleType,
+                vehiclePriceFor100Km,
+                vehicleFuelType,
+                vehicleSeatCapacity,
+                vehicleFuelUsage,
+                vehicleHybrid,
+                vehicleTransmission,
+                bytes,
+                vehicleQty
+
+        );
+
+        vehicleService.update(requestVehicleDto);
+        return new ResponseEntity<>(
+                new StandResponse(201, "Vehicle update", null), HttpStatus.CREATED
+        );
+    }
+
 }
