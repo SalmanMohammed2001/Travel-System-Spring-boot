@@ -10,4 +10,6 @@ public interface VehicleService {
 
     public ResponseVehicleDto findById(String id) throws IOException;
 
+    public void  update(RequestVehicleDto dto);
+
 }

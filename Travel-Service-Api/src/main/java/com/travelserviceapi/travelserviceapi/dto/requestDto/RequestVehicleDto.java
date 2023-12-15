@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @NoArgsConstructor
 public class RequestVehicleDto {
 
-
+    private String vehicleId;
     private String vehicleName;
     private double vehiclePriceFor1Km;
     private String vehicleCategory;

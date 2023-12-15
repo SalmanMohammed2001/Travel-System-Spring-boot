@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -65,6 +66,39 @@ public class VehicleServiceImpl implements VehicleService {
             return responseVehicleDto;
         }else {
             throw new EntryNotFoundException("Id Not Found");
+        }
+    }
+
+    @Override
+    public void update(RequestVehicleDto dto) {
+        if(vehicleRepo.existsById(dto.getVehicleId())){
+            VehicleDto vehicleDto = mapper.map(dto, VehicleDto.class);
+            Vehicle vehicle = mapper.map(dto, Vehicle.class);
+            Optional<Vehicle> byId = vehicleRepo.findById(vehicleDto.getVehicleId());
+            if(byId.isPresent()){
+                deleteImage(byId);
+                exPortImage(vehicleDto,vehicle);
+                vehicleRepo.save(vehicle);
+
+            }
+
+        }else {
+            throw new EntryNotFoundException("Vehicle Id Not Found");
+        }
+    }
+
+    public void deleteImage(Optional<Vehicle> byId){
+        if (byId.isPresent()){
+            Vehicle vehicle = byId.get();
+            String images = vehicle.getVehicleImages();
+            if (images != null){
+                ArrayList<String> pathList = gson.fromJson(images, new TypeToken<ArrayList<String>>(){}.getType());
+                for (String path : pathList) {
+                    File file = new File(path);
+                    boolean delete = file.delete();
+                    System.out.println("Images " + delete);
+                }
+            }
         }
     }
 

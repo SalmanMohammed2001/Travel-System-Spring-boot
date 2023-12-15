@@ -48,6 +48,7 @@ public class VehicleController {
             }
         });
         RequestVehicleDto requestVehicleDto = new RequestVehicleDto(
+                "",
                 vehicleName,
                 vehiclePriceFor1Km,
                 vehicleCategory,
