@@ -1,10 +1,7 @@
-package com.travelserviceapi.travelserviceapi.dto.core;
+package com.travelserviceapi.travelserviceapi.dto.requestDto;
 
 import com.travelserviceapi.travelserviceapi.entity.Driver;
 import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +12,7 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VehicleDto {
+public class RequestVehicleDto {
 
     private String vehicleId;
     private String vehicleName;
@@ -31,5 +28,4 @@ public class VehicleDto {
     private ArrayList<byte[]> vehicleImages;
     private int vehicleQty;
     private Driver driver;
-    private PackageDetails packageDetails;
 }
