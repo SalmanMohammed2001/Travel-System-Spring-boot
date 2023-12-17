@@ -1,6 +1,9 @@
 package com.travelserviceapi.travelserviceapi.service;
 
 
-public interface DriverService {
+import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 
+public interface DriverService {
+    public ResponseVehicleDto save(RequestVehicleDto dto);
 }
