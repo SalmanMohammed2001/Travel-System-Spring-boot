@@ -1,7 +1,6 @@
-package com.travelserviceapi.travelserviceapi.dto.core;
+package com.travelserviceapi.travelserviceapi.dto.responseDto;
 
-import com.travelserviceapi.travelserviceapi.entity.Vehicle;
-import jakarta.persistence.*;
+import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class DriverDto {
-
+public class ResponseDriverDto {
+    private String driverId;
     private String driverName;
     private String driverContact;
     private String driverNic;
@@ -19,5 +18,5 @@ public class DriverDto {
     private byte[] licenseImageFront;
     private byte[] licenseImageRear;
     private boolean driverStatus;
-    private Vehicle vehicle;
+    private ResponseVehicleDto vehicle;
 }
