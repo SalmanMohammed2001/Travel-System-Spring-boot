@@ -18,7 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,8 +52,8 @@ public class VehicleServiceImpl implements VehicleService {
             Vehicle vehicle = mapper.map(vehicleDto, Vehicle.class);
             exPortImage(vehicleDto,vehicle);
             Vehicle save = vehicleRepo.save(vehicle);
-            ResponseVehicleDto responseVehicleDto = mapper.map(vehicle, ResponseVehicleDto.class);
-            importImages(responseVehicleDto,save);
+           ResponseVehicleDto responseVehicleDto = mapper.map(vehicle, ResponseVehicleDto.class);
+          importImages(responseVehicleDto,save);
             return responseVehicleDto;
         }else {
             throw new DuplicateEntryException("Vehicle Id Duplicate");
@@ -79,13 +82,22 @@ public class VehicleServiceImpl implements VehicleService {
                 deleteImage(byId);
                 exPortImage(vehicleDto,vehicle);
                 vehicleRepo.save(vehicle);
-
             }
 
         }else {
             throw new EntryNotFoundException("Vehicle Id Not Found");
         }
     }
+
+    @Override
+    public List<ResponseVehicleDto> findAll() throws IOException {
+        List<Vehicle> all = vehicleRepo.findAll();
+        List<ResponseVehicleDto> responseVehicleDtos = mapper.map(all, new TypeToken<List<ResponseVehicleDto>>() {}.getType());
+        List<ResponseVehicleDto> responseVehicleDtos1 = importImagesAll(responseVehicleDtos, all);
+        return responseVehicleDtos1;
+
+    }
+
 
     public void deleteImage(Optional<Vehicle> byId){
         if (byId.isPresent()){
@@ -105,9 +117,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     public void exPortImage(VehicleDto dto,Vehicle vehicle){
         ArrayList<byte[]> images = dto.getVehicleImages();
-/*        String dt = LocalDate.now().toString().replace("-", "_") + "__"
-                + LocalTime.now().toString().replace(":", "_");*/
-        String dt = "img";
+       String dt = LocalDate.now().toString().replace("-", "_") + "__"
+                + LocalTime.now().toString().replace(":", "_");
+   //     String dt = "img";
 
         ArrayList<String> pathList = new ArrayList<>();
 
@@ -141,5 +153,36 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDto.getVehicleImages().add(imgData);
         }
     }
+
+    public List<ResponseVehicleDto> importImagesAll(List<ResponseVehicleDto> vehicleDto,List<Vehicle>vehicles) throws IOException {
+        Vehicle vehicle = new Vehicle();
+
+        vehicles.forEach(data->{
+            vehicle.setVehicleImages(data.getVehicleImages());
+        });
+        String images = vehicle.getVehicleImages();
+
+        ResponseVehicleDto responseVehicleDto = new ResponseVehicleDto();
+        responseVehicleDto.setVehicleImages(new ArrayList<>());
+
+        ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());
+        for (int i = 0; i < imageList.size(); i++) {
+            BufferedImage r = ImageIO.read(new File(imageList.get(i)));
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ImageIO.write(r, "jpg", b);
+            byte[] imgData= b.toByteArray();
+            responseVehicleDto.getVehicleImages().add(imgData);
+        };
+
+        List<ResponseVehicleDto> arrayList = new ArrayList<>();
+        for (ResponseVehicleDto data:vehicleDto){
+            arrayList.add(new ResponseVehicleDto(data.getVehicleId(),data.getVehicleName(),data.getVehiclePriceFor1Km(),
+                    data.getVehicleCategory(),data.getVehicleType(),data.getVehiclePriceFor100Km(),data.getVehicleFuelType(),
+                    data.getVehicleSeatCapacity(),data.getVehicleFuelUsage(),data.getVehicleHybrid(),data.getVehicleTransmission(),
+                    responseVehicleDto.getVehicleImages(),responseVehicleDto.getVehicleQty()));
+        }
+        return arrayList;
+    }
+
 
 }

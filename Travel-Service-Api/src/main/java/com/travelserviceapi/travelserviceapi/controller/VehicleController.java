@@ -23,7 +23,6 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
-
     @PostMapping
     public ResponseEntity<StandResponse> save(
             @RequestParam String vehicleName,
@@ -64,11 +63,13 @@ public class VehicleController {
 
         );
 
-        ResponseVehicleDto save = vehicleService.save(requestVehicleDto);
+       ResponseVehicleDto save = vehicleService.save(requestVehicleDto);
+        System.out.println(requestVehicleDto.getVehicleImages());
         return new ResponseEntity<>(
-                new StandResponse(201, "Customer saved", save), HttpStatus.CREATED
+                new StandResponse(201, "Customer saved",save ), HttpStatus.CREATED
         );
     }
+
 
     @GetMapping(path = "{id}")
     public ResponseEntity<StandResponse> findByID(@PathVariable String id) throws IOException {
@@ -122,6 +123,14 @@ public class VehicleController {
         vehicleService.update(requestVehicleDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "Vehicle update", null), HttpStatus.CREATED
+        );
+    }
+    @GetMapping
+
+    public ResponseEntity<StandResponse>findAll() throws IOException {
+        List<ResponseVehicleDto> all = vehicleService.findAll();
+        return new ResponseEntity<>(
+                new StandResponse(201, "Vehicle update", all), HttpStatus.CREATED
         );
     }
 

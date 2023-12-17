@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String email) {
 
         User user = userRepo.findByUserEmail(email);
-        deleteImagesByEmail(user);
+       deleteImagesByEmail(user);
         userRepo.deleteUserByUserEmail(email);
     }
 
@@ -138,8 +138,8 @@ public class UserServiceImpl implements UserService {
         if (dto.getProfilePicByte() != null) {
             InputStream is = new ByteArrayInputStream(dto.getProfilePicByte());
             BufferedImage bi = ImageIO.read(is);
-            File outputfile = new File("images/user/pro/" + dt + ".jpg");
-            ImageIO.write(bi, "jpg", outputfile);
+           File outputfile = new File("images/user/pic/" + dt + ".jpg");
+           ImageIO.write(bi, "jpg", outputfile);
             user.setUserProfilePic(outputfile.getAbsolutePath());
         }
 
@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserService {
         if (dto.getNicRearImgByte() != null) {
             InputStream is2 = new ByteArrayInputStream(dto.getNicRearImgByte());
             BufferedImage bi2 = ImageIO.read(is2);
-            File outputfile2 = new File("images/user/nic_back/" + dt + ".jpg");
+            File outputfile2 = new File("images/user/nic_rear/" + dt + ".jpg");
             ImageIO.write(bi2, "jpg", outputfile2);
             user.setUserNicRearImg(outputfile2.getAbsolutePath());
         }
@@ -194,15 +194,15 @@ public class UserServiceImpl implements UserService {
         });
 
         System.out.println(user.getUserProfilePic());
-
         ResponseUserDto responseUserDto = new ResponseUserDto();;
-
         BufferedImage read = ImageIO.read(new File(user.getUserProfilePic()));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(read, "jpg", baos);
         byte[] bytes = baos.toByteArray();
         responseUserDto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
         responseUserDto.setProfilePicByte(bytes);
+
+
 
         read = ImageIO.read(new File(user.getUserNicFrontImg()));
         baos = new ByteArrayOutputStream();
