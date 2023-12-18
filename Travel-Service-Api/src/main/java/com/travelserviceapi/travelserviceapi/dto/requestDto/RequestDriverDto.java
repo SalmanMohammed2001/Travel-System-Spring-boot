@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class RequestDriverDto {
-
+    private String driverId;
     private String driverName;
     private String driverContact;
     private String driverNic;

@@ -26,6 +26,7 @@ public class DriverController {
 
 @PostMapping
     public ResponseEntity<StandResponse> save(
+
             @RequestParam String vehicleId,
             @RequestParam String driverName,
             @RequestParam String driverContact,
@@ -39,6 +40,7 @@ public class DriverController {
 
 
     RequestDriverDto requestDriverDto = new RequestDriverDto(
+           null ,
                 driverName,
                 driverContact,
                 driverNic,
@@ -61,6 +63,42 @@ public class DriverController {
         ResponseDriverDto byNic = driverService.findByNic(nic);
         return new ResponseEntity<>(
                 new StandResponse(201, "driver data",byNic ), HttpStatus.CREATED
+        );
+    }
+
+
+
+    @PutMapping
+    public ResponseEntity<StandResponse> update(
+            @RequestParam String driverId,
+            @RequestParam String driverName,
+            @RequestParam String driverContact,
+            @RequestParam String driverNic,
+            @RequestPart byte[] driverImage,
+            @RequestPart byte[] licenseImageFront,
+            @RequestPart byte[] licenseImageRear,
+            @RequestParam boolean status,
+            @RequestParam String vehicleId
+
+    ) throws IOException {
+
+
+        RequestDriverDto requestDriverDto = new RequestDriverDto(
+                driverId,
+                driverName,
+                driverContact,
+                driverNic,
+                driverImage,
+                licenseImageFront,
+                licenseImageRear,
+                status,
+                vehicleId
+        );
+
+
+     driverService.update(requestDriverDto);
+        return new ResponseEntity<>(
+                new StandResponse(201, "drive update", null), HttpStatus.CREATED
         );
     }
 

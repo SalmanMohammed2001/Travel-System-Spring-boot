@@ -3,6 +3,7 @@ package com.travelserviceapi.travelserviceapi.service.impl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.travelserviceapi.travelserviceapi.dto.core.DriverDto;
+import com.travelserviceapi.travelserviceapi.dto.core.UserDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
@@ -28,6 +29,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,7 +55,9 @@ public class DriverServiceImpl implements DriverService {
     public ResponseDriverDto save(RequestDriverDto dto){
 
         try {
+            String generateKey = generator.generateKey("Driver");
             DriverDto driverDto = mapper.map(dto, DriverDto.class);
+            driverDto.setDriverId(generateKey);
             Vehicle vehicle = new Vehicle();
             vehicle.setVehicleId(driverDto.getVehicle());
             Driver  driver = mapper.map(driverDto, Driver.class);
@@ -95,6 +99,31 @@ public class DriverServiceImpl implements DriverService {
         }
 
     }
+
+    @Override
+    public void update(RequestDriverDto dto) {
+
+        try {
+            if(driverRepo.existsById(dto.getDriverId())){
+                DriverDto driverDto = mapper.map(dto, DriverDto.class);
+                Vehicle vehicle = new Vehicle();
+                vehicle.setVehicleId(driverDto.getVehicle());
+                Driver driver = mapper.map(driverDto, Driver.class);
+                Driver byId = driverRepo.findById(driverDto.getDriverId()).get();
+                deleteImages(driverDto,byId);
+                driver.setVehicle(vehicle);
+                exportImages(driverDto,driver);
+                driverRepo.save(driver);
+
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     public void exportImages(DriverDto dto, Driver driver) throws IOException {
         String dt = LocalDate.now().toString().replace("-", "_") + "__"
@@ -149,7 +178,6 @@ public class DriverServiceImpl implements DriverService {
         dto.setLicenseImageRear(bytes);
     }
 
-
     public void importImages(ResponseVehicleDto vehicleDto,Vehicle vehicle) throws IOException {
         String images = vehicle.getVehicleImages();
         vehicleDto.setVehicleImages(new ArrayList<>());
@@ -160,6 +188,21 @@ public class DriverServiceImpl implements DriverService {
             ImageIO.write(r, "jpg", b);
             byte[] imgData= b.toByteArray();
             vehicleDto.getVehicleImages().add(imgData);
+        }
+    }
+
+    private void deleteImages(DriverDto driverDto, Driver driver) {
+        if (driverDto.getDriverImage()!=null){
+            System.out.println("not null");
+            boolean delete = new File(driver.getDriverImage()).delete();
+        }
+        if (driverDto.getLicenseImageFront()!=null){
+            System.out.println("not null");
+            boolean delete = new File(driver.getLicenseImageFront()).delete();
+        }
+        if (driverDto.getLicenseImageRear()!=null){
+            System.out.println("not null");
+            boolean delete = new File(driver.getLicenseImageRear()).delete();
         }
     }
 

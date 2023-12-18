@@ -12,4 +12,8 @@ public interface DriverService {
     public ResponseDriverDto save(RequestDriverDto dto) throws IOException;
 
     public ResponseDriverDto findByNic(String nic);
+
+    public void update(RequestDriverDto dto);
+
+
 }
