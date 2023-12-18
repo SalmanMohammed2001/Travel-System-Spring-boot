@@ -1,13 +1,18 @@
 package com.travelserviceapi.travelserviceapi.service.impl;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.travelserviceapi.travelserviceapi.dto.core.DriverDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 import com.travelserviceapi.travelserviceapi.entity.Driver;
+import com.travelserviceapi.travelserviceapi.entity.User;
 import com.travelserviceapi.travelserviceapi.entity.Vehicle;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
+import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.DriverRepo;
 import com.travelserviceapi.travelserviceapi.service.DriverService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
@@ -18,12 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Base64;
 
 @Service
 @Transactional
@@ -55,15 +59,41 @@ public class DriverServiceImpl implements DriverService {
             Driver  driver = mapper.map(driverDto, Driver.class);
             driver.setVehicle(vehicle);
             exportImages(driverDto,driver);
-            driverRepo.save(driver);
-
-
+            Driver save = driverRepo.save(driver);
+            ResponseVehicleDto responseVehicleDto = mapper.map(save.getVehicle(), ResponseVehicleDto.class);
+            ResponseDriverDto responseDriverDto = mapper.map(save, ResponseDriverDto.class);
+            responseDriverDto.setVehicle(responseVehicleDto);
+           importImages(responseDriverDto,save);
+            return responseDriverDto;
         }catch (IOException e){
             throw new DuplicateEntryException("id Duplicate");
         }
 
 
-        return null;
+       // return null;
+    }
+
+    @Override
+    public ResponseDriverDto findByNic(String nic) {
+        try{
+            if(driverRepo.existsByDriverNic(nic)){
+                Driver byDriverNic = driverRepo.findByDriverNic(nic);
+
+                Vehicle vehicle = mapper.map(byDriverNic.getVehicle(), Vehicle.class);
+                System.out.println(vehicle.getVehicleImages());
+                ResponseVehicleDto responseVehicleDto = mapper.map(byDriverNic.getVehicle(), ResponseVehicleDto.class);
+                importImages(responseVehicleDto,vehicle);
+                ResponseDriverDto responseDriverDto = mapper.map(byDriverNic, ResponseDriverDto.class);
+                responseDriverDto.setVehicle(responseVehicleDto);
+                importImages(responseDriverDto,byDriverNic);
+                return  responseDriverDto;
+            }else {
+                throw new EntryNotFoundException("nic not found");
+            }
+        } catch (IOException e){
+            throw new EntryNotFoundException("nic not found");
+        }
+
     }
 
     public void exportImages(DriverDto dto, Driver driver) throws IOException {
@@ -95,6 +125,42 @@ public class DriverServiceImpl implements DriverService {
         }
 
     }
+    public void importImages(ResponseDriverDto dto, Driver driver) throws IOException {
 
+        BufferedImage read = ImageIO.read(new File(driver.getDriverImage()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        byte[] bytes = baos.toByteArray();
+       // dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
+        dto.setDriverImage(bytes);
+
+        read = ImageIO.read(new File(driver.getLicenseImageFront()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+     //   dto.setNicFrontImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setLicenseImageFront(bytes);
+
+        read = ImageIO.read(new File(driver.getLicenseImageRear()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+     //   dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setLicenseImageRear(bytes);
+    }
+
+
+    public void importImages(ResponseVehicleDto vehicleDto,Vehicle vehicle) throws IOException {
+        String images = vehicle.getVehicleImages();
+        vehicleDto.setVehicleImages(new ArrayList<>());
+        ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());
+        for (int i = 0; i < imageList.size(); i++) {
+            BufferedImage r = ImageIO.read(new File(imageList.get(i)));
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ImageIO.write(r, "jpg", b);
+            byte[] imgData= b.toByteArray();
+            vehicleDto.getVehicleImages().add(imgData);
+        }
+    }
 
 }

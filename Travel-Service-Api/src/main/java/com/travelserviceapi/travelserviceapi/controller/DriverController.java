@@ -2,6 +2,7 @@ package com.travelserviceapi.travelserviceapi.controller;
 
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
 import com.travelserviceapi.travelserviceapi.service.DriverService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
@@ -48,9 +49,18 @@ public class DriverController {
             vehicleId
         );
 
-    driverService.save(requestDriverDto);
+
+    ResponseDriverDto save = driverService.save(requestDriverDto);
+    return new ResponseEntity<>(
+                new StandResponse(201, "drive saved", save), HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping(path = "{nic}")
+    public ResponseEntity<StandResponse> findByNic(@PathVariable String nic){
+        ResponseDriverDto byNic = driverService.findByNic(nic);
         return new ResponseEntity<>(
-                new StandResponse(201, "Vehicle update", null), HttpStatus.CREATED
+                new StandResponse(201, "driver data",byNic ), HttpStatus.CREATED
         );
     }
 

@@ -10,4 +10,6 @@ import java.io.IOException;
 
 public interface DriverService {
     public ResponseDriverDto save(RequestDriverDto dto) throws IOException;
+
+    public ResponseDriverDto findByNic(String nic);
 }
