@@ -15,13 +15,15 @@ public class Driver {
     private int driverId;
     private String driverName;
     private String driverContact;
+    @Column(unique = true)
     private String driverNic;
     private String driverImage;
     private String licenseImageFront;
     private String licenseImageRear;
     private boolean driverStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id",unique = true)
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "vehicle_id",referencedColumnName = "vehicleId",nullable = false,unique = true)
     private Vehicle vehicle;
+
 }

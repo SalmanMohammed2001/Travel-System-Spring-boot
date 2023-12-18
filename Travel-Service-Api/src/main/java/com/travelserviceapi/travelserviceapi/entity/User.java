@@ -35,6 +35,7 @@ public class User {
     private String userNicRearImg;
     private String userProfilePic;
 
+
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 }

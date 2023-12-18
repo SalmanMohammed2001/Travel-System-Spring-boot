@@ -18,5 +18,5 @@ public class RequestDriverDto {
     private byte[] licenseImageFront;
     private byte[] licenseImageRear;
     private boolean driverStatus;
-    private RequestVehicleDto vehicle;
+    private String vehicle;
 }

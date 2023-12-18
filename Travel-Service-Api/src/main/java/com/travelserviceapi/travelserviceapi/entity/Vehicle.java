@@ -24,9 +24,12 @@ public class Vehicle {
     private String vehicleTransmission;
     private String vehicleImages;
     private int vehicleQty;
+
     @OneToOne( mappedBy = "vehicle")
     private Driver driver;
 
     @OneToOne(mappedBy = "vehicle")
     private PackageDetails  packageDetails;
+
+
 }
