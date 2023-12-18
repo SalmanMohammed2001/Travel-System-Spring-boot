@@ -15,5 +15,5 @@ public interface DriverService {
 
     public void update(RequestDriverDto dto);
 
-
+    public void deleteDriver(String id);
 }

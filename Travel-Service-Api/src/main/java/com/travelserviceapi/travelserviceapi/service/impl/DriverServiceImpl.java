@@ -123,6 +123,17 @@ public class DriverServiceImpl implements DriverService {
 
     }
 
+    @Override
+    public void deleteDriver(String id) {
+        if(driverRepo.existsById(id)){
+            Driver driver = driverRepo.findById(id).get();
+            deleteImagesById(driver);
+            driverRepo.deleteById(id);
+
+        }else {
+            throw new EntryNotFoundException("id not found");
+        }
+    }
 
 
     public void exportImages(DriverDto dto, Driver driver) throws IOException {
@@ -204,6 +215,15 @@ public class DriverServiceImpl implements DriverService {
             System.out.println("not null");
             boolean delete = new File(driver.getLicenseImageRear()).delete();
         }
+    }
+
+    private void deleteImagesById(Driver driver) {
+
+        boolean delete1 = new File(driver.getDriverImage()).delete();
+
+        boolean delete2 = new File(driver.getLicenseImageFront()).delete();
+
+        boolean delete3 = new File(driver.getLicenseImageRear()).delete();
     }
 
 }

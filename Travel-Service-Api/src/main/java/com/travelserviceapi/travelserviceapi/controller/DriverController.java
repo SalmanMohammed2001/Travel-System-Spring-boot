@@ -102,4 +102,12 @@ public class DriverController {
         );
     }
 
+    @DeleteMapping(params = {"id"})
+    public ResponseEntity<StandResponse> delete(@RequestParam String id){
+        driverService.deleteDriver(id);
+        return new ResponseEntity<>(
+                new StandResponse(201, "drive update", null), HttpStatus.CREATED
+        );
+    }
+
 }
