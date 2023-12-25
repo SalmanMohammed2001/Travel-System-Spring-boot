@@ -1,10 +1,12 @@
 package com.travelserviceapi.travelserviceapi.service.impl;
 
 import com.google.gson.Gson;
+import com.travelserviceapi.travelserviceapi.dto.core.DriverDto;
 import com.travelserviceapi.travelserviceapi.dto.core.GuideDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestGuideDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseGuideDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
+import com.travelserviceapi.travelserviceapi.entity.Driver;
 import com.travelserviceapi.travelserviceapi.entity.Guide;
 import com.travelserviceapi.travelserviceapi.entity.User;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
@@ -63,12 +65,6 @@ public class GuideServiceImpl implements GuideService {
                dto.isGuideStatus()
        );
 
-
-
-
-
-
-
        if(!guideRepo.existsById(guideDto.getGuideId())){
            Guide guide = mapper.map(guideDto, Guide.class);
            exportImages(guideDto,guide);
@@ -85,12 +81,44 @@ public class GuideServiceImpl implements GuideService {
     }
 
     @Override
-    public ResponseGuideDto saveGuide(String guideId) throws IOException {
+    public ResponseGuideDto findId(String guideId) throws IOException {
         if(guideRepo.existsById(guideId)){
             Guide guide = guideRepo.findById(guideId).get();
             ResponseGuideDto responseGuideDto = mapper.map(guide, ResponseGuideDto.class);
             importImages(responseGuideDto,guide);
+
             return responseGuideDto;
+        }else {
+            throw new EntryNotFoundException("Id Not found");
+        }
+    }
+
+    @Override
+    public ResponseGuideDto update(RequestGuideDto dto) throws IOException {
+        GuideDto guideDto = new GuideDto(
+                dto.getGuideId(),
+                dto.getGuideName(),
+                dto.getGuideAddress(),
+                dto.getGuideContact(),
+                dto.getGuideBirthDate(),
+                dto.getGuideManDayValue(),
+                dto.getGuideExperience(),
+                dto.getGuideIdFrontImage(),
+                dto.getGuideIdRearImage(),
+                dto.getGuideNicFrontImag(),
+                dto.getGuideNicRearImage(),
+                dto.getGuideProfilePicImage(),
+                dto.isGuideStatus()
+        );
+
+
+        if(guideRepo.existsById(guideDto.getGuideId())){
+            Guide guide = mapper.map(guideDto, Guide.class);
+            Guide byId = guideRepo.findById(guide.getGuideId()).get();
+            deleteImages(guideDto,byId);
+            exportImages(guideDto,guide);
+            guideRepo.save(guide);
+            return null;
         }else {
             throw new EntryNotFoundException("Id Not found");
         }
@@ -182,6 +210,31 @@ public class GuideServiceImpl implements GuideService {
         // dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
         dto.setGuideIdRearImage(bytes);
     }
+
+    private void deleteImages(GuideDto guideDto, Guide guide) {
+        if (guideDto.getGuideProfilePicImage()!=null){
+            System.out.println("not null");
+            boolean delete = new File(guide.getGuideProfilePicImage()).delete();
+        }
+        if (guideDto.getGuideNicFrontImag()!=null){
+            System.out.println("not null");
+            boolean delete = new File(guide.getGuideNicFrontImag()).delete();
+        }
+        if (guideDto.getGuideNicRearImage()!=null){
+            System.out.println("not null");
+            boolean delete = new File(guide.getGuideNicRearImage()).delete();
+        }
+
+        if (guideDto.getGuideIdFrontImage()!=null){
+            System.out.println("not null");
+            boolean delete = new File(guide.getGuideIdFrontImage()).delete();
+        }
+        if (guideDto.getGuideIdRearImage()!=null){
+            System.out.println("not null");
+            boolean delete = new File(guide.getGuideIdRearImage()).delete();
+        }
+    }
+
 }
 
 

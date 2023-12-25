@@ -11,6 +11,7 @@ import lombok.*;
 
 
 public class RequestGuideDto {
+    private String guideId;
     private String guideName;
     private String guideAddress;
     private String guideContact;

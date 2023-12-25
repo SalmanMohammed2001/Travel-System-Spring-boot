@@ -42,6 +42,7 @@ public class GuideController {
     ) throws IOException {
 
        RequestGuideDto requestGuideDto = new RequestGuideDto(
+               "",
                 guideName,
                 guideAddress,
                 guideContact,
@@ -62,16 +63,16 @@ public class GuideController {
         );
     }
 
-  /*  @GetMapping(path = "{nic}")
-    public ResponseEntity<StandResponse> findByNic(@PathVariable String nic) {
-        ResponseDriverDto byNic = driverService.findByNic(nic);
+    @GetMapping(path = "{id}")
+    public ResponseEntity<StandResponse> findById(@PathVariable String id) throws IOException {
+        ResponseGuideDto byNic = guideService.findId(id);
         return new ResponseEntity<>(
                 new StandResponse(201, "driver data", byNic), HttpStatus.CREATED
         );
     }
 
 
-    @PutMapping
+  /*  @PutMapping
     public ResponseEntity<StandResponse> update(
             @RequestParam String driverId,
             @RequestParam String driverName,
