@@ -21,7 +21,7 @@ import java.util.List;
 public class Hotel {
 
     @Id
-    private int hotelId;
+    private String hotelId;
     private String hotelName;
     private String hotelCategory;
     private String hotelPetAllowed;

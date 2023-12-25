@@ -19,7 +19,7 @@ import java.util.Collection;
 
 
 public class responseHotelDto {
-    private int hotelId;
+    private String hotelId;
     private String hotelName;
     private String hotelCategory;
     private String hotelPetAllowed;
