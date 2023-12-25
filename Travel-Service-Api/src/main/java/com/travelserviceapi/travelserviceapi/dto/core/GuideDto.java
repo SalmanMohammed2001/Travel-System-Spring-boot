@@ -1,6 +1,9 @@
-package com.travelserviceapi.travelserviceapi.entity;
+package com.travelserviceapi.travelserviceapi.dto.core;
 
-import jakarta.persistence.*;
+import com.travelserviceapi.travelserviceapi.entity.Booking;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +14,8 @@ import lombok.Setter;
 @Getter
 @Setter
 
-@Entity
-public class Guide {
-    @Id
+
+public class GuideDto {
     private String guideId;
     private String guideName;
     private String guideAddress;
@@ -21,14 +23,11 @@ public class Guide {
     private String guideBirthDate;
     private double guideManDayValue;
     private String guideExperience;
-    private String guideIdFrontImage;
-    private String guideIdRearImage;
-    private String guideNicFrontImag;
-    private String guideNicRearImage;
+    private byte[] guideIdFrontImage;
+    private byte[] guideIdRearImage;
+    private byte[] guideNicFrontImag;
+    private byte[] guideNicRearImage;
     private String guideProfilePicImage;
-
     private boolean guideStatus;
-
-    @OneToOne(mappedBy = "guide")
     private Booking booking;
 }
