@@ -72,41 +72,50 @@ public class GuideController {
     }
 
 
-  /*  @PutMapping
+    @PutMapping
     public ResponseEntity<StandResponse> update(
-            @RequestParam String driverId,
-            @RequestParam String driverName,
-            @RequestParam String driverContact,
-            @RequestParam String driverNic,
-            @RequestPart byte[] driverImage,
-            @RequestPart byte[] licenseImageFront,
-            @RequestPart byte[] licenseImageRear,
-            @RequestParam boolean status,
-            @RequestParam String vehicleId
+            @RequestPart String guideName,
+            @RequestPart String guideAddress,
+            @RequestPart String guideContact,
+            @RequestPart String guideBirthDate,
+            @RequestParam double guideManDayValue,
+            @RequestPart String guideExperience,
+            @RequestPart byte[] guideIdFrontImage,
+            @RequestPart byte[] guideIdRearImage,
+            @RequestPart byte[] guideNicFrontImag,
+            @RequestPart byte[] guideNicRearImage,
+            @RequestPart byte[] guideProfilePicImage,
+            @RequestParam boolean guideStatus,
+            @RequestPart String guideId
 
     ) throws IOException {
 
-
-        RequestDriverDto requestDriverDto = new RequestDriverDto(
-                driverId,
-                driverName,
-                driverContact,
-                driverNic,
-                driverImage,
-                licenseImageFront,
-                licenseImageRear,
-                status,
-                vehicleId
+        RequestGuideDto requestGuideDto = new RequestGuideDto(
+                guideId,
+                guideName,
+                guideAddress,
+                guideContact,
+                guideBirthDate,
+                guideManDayValue,
+                guideExperience,
+                guideIdFrontImage,
+                guideIdRearImage,
+                guideNicFrontImag,
+                guideNicRearImage,
+                guideProfilePicImage,
+                guideStatus
         );
 
 
-        driverService.update(requestDriverDto);
+
+
+        guideService.update(requestGuideDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "drive update", null), HttpStatus.CREATED
         );
     }
 
-    @DeleteMapping(params = {"id"})
+  /*  @DeleteMapping(params = {"id"})
     public ResponseEntity<StandResponse> delete(@RequestParam String id) {
         driverService.deleteDriver(id);
         return new ResponseEntity<>(
