@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
                 User user = mapper.map(userDto, User.class);
                 exportImages(userDto, user);
                 User save = userRepo.save(user);
+
                 return new ResponseUserDto(save.getUserId(), save.getUsername(), save.getUserPassword(), save.getUserNic(),
                         save.getUserDob(), save.getUserGender(), save.getUserContact(), save.getUserEmail(),
                         save.getUserAddress(), null, null, null, null,null,null,null);

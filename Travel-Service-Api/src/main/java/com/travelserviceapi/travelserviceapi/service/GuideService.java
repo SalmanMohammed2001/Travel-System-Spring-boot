@@ -8,4 +8,6 @@ import java.io.IOException;
 public interface GuideService {
 
     public ResponseGuideDto saveGuide(RequestGuideDto dto) throws IOException;
+    public ResponseGuideDto saveGuide(String guideId) throws IOException;
+
 }

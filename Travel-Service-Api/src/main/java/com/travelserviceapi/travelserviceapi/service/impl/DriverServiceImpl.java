@@ -64,6 +64,7 @@ public class DriverServiceImpl implements DriverService {
             driver.setVehicle(vehicle);
             exportImages(driverDto,driver);
             Driver save = driverRepo.save(driver);
+
             ResponseVehicleDto responseVehicleDto = mapper.map(save.getVehicle(), ResponseVehicleDto.class);
             ResponseDriverDto responseDriverDto = mapper.map(save, ResponseDriverDto.class);
             responseDriverDto.setVehicle(responseVehicleDto);

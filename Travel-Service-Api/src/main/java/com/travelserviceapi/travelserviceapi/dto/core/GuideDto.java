@@ -4,16 +4,13 @@ import com.travelserviceapi.travelserviceapi.entity.Booking;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-
+@ToString
 
 public class GuideDto {
     private String guideId;
@@ -27,7 +24,6 @@ public class GuideDto {
     private byte[] guideIdRearImage;
     private byte[] guideNicFrontImag;
     private byte[] guideNicRearImage;
-    private String guideProfilePicImage;
+    private byte[] guideProfilePicImage;
     private boolean guideStatus;
-    private Booking booking;
 }

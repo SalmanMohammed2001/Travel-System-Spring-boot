@@ -23,3 +23,4 @@ public class DriverDto {
     private boolean driverStatus;
     private String vehicle;
 }
+

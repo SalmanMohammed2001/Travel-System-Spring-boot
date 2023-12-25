@@ -1,15 +1,13 @@
 package com.travelserviceapi.travelserviceapi.dto.responseDto;
 
 import com.travelserviceapi.travelserviceapi.entity.Booking;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 
 
 public class ResponseGuideDto {
@@ -24,7 +22,7 @@ public class ResponseGuideDto {
     private byte[] guideIdRearImage;
     private byte[] guideNicFrontImag;
     private byte[] guideNicRearImage;
-    private String guideProfilePicImage;
+    private byte[] guideProfilePicImage;
     private boolean guideStatus;
     private Booking booking;
 }
