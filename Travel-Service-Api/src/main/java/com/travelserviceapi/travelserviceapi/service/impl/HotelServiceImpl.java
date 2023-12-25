@@ -47,7 +47,7 @@ public class HotelServiceImpl implements HotelService {
         String generateKey = generator.generateKey("Hotel");
         HotelDto hotelDto = mapper.map(dto, HotelDto.class);
         hotelDto.setHotelId(generateKey);
-        if(hotelRepo.existsById(hotelDto.getHotelId())){
+        if(!hotelRepo.existsById(hotelDto.getHotelId())){
             Hotel hotel = mapper.map(hotelDto, Hotel.class);
             exPortImage(hotelDto,hotel);
             hotelRepo.save(hotel);
