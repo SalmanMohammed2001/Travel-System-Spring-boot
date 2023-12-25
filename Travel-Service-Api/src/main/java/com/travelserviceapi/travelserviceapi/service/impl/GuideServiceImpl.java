@@ -16,6 +16,7 @@ import com.travelserviceapi.travelserviceapi.service.GuideService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import com.travelserviceapi.travelserviceapi.util.mapper.GuideMapper;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +25,9 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Service
 
@@ -34,9 +37,10 @@ public class GuideServiceImpl implements GuideService {
 
     private final Generator generator;
     private final Gson gson;
-    
+
     private final GuideMapper guideMapper;
     private final GuideRepo guideRepo;
+
     public GuideServiceImpl(ModelMapper mapper, Generator generator, Gson gson, GuideMapper guideMapper, GuideRepo guideRepo) {
         this.mapper = mapper;
         this.generator = generator;
@@ -49,32 +53,32 @@ public class GuideServiceImpl implements GuideService {
     public ResponseGuideDto saveGuide(RequestGuideDto dto) throws IOException {
         String generateKey = generator.generateKey("Guide");
 
-       GuideDto guideDto = new GuideDto(
-               generateKey,
-               dto.getGuideName(),
-               dto.getGuideAddress(),
-               dto.getGuideContact(),
-               dto.getGuideBirthDate(),
-               dto.getGuideManDayValue(),
-               dto.getGuideExperience(),
-               dto.getGuideIdFrontImage(),
-               dto.getGuideIdRearImage(),
-               dto.getGuideNicFrontImag(),
-               dto.getGuideNicRearImage(),
-               dto.getGuideProfilePicImage(),
-               dto.isGuideStatus()
-       );
+        GuideDto guideDto = new GuideDto(
+                generateKey,
+                dto.getGuideName(),
+                dto.getGuideAddress(),
+                dto.getGuideContact(),
+                dto.getGuideBirthDate(),
+                dto.getGuideManDayValue(),
+                dto.getGuideExperience(),
+                dto.getGuideIdFrontImage(),
+                dto.getGuideIdRearImage(),
+                dto.getGuideNicFrontImag(),
+                dto.getGuideNicRearImage(),
+                dto.getGuideProfilePicImage(),
+                dto.isGuideStatus()
+        );
 
-       if(!guideRepo.existsById(guideDto.getGuideId())){
-           Guide guide = mapper.map(guideDto, Guide.class);
-           exportImages(guideDto,guide);
-           Guide save = guideRepo.save(guide);
-           ResponseGuideDto responseGuideDto = mapper.map(save, ResponseGuideDto.class);
-           importImages(responseGuideDto,save);
-           return responseGuideDto;
+        if (!guideRepo.existsById(guideDto.getGuideId())) {
+            Guide guide = mapper.map(guideDto, Guide.class);
+            exportImages(guideDto, guide);
+            Guide save = guideRepo.save(guide);
+            ResponseGuideDto responseGuideDto = mapper.map(save, ResponseGuideDto.class);
+            importImages(responseGuideDto, save);
+            return responseGuideDto;
 
 
-       }else {
+        } else {
             throw new DuplicateEntryException("duplicate Guide Id");
         }
 
@@ -82,13 +86,13 @@ public class GuideServiceImpl implements GuideService {
 
     @Override
     public ResponseGuideDto findId(String guideId) throws IOException {
-        if(guideRepo.existsById(guideId)){
+        if (guideRepo.existsById(guideId)) {
             Guide guide = guideRepo.findById(guideId).get();
             ResponseGuideDto responseGuideDto = mapper.map(guide, ResponseGuideDto.class);
-            importImages(responseGuideDto,guide);
+            importImages(responseGuideDto, guide);
 
             return responseGuideDto;
-        }else {
+        } else {
             throw new EntryNotFoundException("Id Not found");
         }
     }
@@ -112,16 +116,41 @@ public class GuideServiceImpl implements GuideService {
         );
 
 
-        if(guideRepo.existsById(guideDto.getGuideId())){
+        if (guideRepo.existsById(guideDto.getGuideId())) {
             Guide guide = mapper.map(guideDto, Guide.class);
             Guide byId = guideRepo.findById(guide.getGuideId()).get();
-            deleteImages(guideDto,byId);
-            exportImages(guideDto,guide);
+            deleteImages(guideDto, byId);
+            exportImages(guideDto, guide);
             guideRepo.save(guide);
             return null;
-        }else {
+        } else {
             throw new EntryNotFoundException("Id Not found");
         }
+    }
+
+    @Override
+    public void delete(String id) {
+        if (guideRepo.existsById(id)) {
+            Guide guide = guideRepo.findById(id).get();
+            deleteImagesAll(guide);
+            guideRepo.deleteById(id);
+
+        } else {
+            throw new EntryNotFoundException("Id Not found");
+        }
+    }
+
+    @Override
+    public List<ResponseGuideDto> findAll() {
+        try {
+            List<Guide> all = guideRepo.findAll();
+            List<ResponseGuideDto> responseGuideDtoList = mapper.map(all, new TypeToken<List<ResponseGuideDto>>() {}.getType());
+            List<ResponseGuideDto> responseGuideDtoList1 = importImagesAll(responseGuideDtoList, all);
+            return responseGuideDtoList1;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -177,22 +206,22 @@ public class GuideServiceImpl implements GuideService {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(read, "jpg", baos);
         byte[] bytes = baos.toByteArray();
-       // dto.setG(Base64.getEncoder().encodeToString(bytes));
+        // dto.setG(Base64.getEncoder().encodeToString(bytes));
         dto.setGuideProfilePicImage(bytes);
 
 
-       read = ImageIO.read(new File(guide.getGuideNicFrontImag()));
+        read = ImageIO.read(new File(guide.getGuideNicFrontImag()));
         baos = new ByteArrayOutputStream();
         ImageIO.write(read, "jpg", baos);
         bytes = baos.toByteArray();
-       // dto.setNicFrontImg(Base64.getEncoder().encodeToString(bytes));
+        // dto.setNicFrontImg(Base64.getEncoder().encodeToString(bytes));
         dto.setGuideNicFrontImag(bytes);
 
-       read = ImageIO.read(new File(guide.getGuideNicRearImage()));
+        read = ImageIO.read(new File(guide.getGuideNicRearImage()));
         baos = new ByteArrayOutputStream();
         ImageIO.write(read, "jpg", baos);
         bytes = baos.toByteArray();
-       // dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        // dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
         dto.setGuideNicRearImage(bytes);
 
         read = ImageIO.read(new File(guide.getGuideIdFrontImage()));
@@ -211,29 +240,107 @@ public class GuideServiceImpl implements GuideService {
         dto.setGuideIdRearImage(bytes);
     }
 
+    public List<ResponseGuideDto> importImagesAll(List<ResponseGuideDto> dto1, List<Guide> guide1) throws IOException {
+        Guide guide = new Guide();
+        guide1.forEach(data -> {
+            guide.setGuideProfilePicImage(data.getGuideProfilePicImage());
+            guide.setGuideIdFrontImage(data.getGuideIdFrontImage());
+            guide.setGuideIdRearImage(data.getGuideIdRearImage());
+            guide.setGuideNicFrontImag(data.getGuideNicFrontImag());
+            guide.setGuideNicRearImage(data.getGuideNicRearImage());
+        });
+
+
+        ResponseGuideDto dto = new ResponseGuideDto();
+        BufferedImage read = ImageIO.read(new File(guide.getGuideProfilePicImage()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        byte[] bytes = baos.toByteArray();
+        // dto.setG(Base64.getEncoder().encodeToString(bytes));
+        dto.setGuideProfilePicImage(bytes);
+
+
+        read = ImageIO.read(new File(guide.getGuideNicFrontImag()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        // dto.setNicFrontImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setGuideNicFrontImag(bytes);
+
+        read = ImageIO.read(new File(guide.getGuideNicRearImage()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        // dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setGuideNicRearImage(bytes);
+
+        read = ImageIO.read(new File(guide.getGuideIdFrontImage()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        // dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setGuideIdFrontImage(bytes);
+
+
+        read = ImageIO.read(new File(guide.getGuideIdRearImage()));
+        baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        bytes = baos.toByteArray();
+        // dto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
+        dto.setGuideIdRearImage(bytes);
+
+        ArrayList<ResponseGuideDto> list = new ArrayList<>();
+        for (ResponseGuideDto data : dto1) {
+            list.add(new ResponseGuideDto(
+                    data.getGuideId(), data.getGuideName(), data.getGuideAddress(), data.getGuideContact(), data.getGuideBirthDate(),
+                    data.getGuideManDayValue(), data.getGuideExperience(), dto.getGuideIdFrontImage(), dto.getGuideIdRearImage(),
+                    dto.getGuideNicFrontImag(), dto.getGuideNicRearImage(), dto.getGuideProfilePicImage(), data.isGuideStatus(), null
+            ));
+        }
+
+        return  list;
+
+
+    }
+
+
     private void deleteImages(GuideDto guideDto, Guide guide) {
-        if (guideDto.getGuideProfilePicImage()!=null){
+        if (guideDto.getGuideProfilePicImage() != null) {
             System.out.println("not null");
             boolean delete = new File(guide.getGuideProfilePicImage()).delete();
         }
-        if (guideDto.getGuideNicFrontImag()!=null){
+        if (guideDto.getGuideNicFrontImag() != null) {
             System.out.println("not null");
             boolean delete = new File(guide.getGuideNicFrontImag()).delete();
         }
-        if (guideDto.getGuideNicRearImage()!=null){
+        if (guideDto.getGuideNicRearImage() != null) {
             System.out.println("not null");
             boolean delete = new File(guide.getGuideNicRearImage()).delete();
         }
 
-        if (guideDto.getGuideIdFrontImage()!=null){
+        if (guideDto.getGuideIdFrontImage() != null) {
             System.out.println("not null");
             boolean delete = new File(guide.getGuideIdFrontImage()).delete();
         }
-        if (guideDto.getGuideIdRearImage()!=null){
+        if (guideDto.getGuideIdRearImage() != null) {
             System.out.println("not null");
             boolean delete = new File(guide.getGuideIdRearImage()).delete();
         }
     }
+
+    private void deleteImagesAll(Guide guide) {
+        boolean delete = new File(guide.getGuideProfilePicImage()).delete();
+
+        delete = new File(guide.getGuideNicFrontImag()).delete();
+
+        delete = new File(guide.getGuideNicRearImage()).delete();
+
+        delete = new File(guide.getGuideIdFrontImage()).delete();
+
+        delete = new File(guide.getGuideIdRearImage()).delete();
+
+    }
+
 
 }
 

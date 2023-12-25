@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/guide")
@@ -115,12 +116,20 @@ public class GuideController {
         );
     }
 
-  /*  @DeleteMapping(params = {"id"})
-    public ResponseEntity<StandResponse> delete(@RequestParam String id) {
-        driverService.deleteDriver(id);
+    @DeleteMapping(params = {"guideId"})
+    public ResponseEntity<StandResponse> delete(@RequestParam String guideId) {
+        guideService.delete(guideId);
         return new ResponseEntity<>(
                 new StandResponse(201, "drive update", null), HttpStatus.CREATED
         );
     }
-*/
+
+    @GetMapping()
+    public ResponseEntity<StandResponse> findAll() {
+        List<ResponseGuideDto> all = guideService.findAll();
+        return new ResponseEntity<>(
+                new StandResponse(201, "drive all data", all), HttpStatus.CREATED
+        );
+    }
+
 }
