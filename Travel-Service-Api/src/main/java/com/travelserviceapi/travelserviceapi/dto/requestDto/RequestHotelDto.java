@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @AllArgsConstructor
@@ -36,7 +37,7 @@ public class RequestHotelDto {
     )
     private Collection<Price> hotelPrices;
 
-    private String images;
+    private ArrayList<byte[]> images;
     private boolean hotelStatus;
 
 
