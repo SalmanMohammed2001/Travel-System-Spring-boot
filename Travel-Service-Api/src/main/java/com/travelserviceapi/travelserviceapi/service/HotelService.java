@@ -3,8 +3,16 @@ package com.travelserviceapi.travelserviceapi.service;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestHotelDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 
+import java.util.List;
+
 public interface HotelService {
 
     public void save(RequestHotelDto dto);
     public ResponseHotelDto findById(String id);
+
+    public void updateHotel(RequestHotelDto dto);
+
+    public void deleteHotel(String id);
+
+    public List<ResponseHotelDto> findAll();
 }

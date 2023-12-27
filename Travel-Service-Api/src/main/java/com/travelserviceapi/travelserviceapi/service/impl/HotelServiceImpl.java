@@ -24,6 +24,8 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -77,6 +79,45 @@ public class HotelServiceImpl implements HotelService {
         }
         return null;
 
+    }
+
+    @Override
+    public void updateHotel(RequestHotelDto dto) {
+        HotelDto hotelDto = mapper.map(dto, HotelDto.class);
+        if(hotelRepo.existsById(dto.getHotelId())){
+            Hotel hotelImage = hotelRepo.findById(dto.getHotelId()).get();
+            deleteImage(hotelImage);
+            Hotel hotel = mapper.map(dto, Hotel.class);
+            exPortImage(hotelDto,hotel);
+            hotelRepo.save(hotel);
+        }else {
+            throw new EntryNotFoundException("Id Not Found");
+        }
+    }
+
+    @Override
+    public void deleteHotel(String id) {
+
+    }
+
+    @Override
+    public List<ResponseHotelDto> findAll() {
+        return null;
+    }
+
+    public void deleteImage(Hotel hotel){
+        if (hotel!=null){
+          //  Vehicle vehicle = byId.get();
+            String images = hotel.getImages();
+            if (images != null){
+                ArrayList<String> pathList = gson.fromJson(images, new TypeToken<ArrayList<String>>(){}.getType());
+                for (String path : pathList) {
+                    File file = new File(path);
+                    boolean delete = file.delete();
+                    System.out.println("Images " + delete);
+                }
+            }
+        }
     }
 
     public void exPortImage(HotelDto dto, Hotel hotel){
