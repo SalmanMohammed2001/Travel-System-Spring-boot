@@ -75,53 +75,51 @@ public class PackageDetailsController {
         );
     }
 
- /*   private ResponsePackageDetailsDto find(@PathVariable String id){
-        ResponsePackageDetailsDto byId = packageDetailsService.findById(id);
-        return byId;
-    }
-*/
 
-
-  /*  @PutMapping
+    @PutMapping
     public ResponseEntity<StandResponse> update(
-            @RequestParam String driverId,
-            @RequestParam String driverName,
-            @RequestParam String driverContact,
-            @RequestParam String driverNic,
-            @RequestPart byte[] driverImage,
-            @RequestPart byte[] licenseImageFront,
-            @RequestPart byte[] licenseImageRear,
-            @RequestParam boolean status,
-            @RequestParam String vehicleId
+
+
+            @RequestParam String category,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam int days,
+            @RequestParam int night,
+            @RequestParam String packageTravelArea,
+            @RequestParam String packageNoAdult,
+            @RequestParam String packageNoChildren,
+            @RequestParam String packageTotalHeadCount,
+            @RequestParam String withPetOrNo,
+            @RequestParam double packageValue,
+            @RequestParam String packageStatus,
+            @RequestParam String hotel,
+            @RequestParam String vehicle,
+            @RequestParam String packageId
+
+
 
     ) throws IOException {
+        TravelDuration travelDuration = new TravelDuration(startDate,endDate,days,night);
+        RequestPackageDetailsDto requestPackageDetailsDto = new RequestPackageDetailsDto();
+        requestPackageDetailsDto.setPackageId(packageId);
+        requestPackageDetailsDto.setCategory(category);
+        requestPackageDetailsDto.setTravelDuration(travelDuration);
+        requestPackageDetailsDto.setPackageTravelArea(packageTravelArea);
+        requestPackageDetailsDto.setPackageNoAdult(packageNoAdult);
+        requestPackageDetailsDto.setPackageNoChildren(packageNoChildren);
+        requestPackageDetailsDto.setPackageTotalHeadCount(packageTotalHeadCount);
+        requestPackageDetailsDto.setWithPetOrNo(withPetOrNo);
+        requestPackageDetailsDto.setPackageValue(packageValue);
+        requestPackageDetailsDto.setPackageStatus(packageStatus);
+        requestPackageDetailsDto.setHotel(hotel);
+        requestPackageDetailsDto.setVehicle(vehicle);
 
-
-        RequestDriverDto requestDriverDto = new RequestDriverDto(
-                driverId,
-                driverName,
-                driverContact,
-                driverNic,
-                driverImage,
-                licenseImageFront,
-                licenseImageRear,
-                status,
-                vehicleId
-        );
-
-
-     driverService.update(requestDriverDto);
+        ResponsePackageDetailsDto save = packageDetailsService.update(requestPackageDetailsDto);
         return new ResponseEntity<>(
-                new StandResponse(201, "drive update", null), HttpStatus.CREATED
+                new StandResponse(201, "update Package", save), HttpStatus.CREATED
         );
     }
 
-    @DeleteMapping(params = {"id"})
-    public ResponseEntity<StandResponse> delete(@RequestParam String id){
-        driverService.deleteDriver(id);
-        return new ResponseEntity<>(
-                new StandResponse(201, "drive update", null), HttpStatus.CREATED
-        );
-    }*/
+
 
 }

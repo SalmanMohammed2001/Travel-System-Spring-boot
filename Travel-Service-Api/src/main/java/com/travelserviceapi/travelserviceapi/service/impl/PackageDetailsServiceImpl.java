@@ -58,6 +58,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
 
                ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
                 ResponseHotelDto responseHotelDto = mapper.map(save.getHotel(), ResponseHotelDto.class);
+                responseHotelDto.setPackageDetails(null);
 
                 ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(save, ResponsePackageDetailsDto.class);
                 responsePackageDetailsDto.setHotel(responseHotelDto);
@@ -107,10 +108,21 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
             packageDetails.setHotel(hotel);
             packageDetails.setVehicle(vehicle);
             PackageDetails save = packageDetailsRepo.save(packageDetails);
+
+
+            ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
+            ResponseHotelDto responseHotelDto = mapper.map(save.getHotel(), ResponseHotelDto.class);
+            responseHotelDto.setPackageDetails(null);
+
+            ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(save, ResponsePackageDetailsDto.class);
+            responsePackageDetailsDto.setHotel(responseHotelDto);
+            responsePackageDetailsDto.setVehicle(responseVehicleDto);
+            return responsePackageDetailsDto;
+
         }else {
             throw new EntryNotFoundException("Id Not found");
         }
-        return null;
+
     }
 
     @Override
