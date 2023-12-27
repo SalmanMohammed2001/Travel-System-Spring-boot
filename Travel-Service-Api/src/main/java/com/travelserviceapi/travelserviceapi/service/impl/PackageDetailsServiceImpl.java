@@ -7,20 +7,19 @@ import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponsePackageDetailsDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
-import com.travelserviceapi.travelserviceapi.entity.Driver;
-import com.travelserviceapi.travelserviceapi.entity.Hotel;
-import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
-import com.travelserviceapi.travelserviceapi.entity.Vehicle;
+import com.travelserviceapi.travelserviceapi.entity.*;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
 import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.PackageDetailsRepo;
 import com.travelserviceapi.travelserviceapi.service.PackageDetailsService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 @Service
 @Transactional
@@ -58,7 +57,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
 
                ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
                 ResponseHotelDto responseHotelDto = mapper.map(save.getHotel(), ResponseHotelDto.class);
-                responseHotelDto.setPackageDetails(null);
+               // responseHotelDto.setPackageDetails(null);
 
                 ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(save, ResponsePackageDetailsDto.class);
                 responsePackageDetailsDto.setHotel(responseHotelDto);
@@ -82,7 +81,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
            PackageDetails packageDetails = packageDetailsRepo.findById(id).get();
             ResponseVehicleDto responseVehicleDto= mapper.map(packageDetails.getVehicle(),ResponseVehicleDto.class);
             ResponseHotelDto responseHotelDto = mapper.map(packageDetails.getHotel(), ResponseHotelDto.class);
-            responseHotelDto.setPackageDetails(null);
+           // responseHotelDto.setPackageDetails(null);
 
 
             ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(packageDetails, ResponsePackageDetailsDto.class);
@@ -112,7 +111,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
 
             ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
             ResponseHotelDto responseHotelDto = mapper.map(save.getHotel(), ResponseHotelDto.class);
-            responseHotelDto.setPackageDetails(null);
+          //  responseHotelDto.setPackageDetails(null);
 
             ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(save, ResponsePackageDetailsDto.class);
             responsePackageDetailsDto.setHotel(responseHotelDto);
@@ -136,6 +135,8 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
 
     @Override
     public List<ResponsePackageDetailsDto> findAll() {
-        return null;
+        List<PackageDetails> all = packageDetailsRepo.findAll();
+        List<ResponsePackageDetailsDto> responsePackageDetailsDto=mapper.map(all,new TypeToken<List<ResponsePackageDetailsDto>>(){}.getType());
+       return responsePackageDetailsDto;
     }
 }

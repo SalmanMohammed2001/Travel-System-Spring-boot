@@ -199,7 +199,7 @@ public class HotelServiceImpl implements HotelService {
             arrayList.add(new ResponseHotelDto(
                     data.getHotelId(),data.getHotelName(),data.getHotelCategory(),data.getHotelPetAllowed(),
                     data.getHotelMapLink(),data.getHotelAddress(),data.getHotelContact(),data.getHotelEmail(),
-                    data.getHotelPrices(),responseHotelDto.getImages(),data.isHotelStatus(),data.getPackageDetails()
+                    data.getHotelPrices(),responseHotelDto.getImages(),data.isHotelStatus()
             ));
         }
         return arrayList;

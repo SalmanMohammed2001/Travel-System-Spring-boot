@@ -35,7 +35,7 @@ public class ResponseHotelDto {
 
     private ArrayList<byte[]> images;
     private boolean hotelStatus;
-    private PackageDetails packageDetails;
+    //private PackageDetails packageDetails;
 
 
 }
