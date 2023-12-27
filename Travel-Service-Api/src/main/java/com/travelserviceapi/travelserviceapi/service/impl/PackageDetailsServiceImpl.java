@@ -16,13 +16,16 @@ import com.travelserviceapi.travelserviceapi.repo.PackageDetailsRepo;
 import com.travelserviceapi.travelserviceapi.service.PackageDetailsService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
-
+@Service
+@Transactional
 public class PackageDetailsServiceImpl implements PackageDetailsService {
 
-    private PackageDetailsRepo packageDetailsRepo;
+    private final PackageDetailsRepo packageDetailsRepo;
 
     private final ModelMapper mapper;
 
