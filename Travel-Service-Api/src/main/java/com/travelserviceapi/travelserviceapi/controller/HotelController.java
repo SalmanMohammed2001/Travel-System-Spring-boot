@@ -152,5 +152,11 @@ public class HotelController {
         );
     }
 
-
+@DeleteMapping(params = {"hotelId"})
+    public ResponseEntity<StandResponse> delete(@RequestParam String hotelId){
+        hotelService.deleteHotel(hotelId);
+    return new ResponseEntity<>(
+            new StandResponse(201, "hotel delete", null), HttpStatus.CREATED
+    );
+}
 }

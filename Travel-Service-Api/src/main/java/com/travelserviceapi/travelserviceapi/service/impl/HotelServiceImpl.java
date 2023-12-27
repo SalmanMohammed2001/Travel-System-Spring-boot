@@ -97,8 +97,19 @@ public class HotelServiceImpl implements HotelService {
 
     @Override
     public void deleteHotel(String id) {
+        try {
+            if(hotelRepo.existsById(id)){
+                Hotel hotel = hotelRepo.findById(id).get();
+                deleteImage(hotel);
+                hotelRepo.deleteById(id);
+            }else {
+                throw new EntryNotFoundException("Id Not Found");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-    }
+}
 
     @Override
     public List<ResponseHotelDto> findAll() {
