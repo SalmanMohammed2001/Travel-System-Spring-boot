@@ -97,7 +97,18 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
     @Override
     public ResponsePackageDetailsDto update(RequestPackageDetailsDto dto) {
         if(packageDetailsRepo.existsById(dto.getPackageId())){
+            PackageDetailsDto packageDetailsDto = mapper.map(dto, PackageDetailsDto.class);
+            Hotel hotel = new Hotel();
+            hotel.setHotelId(packageDetailsDto.getHotel());
+            Vehicle vehicle = new Vehicle();
+            vehicle.setVehicleId(packageDetailsDto.getVehicle());
 
+            PackageDetails packageDetails = mapper.map(packageDetailsDto, PackageDetails.class);
+            packageDetails.setHotel(hotel);
+            packageDetails.setVehicle(vehicle);
+            PackageDetails save = packageDetailsRepo.save(packageDetails);
+        }else {
+            throw new EntryNotFoundException("Id Not found");
         }
         return null;
     }
