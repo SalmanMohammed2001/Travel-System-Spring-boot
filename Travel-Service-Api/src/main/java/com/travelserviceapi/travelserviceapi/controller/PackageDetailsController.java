@@ -120,6 +120,12 @@ public class PackageDetailsController {
         );
     }
 
-
+    @DeleteMapping(params = {"packageId"})
+    public ResponseEntity<StandResponse> delete(@RequestParam String packageId){
+         packageDetailsService.delete(packageId);
+        return new ResponseEntity<>(
+                new StandResponse(201, "delete package",null), HttpStatus.CREATED
+        );
+    }
 
 }

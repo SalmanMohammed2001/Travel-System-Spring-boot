@@ -127,7 +127,11 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
 
     @Override
     public void delete(String id) {
-
+        if (packageDetailsRepo.existsById(id)){
+            packageDetailsRepo.deleteById(id);
+        }else {
+            throw new EntryNotFoundException("Id Not found");
+        }
     }
 
     @Override
