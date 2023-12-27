@@ -2,6 +2,7 @@ package com.travelserviceapi.travelserviceapi.controller;
 
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestGuideDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestHotelDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.embadded.Price;
 import com.travelserviceapi.travelserviceapi.service.HotelService;
@@ -83,16 +84,16 @@ public class HotelController {
         );
     }
 
-  /*  @GetMapping(path = "{id}")
+   @GetMapping(path = "{id}")
     public ResponseEntity<StandResponse> findById(@PathVariable String id) throws IOException {
-        ResponseGuideDto byNic = guideService.findId(id);
-        return new ResponseEntity<>(
-                new StandResponse(201, "driver data", byNic), HttpStatus.CREATED
+       ResponseHotelDto byId = hotelService.findById(id);
+       return new ResponseEntity<>(
+                new StandResponse(201, "driver data", byId), HttpStatus.CREATED
         );
     }
 
 
-    @PutMapping
+  /*  @PutMapping
     public ResponseEntity<StandResponse> update(
             @RequestPart String guideName,
             @RequestPart String guideAddress,

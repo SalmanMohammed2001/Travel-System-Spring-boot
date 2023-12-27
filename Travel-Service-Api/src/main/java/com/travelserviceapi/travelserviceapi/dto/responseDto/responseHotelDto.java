@@ -18,7 +18,7 @@ import java.util.Collection;
 @Setter
 
 
-public class responseHotelDto {
+public class ResponseHotelDto {
     private String hotelId;
     private String hotelName;
     private String hotelCategory;
