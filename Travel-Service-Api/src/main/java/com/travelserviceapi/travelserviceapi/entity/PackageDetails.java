@@ -30,13 +30,15 @@ public class PackageDetails {
     private double packageValue;
     private String packageStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "hotel_id",unique = true)
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "hotel_id",referencedColumnName = "hotelId",nullable = false,unique = true)
     private Hotel hotel;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "vehicle_id",unique = true)
+    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "vehicle_id",referencedColumnName = "vehicleId",nullable = false,unique = true)
     private Vehicle vehicle;
+
+
 
 
     @OneToMany(mappedBy = "packageDetails", cascade = CascadeType.ALL)

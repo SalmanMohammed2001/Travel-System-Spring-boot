@@ -67,17 +67,22 @@ public class PackageDetailsController {
         );
     }
 
-   /* @GetMapping(path = "{nic}")
-    public ResponseEntity<StandResponse> findByNic(@PathVariable String nic){
-        ResponseDriverDto byNic = driverService.findByNic(nic);
+    @GetMapping(path = "{id}")
+    public ResponseEntity<StandResponse> findByNic(@PathVariable String id){
+        ResponsePackageDetailsDto byId = packageDetailsService.findById(id);
         return new ResponseEntity<>(
-                new StandResponse(201, "driver data",byNic ), HttpStatus.CREATED
+                new StandResponse(201, "driver data",byId ), HttpStatus.CREATED
         );
     }
 
+ /*   private ResponsePackageDetailsDto find(@PathVariable String id){
+        ResponsePackageDetailsDto byId = packageDetailsService.findById(id);
+        return byId;
+    }
+*/
 
 
-    @PutMapping
+  /*  @PutMapping
     public ResponseEntity<StandResponse> update(
             @RequestParam String driverId,
             @RequestParam String driverName,

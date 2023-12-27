@@ -5,6 +5,7 @@ import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ResponseVehicleDto {
 
     private String vehicleId;

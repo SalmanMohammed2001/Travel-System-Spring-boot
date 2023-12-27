@@ -2,10 +2,7 @@ package com.travelserviceapi.travelserviceapi.dto.responseDto;
 
 import com.travelserviceapi.travelserviceapi.embadded.TravelDuration;
 import com.travelserviceapi.travelserviceapi.entity.BookingDetails;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-
+@ToString
 
 public class ResponsePackageDetailsDto {
     private String packageId;

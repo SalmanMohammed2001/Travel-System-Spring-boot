@@ -4,10 +4,7 @@ import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.embadded.Price;
 import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +13,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @Getter
 @Setter
-
+@ToString
 
 public class ResponseHotelDto {
     private String hotelId;

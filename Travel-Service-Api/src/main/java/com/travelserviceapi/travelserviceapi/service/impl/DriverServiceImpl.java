@@ -86,8 +86,10 @@ public class DriverServiceImpl implements DriverService {
 
                 Vehicle vehicle = mapper.map(byDriverNic.getVehicle(), Vehicle.class);
                 System.out.println(vehicle.getVehicleImages());
+
                 ResponseVehicleDto responseVehicleDto = mapper.map(byDriverNic.getVehicle(), ResponseVehicleDto.class);
                 importImages(responseVehicleDto,vehicle);
+
                 ResponseDriverDto responseDriverDto = mapper.map(byDriverNic, ResponseDriverDto.class);
                 responseDriverDto.setVehicle(responseVehicleDto);
                 importImages(responseDriverDto,byDriverNic);

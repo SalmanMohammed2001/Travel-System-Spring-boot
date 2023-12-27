@@ -12,6 +12,7 @@ import com.travelserviceapi.travelserviceapi.entity.Hotel;
 import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
 import com.travelserviceapi.travelserviceapi.entity.Vehicle;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
+import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.PackageDetailsRepo;
 import com.travelserviceapi.travelserviceapi.service.PackageDetailsService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
@@ -55,13 +56,14 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
                 packageDetails.setVehicle(vehicle);
                 PackageDetails save = packageDetailsRepo.save(packageDetails);
 
-                ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
+               ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
                 ResponseHotelDto responseHotelDto = mapper.map(save.getHotel(), ResponseHotelDto.class);
 
                 ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(save, ResponsePackageDetailsDto.class);
                 responsePackageDetailsDto.setHotel(responseHotelDto);
                 responsePackageDetailsDto.setVehicle(responseVehicleDto);
                 return responsePackageDetailsDto;
+
             }else {
                 throw new DuplicateEntryException("id Duplicate");
             }
@@ -72,7 +74,31 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
     }
 
     @Override
+    public ResponsePackageDetailsDto findById(String id) {
+        if(packageDetailsRepo.existsById(id)){
+
+            System.out.println(id);
+           PackageDetails packageDetails = packageDetailsRepo.findById(id).get();
+            ResponseVehicleDto responseVehicleDto= mapper.map(packageDetails.getVehicle(),ResponseVehicleDto.class);
+            ResponseHotelDto responseHotelDto = mapper.map(packageDetails.getHotel(), ResponseHotelDto.class);
+            responseHotelDto.setPackageDetails(null);
+
+
+            ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(packageDetails, ResponsePackageDetailsDto.class);
+         responsePackageDetailsDto.setHotel(responseHotelDto);
+      responsePackageDetailsDto.setVehicle(responseVehicleDto);
+            System.out.println(responseHotelDto);
+            return responsePackageDetailsDto  ;
+        }else {
+            throw new EntryNotFoundException("Id Not found");
+        }
+    }
+
+    @Override
     public ResponsePackageDetailsDto update(RequestPackageDetailsDto dto) {
+        if(packageDetailsRepo.existsById(dto.getPackageId())){
+
+        }
         return null;
     }
 
