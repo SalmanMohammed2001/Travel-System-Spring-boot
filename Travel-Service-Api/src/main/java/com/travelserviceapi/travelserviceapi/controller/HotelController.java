@@ -159,4 +159,13 @@ public class HotelController {
             new StandResponse(201, "hotel delete", null), HttpStatus.CREATED
     );
 }
+    @GetMapping()
+    public ResponseEntity<StandResponse> findAll() throws IOException {
+        List<ResponseHotelDto> all = hotelService.findAll();
+        return new ResponseEntity<>(
+                new StandResponse(201, "hotel all", all), HttpStatus.CREATED
+        );
+    }
+
+
 }

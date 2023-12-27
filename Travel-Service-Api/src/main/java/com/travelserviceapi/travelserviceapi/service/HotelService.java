@@ -3,6 +3,7 @@ package com.travelserviceapi.travelserviceapi.service;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestHotelDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface HotelService {
@@ -14,5 +15,5 @@ public interface HotelService {
 
     public void deleteHotel(String id);
 
-    public List<ResponseHotelDto> findAll();
+    public List<ResponseHotelDto> findAll() throws IOException;
 }

@@ -112,8 +112,12 @@ public class HotelServiceImpl implements HotelService {
 }
 
     @Override
-    public List<ResponseHotelDto> findAll() {
-        return null;
+    public List<ResponseHotelDto> findAll() throws IOException {
+        List<Hotel> all = hotelRepo.findAll();
+        List<ResponseHotelDto> responseHotelDto = mapper.map(all, new TypeToken<List<ResponseHotelDto>>() {}.getType());
+        List<ResponseHotelDto> responseHotelDtos = importImagesAll(responseHotelDto, all);
+        return responseHotelDtos;
+
     }
 
     public void deleteImage(Hotel hotel){
@@ -168,6 +172,37 @@ public class HotelServiceImpl implements HotelService {
             byte[] imgData= b.toByteArray();
             hotelDto.getImages().add(imgData);
         }
+    }
+
+    List<ResponseHotelDto> importImagesAll(List<ResponseHotelDto> hotelDto,List<Hotel> hotels) throws IOException {
+        Hotel hotel = new Hotel();
+
+        hotels.forEach(data->{
+            hotel.setImages(data.getImages());
+        });
+        String images = hotel.getImages();
+
+        ResponseHotelDto responseHotelDto = new ResponseHotelDto();
+        responseHotelDto.setImages(new ArrayList<>());
+
+        ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());
+        for (int i = 0; i < imageList.size(); i++) {
+            BufferedImage r = ImageIO.read(new File(imageList.get(i)));
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ImageIO.write(r, "jpg", b);
+            byte[] imgData= b.toByteArray();
+            responseHotelDto.getImages().add(imgData);
+        };
+
+        List<ResponseHotelDto> arrayList = new ArrayList<>();
+        for (ResponseHotelDto data:hotelDto){
+            arrayList.add(new ResponseHotelDto(
+                    data.getHotelId(),data.getHotelName(),data.getHotelCategory(),data.getHotelPetAllowed(),
+                    data.getHotelMapLink(),data.getHotelAddress(),data.getHotelContact(),data.getHotelEmail(),
+                    data.getHotelPrices(),responseHotelDto.getImages(),data.isHotelStatus(),data.getPackageDetails()
+            ));
+        }
+        return arrayList;
     }
 
 }
