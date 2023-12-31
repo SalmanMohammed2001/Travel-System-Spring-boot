@@ -22,7 +22,7 @@ public class ResponsePackageDetailsDto {
     private String PackageTotalHeadCount;
     private String withPetOrNo;
     private double packageValue;
-    private String packageStatus;
+    private boolean packageStatus;
     private ResponseHotelDto hotel;
     private ResponseVehicleDto vehicle;
     private List<BookingDetails> bookingDetailsLis;

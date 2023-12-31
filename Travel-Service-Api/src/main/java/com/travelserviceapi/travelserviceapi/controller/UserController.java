@@ -34,6 +34,8 @@ public class UserController {
             @RequestPart String contact2,
             @RequestPart String email,
             @RequestPart String address,
+            @RequestParam boolean userState,
+
             @RequestPart byte[] nicFrontImg,
             @RequestPart byte[] nicRearImg,
             @RequestPart byte[] profilePic
@@ -49,6 +51,7 @@ public class UserController {
                 contact,
                 email,
                 address,
+                userState,
                 nicFrontImg,
                 nicRearImg,
                 profilePic);
@@ -80,6 +83,7 @@ public class UserController {
             @RequestPart String contact2,
             @RequestPart String email,
             @RequestPart String address,
+            @RequestParam boolean userState,
             @RequestPart byte[] nicFrontImg,
             @RequestPart byte[] nicRearImg,
             @RequestPart byte[] profilePic
@@ -95,6 +99,7 @@ public class UserController {
                 contact,
                 email,
                 address,
+                userState,
                 nicFrontImg,
                 nicRearImg,
                 profilePic);

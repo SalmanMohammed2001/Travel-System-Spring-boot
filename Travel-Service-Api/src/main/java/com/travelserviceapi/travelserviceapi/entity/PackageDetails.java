@@ -28,7 +28,7 @@ public class PackageDetails {
     private String PackageTotalHeadCount;
     private String withPetOrNo;
     private double packageValue;
-    private String packageStatus;
+    private boolean packageStatus;
 
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "hotel_id",referencedColumnName = "hotelId",nullable = false,unique = true)
@@ -37,7 +37,6 @@ public class PackageDetails {
     @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "vehicle_id",referencedColumnName = "vehicleId",nullable = false,unique = true)
     private Vehicle vehicle;
-
 
 
 

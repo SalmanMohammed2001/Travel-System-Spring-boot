@@ -20,13 +20,11 @@ public class Booking {
     private String bookingId;
     private String bookingDate;
     private double bookingPrice;
-
-
     private String bankSlip;
     private boolean bookingStatus;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH})
     @JoinColumn(name = "guide_id",unique = true)
     private Guide guide;
 

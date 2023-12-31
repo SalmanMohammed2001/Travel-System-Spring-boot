@@ -29,5 +29,6 @@ public class ResponseVehicleDto {
     private String vehicleTransmission;
     private ArrayList<byte[]> vehicleImages;
     private int vehicleQty;
+    private  boolean vehicleState;
 
 }

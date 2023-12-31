@@ -40,7 +40,7 @@ public class PackageDetailsController {
     @RequestParam String packageTotalHeadCount,
     @RequestParam String withPetOrNo,
     @RequestParam double packageValue,
-    @RequestParam String packageStatus,
+    @RequestParam boolean packageStatus,
     @RequestParam String hotel,
     @RequestParam String vehicle
 
@@ -91,7 +91,7 @@ public class PackageDetailsController {
             @RequestParam String packageTotalHeadCount,
             @RequestParam String withPetOrNo,
             @RequestParam double packageValue,
-            @RequestParam String packageStatus,
+            @RequestParam boolean packageStatus,
             @RequestParam String hotel,
             @RequestParam String vehicle,
             @RequestParam String packageId

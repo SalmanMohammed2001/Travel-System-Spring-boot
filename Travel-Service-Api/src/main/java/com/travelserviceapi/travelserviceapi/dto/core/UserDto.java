@@ -27,6 +27,7 @@ public class UserDto {
     private Contact contact;
     private String email;
     private String address;
+    private boolean userState;
     private byte[] nicFrontImgByte;
     private byte[] nicRearImgByte;
     private byte[] profilePicByte;

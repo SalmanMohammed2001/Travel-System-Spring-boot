@@ -32,4 +32,5 @@ public class VehicleDto {
     private int vehicleQty;
     private Driver driver;
     private PackageDetails packageDetails;
+    private  boolean vehicleState;
 }

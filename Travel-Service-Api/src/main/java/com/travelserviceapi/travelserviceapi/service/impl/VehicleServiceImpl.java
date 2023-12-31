@@ -179,7 +179,7 @@ public class VehicleServiceImpl implements VehicleService {
             arrayList.add(new ResponseVehicleDto(data.getVehicleId(),data.getVehicleName(),data.getVehiclePriceFor1Km(),
                     data.getVehicleCategory(),data.getVehicleType(),data.getVehiclePriceFor100Km(),data.getVehicleFuelType(),
                     data.getVehicleSeatCapacity(),data.getVehicleFuelUsage(),data.getVehicleHybrid(),data.getVehicleTransmission(),
-                    responseVehicleDto.getVehicleImages(),responseVehicleDto.getVehicleQty()));
+                    responseVehicleDto.getVehicleImages(),responseVehicleDto.getVehicleQty(),responseVehicleDto.isVehicleState()));
         }
         return arrayList;
     }

@@ -36,7 +36,8 @@ public class VehicleController {
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages
+            @RequestParam List<MultipartFile> vehicleImages,
+            @RequestParam boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
         vehicleImages.forEach(data->{
@@ -59,7 +60,8 @@ public class VehicleController {
                 vehicleHybrid,
                 vehicleTransmission,
                 bytes,
-                vehicleQty
+                vehicleQty,
+                vehicleState
 
         );
 
@@ -93,7 +95,8 @@ public class VehicleController {
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages
+            @RequestParam List<MultipartFile> vehicleImages,
+           @RequestParam  boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
         vehicleImages.forEach(data->{
@@ -116,7 +119,8 @@ public class VehicleController {
                 vehicleHybrid,
                 vehicleTransmission,
                 bytes,
-                vehicleQty
+                vehicleQty,
+                vehicleState
 
         );
 

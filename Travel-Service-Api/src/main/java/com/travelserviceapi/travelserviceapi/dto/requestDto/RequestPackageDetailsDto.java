@@ -25,7 +25,7 @@ public class RequestPackageDetailsDto {
     private String PackageTotalHeadCount;
     private String withPetOrNo;
     private double packageValue;
-    private String packageStatus;
+    private boolean packageStatus;
 
     private String hotel;
 

@@ -39,7 +39,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
     @Override
     public ResponsePackageDetailsDto save(RequestPackageDetailsDto dto) {
         try {
-            String generateKey = generator.generateKey("Next");
+            String generateKey = generator.generateKey("Package");
             PackageDetailsDto packageDetailsDto = mapper.map(dto, PackageDetailsDto.class);
             packageDetailsDto.setPackageId(generateKey);
 

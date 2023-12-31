@@ -23,8 +23,9 @@ public class BookingDetails {
 
     private double total;
 
-    private String bankSlip;
+    private String guideName;
 
+    private String vehicleType;
 
     @ManyToOne()
     @JoinColumn(name = "bookingId",referencedColumnName = "bookingId")

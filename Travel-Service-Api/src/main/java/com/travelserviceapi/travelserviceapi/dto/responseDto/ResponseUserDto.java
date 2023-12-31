@@ -28,6 +28,7 @@ public class ResponseUserDto {
     private String nicFrontImg;
     private String nicRearImg;
     private String profilePic;
+    private boolean userState;
 
     private byte[] nicFrontImgByte;
     private byte[] nicRearImgByte;
