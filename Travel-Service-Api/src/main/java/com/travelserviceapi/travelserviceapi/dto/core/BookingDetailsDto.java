@@ -23,7 +23,7 @@ public class BookingDetailsDto {
 
     private String guideName;
 
-    private String vehicleType;
+    private String userName;
 
 
 

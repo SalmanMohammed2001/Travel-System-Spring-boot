@@ -18,6 +18,11 @@
         <org.mapstruct.version>1.4.1.Final</org.mapstruct.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.google.code.gson</groupId>

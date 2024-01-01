@@ -24,7 +24,7 @@ public class ResponseBookingDto {
     private boolean bookingStatus;
     private String guide;
     private String user;
-    private List<BookingDetailsDto> bookingDetailsLis;
+    private List<ResponseBookingDetailsDto> bookingDetailsLis;
 
 
 

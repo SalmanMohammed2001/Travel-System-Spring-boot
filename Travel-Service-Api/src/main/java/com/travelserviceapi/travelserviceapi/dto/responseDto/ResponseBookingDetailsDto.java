@@ -10,16 +10,11 @@ import lombok.*;
 
 public class ResponseBookingDetailsDto {
     private String bookingId;
-
     private String packageId;
-
     private String date;
-
     private double total;
-
     private String guideName;
-
-    private String vehicleType;
+    private String userName;
 
 
 

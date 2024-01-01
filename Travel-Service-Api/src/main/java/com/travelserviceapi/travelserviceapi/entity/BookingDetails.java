@@ -25,14 +25,14 @@ public class BookingDetails {
 
     private String guideName;
 
-    private String vehicleType;
+    private String userName;
 
     @ManyToOne()
-    @JoinColumn(name = "bookingId",referencedColumnName = "bookingId")
+    @JoinColumn(name = "bookingId",referencedColumnName = "bookingId",insertable = false,updatable = false)
     private Booking booking;
 
     @ManyToOne()
-    @JoinColumn(name = "packageId",referencedColumnName = "packageId")
+    @JoinColumn(name = "packageId",referencedColumnName = "packageId",insertable = false,updatable = false)
     private PackageDetails packageDetails;
 
 
