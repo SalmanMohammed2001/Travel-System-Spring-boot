@@ -7,9 +7,11 @@ import com.travelserviceapi.travelserviceapi.dto.core.VehicleDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDetailsDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDetailsDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDto;
 import com.travelserviceapi.travelserviceapi.entity.Vehicle;
 import com.travelserviceapi.travelserviceapi.service.BookingService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
+import lombok.Getter;
 import org.mapstruct.ap.shaded.freemarker.template.SimpleDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -67,17 +69,13 @@ public class BookingController {
         );
     }
 
- /*   @PostMapping()
-    public ResponseEntity<StandResponse> save(@RequestParam String name, @RequestParam SampleDto dto){
-
-        VehicleDto vehicleDto = new VehicleDto();
-        vehicleDto.setVehicleId(dto.getId());
-        System.out.println(vehicleDto.getVehicleId());
-
+    @GetMapping
+    public ResponseEntity<StandResponse> save() throws IOException {
+        List<ResponseBookingDto> all = bookingService.findAll();
         return new ResponseEntity<>(
-                new StandResponse(201, "booking saved", null), HttpStatus.CREATED
+                new StandResponse(201, "booking saved", all), HttpStatus.CREATED
         );
 
-    }*/
+    }
 
 }

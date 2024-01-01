@@ -1,10 +1,10 @@
 package com.travelserviceapi.travelserviceapi.dto.responseDto;
 
 import com.travelserviceapi.travelserviceapi.dto.core.BookingDetailsDto;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.travelserviceapi.travelserviceapi.entity.BookingDetails;
+import com.travelserviceapi.travelserviceapi.entity.Guide;
+import com.travelserviceapi.travelserviceapi.entity.User;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-
+@ToString
 
 public class ResponseBookingDto {
 
