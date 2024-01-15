@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserRepo  extends JpaRepository<User,String> {
@@ -35,4 +36,8 @@ public interface UserRepo  extends JpaRepository<User,String> {
                                @Param("profilePic") String profilePic , @Param("contact") Contact contact, @Param("email") String email);
 
     public void deleteUserByUserEmail(String email);
+
+    @Modifying
+    @Query(value = "select * from user where user_email like ? || user_nic like ?  ",nativeQuery = true)
+    public List<User> searchByEmailAndName(String email,String nic);
 }

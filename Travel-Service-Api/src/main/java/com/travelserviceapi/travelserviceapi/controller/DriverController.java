@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/driver")
+@CrossOrigin
 public class DriverController {
 
     private final DriverService driverService;
@@ -33,8 +34,8 @@ public class DriverController {
             @RequestParam String driverNic,
             @RequestPart byte[] driverImage,
             @RequestPart byte[] licenseImageFront,
-            @RequestPart byte[] licenseImageRear,
-            @RequestParam boolean status
+            @RequestPart byte[] licenseImageRear
+//            @RequestParam boolean status
 
     ) throws IOException {
 
@@ -47,7 +48,7 @@ public class DriverController {
                 driverImage,
                 licenseImageFront,
                 licenseImageRear,
-                status,
+                true,
             vehicleId
         );
 

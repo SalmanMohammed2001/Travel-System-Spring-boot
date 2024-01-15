@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/vehicle")
+@CrossOrigin
 public class VehicleController {
 
     private final VehicleService vehicleService;
@@ -32,12 +33,12 @@ public class VehicleController {
             @RequestParam double vehiclePriceFor100Km,
             @RequestParam String vehicleFuelType,
             @RequestParam int vehicleSeatCapacity,
-            @RequestParam double vehicleFuelUsage,
+            @RequestParam String vehicleFuelUsage,
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages,
-            @RequestParam boolean vehicleState
+            @RequestParam List<MultipartFile> vehicleImages
+           // @RequestParam boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
         vehicleImages.forEach(data->{
@@ -61,7 +62,7 @@ public class VehicleController {
                 vehicleTransmission,
                 bytes,
                 vehicleQty,
-                vehicleState
+                false
 
         );
 
@@ -74,11 +75,32 @@ public class VehicleController {
 
 
     @GetMapping(path = "{id}")
-    public ResponseEntity<StandResponse> findByID(@PathVariable String id) throws IOException {
+    public List<ResponseVehicleDto> findByID(@PathVariable String id) throws IOException {
         ResponseVehicleDto byId = vehicleService.findById(id);
-        return new ResponseEntity<>(
+
+        List<ResponseVehicleDto> responseVehicleDtos = new ArrayList<>();
+        responseVehicleDtos.add(new ResponseVehicleDto(
+                byId.getVehicleId()
+                , byId.getVehicleName(),
+                byId.getVehiclePriceFor1Km(),
+                byId.getVehicleCategory(),
+                byId.getVehicleType(),
+                byId.getVehiclePriceFor100Km(),
+                byId.getVehicleFuelType(),
+                byId.getVehicleSeatCapacity(),
+                byId.getVehicleFuelUsage(),
+                byId.getVehicleHybrid(),
+                byId.getVehicleTransmission()
+                ,byId.getVehicleImages(),
+                byId.getVehicleQty(),
+                byId.isVehicleState()
+
+        ));
+
+       return responseVehicleDtos;
+       /* return new ResponseEntity<>(
                 new StandResponse(201, "Customer find", byId), HttpStatus.CREATED
-        );
+        );*/
     }
 
     @PutMapping
@@ -91,12 +113,12 @@ public class VehicleController {
             @RequestParam double vehiclePriceFor100Km,
             @RequestParam String vehicleFuelType,
             @RequestParam int vehicleSeatCapacity,
-            @RequestParam double vehicleFuelUsage,
+            @RequestParam String vehicleFuelUsage,
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages,
-           @RequestParam  boolean vehicleState
+            @RequestParam List<MultipartFile> vehicleImages
+       //    @RequestParam  boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
         vehicleImages.forEach(data->{
@@ -120,7 +142,7 @@ public class VehicleController {
                 vehicleTransmission,
                 bytes,
                 vehicleQty,
-                vehicleState
+                false
 
         );
 
@@ -137,5 +159,22 @@ public class VehicleController {
                 new StandResponse(201, "Vehicle update", all), HttpStatus.CREATED
         );
     }
+
+    @DeleteMapping(params = {"vehicleId"})
+    public ResponseEntity<StandResponse>delete(@RequestParam String vehicleId) throws IOException {
+                    vehicleService.deleteById(vehicleId);
+        return new ResponseEntity<>(
+                new StandResponse(201, "Vehicle delete", null), HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping(path = "list")
+    public ResponseEntity<StandResponse>findAllVehicleStateFalse() throws IOException {
+        List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesFalse();
+        return new ResponseEntity<>(
+                new StandResponse(201, "Vehicle update", all), HttpStatus.CREATED
+        );
+    }
+
 
 }

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.RequestPart;
 
+import java.awt.*;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -20,9 +22,10 @@ public class Vehicle {
     private double vehiclePriceFor100Km;
     private String vehicleFuelType;
     private int vehicleSeatCapacity;
-    private double vehicleFuelUsage;
+    private String vehicleFuelUsage;
     private String vehicleHybrid;
     private String vehicleTransmission;
+    @Column(columnDefinition = "Text")
     private String vehicleImages;
     private int vehicleQty;
     private  boolean vehicleState;

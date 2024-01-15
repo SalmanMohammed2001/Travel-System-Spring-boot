@@ -3,18 +3,15 @@ package com.travelserviceapi.travelserviceapi.service.impl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.travelserviceapi.travelserviceapi.dto.core.DriverDto;
-import com.travelserviceapi.travelserviceapi.dto.core.UserDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestDriverDto;
-import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
-import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 import com.travelserviceapi.travelserviceapi.entity.Driver;
-import com.travelserviceapi.travelserviceapi.entity.User;
 import com.travelserviceapi.travelserviceapi.entity.Vehicle;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
 import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.DriverRepo;
+import com.travelserviceapi.travelserviceapi.repo.VehicleRepo;
 import com.travelserviceapi.travelserviceapi.service.DriverService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
@@ -28,14 +25,14 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Optional;
 
 @Service
 @Transactional
 public class DriverServiceImpl implements DriverService {
 
     private final DriverRepo driverRepo;
+
+    private final VehicleRepo vehicleRepo;
 
     private final ModelMapper mapper;
 
@@ -44,8 +41,9 @@ public class DriverServiceImpl implements DriverService {
     private Gson gson;
 
     @Autowired
-    public DriverServiceImpl(DriverRepo driverRepo, ModelMapper mapper, Generator generator, Gson gson) {
+    public DriverServiceImpl(DriverRepo driverRepo, VehicleRepo vehicleRepo, ModelMapper mapper, Generator generator, Gson gson) {
         this.driverRepo = driverRepo;
+        this.vehicleRepo = vehicleRepo;
         this.mapper = mapper;
         this.generator = generator;
         this.gson = gson;
@@ -57,6 +55,12 @@ public class DriverServiceImpl implements DriverService {
         try {
             String generateKey = generator.generateKey("Driver");
             DriverDto driverDto = mapper.map(dto, DriverDto.class);
+
+            Vehicle vehicle1 = vehicleRepo.findById(driverDto.getVehicle()).get();
+            vehicle1.setVehicleState(true);
+            vehicleRepo.save(vehicle1);
+
+
             driverDto.setDriverId(generateKey);
             Vehicle vehicle = new Vehicle();
             vehicle.setVehicleId(driverDto.getVehicle());
@@ -64,6 +68,7 @@ public class DriverServiceImpl implements DriverService {
             driver.setVehicle(vehicle);
             exportImages(driverDto,driver);
             Driver save = driverRepo.save(driver);
+
 
             ResponseVehicleDto responseVehicleDto = mapper.map(save.getVehicle(), ResponseVehicleDto.class);
             ResponseDriverDto responseDriverDto = mapper.map(save, ResponseDriverDto.class);

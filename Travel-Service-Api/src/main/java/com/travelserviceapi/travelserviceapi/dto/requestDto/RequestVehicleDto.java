@@ -22,7 +22,7 @@ public class RequestVehicleDto {
     private double vehiclePriceFor100Km;
     private String vehicleFuelType;
     private int vehicleSeatCapacity;
-    private double vehicleFuelUsage;
+    private String vehicleFuelUsage;
     private String vehicleHybrid;
     private String vehicleTransmission;
     private ArrayList<byte[]> vehicleImages;

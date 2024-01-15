@@ -18,4 +18,6 @@ public interface UserService {
 
     public List<ResponseUserDto> findAllUser() throws IOException;
 
+    public List<ResponseUserDto> searchByEmailAndName(String email,String nic);
+
 }

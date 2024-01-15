@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
         String generatePrefix = generator.generatePrefix(5, 16);
         String primaryKey = generator.generatePrimaryKey("USER", generatePrefix);
         UserDto userDto = mapper.map(dto, UserDto.class);
+        userDto.setUserState(true);
         userDto.setUserId(primaryKey);
 
         if(!userRepo.existsByUserEmail(dto.getEmail())){
@@ -126,9 +127,29 @@ public class UserServiceImpl implements UserService {
         /*user.forEach(data->{
             System.out.println(data.getUserId());
         });*/
-        List<ResponseUserDto> responseUserDtos = mapper.map(user, new TypeToken<List<ResponseUserDto>>() {}.getType());
-        List<ResponseUserDto> responseUserDtos1 = importImagesAll(responseUserDtos, user);
-        return responseUserDtos1;
+        if(user.isEmpty()){
+            return null;
+        }else {
+            List<ResponseUserDto> responseUserDtos = mapper.map(user, new TypeToken<List<ResponseUserDto>>() {}.getType());
+            List<ResponseUserDto> responseUserDtos1 = importImagesAll(responseUserDtos, user);
+            return responseUserDtos1;
+        }
+
+    }
+
+    @Override
+    public List<ResponseUserDto> searchByEmailAndName(String email,String nic) {
+        List<User> users = userRepo.searchByEmailAndName(email,nic);
+        ArrayList<ResponseUserDto> responseUserDtos = new ArrayList<>();
+
+        users.forEach(data->{
+            responseUserDtos.add(new ResponseUserDto( data.getUserId(),data.getUsername(),data.getUserPassword(),data.getUserNic(),
+                    data.getUserDob(),data.getUserGender(),data.getUserContact(), data.getUserEmail(),
+                    data.getUserAddress(),null,null, null,data.isUserState(), null,null,null,null
+            ));
+        });
+        return  responseUserDtos;
+
     }
 
 

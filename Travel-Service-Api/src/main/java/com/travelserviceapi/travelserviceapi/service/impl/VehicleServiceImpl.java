@@ -94,9 +94,45 @@ public class VehicleServiceImpl implements VehicleService {
         List<Vehicle> all = vehicleRepo.findAll();
         List<ResponseVehicleDto> responseVehicleDtos = mapper.map(all, new TypeToken<List<ResponseVehicleDto>>() {}.getType());
         List<ResponseVehicleDto> responseVehicleDtos1 = importImagesAll(responseVehicleDtos, all);
-        return responseVehicleDtos1;
+
+        if(responseVehicleDtos1.isEmpty()){
+            return null;
+        }else {
+            return responseVehicleDtos1;
+        }
+
 
     }
+
+    @Override
+    public List<ResponseVehicleDto> findAllVehicleStatesFalse() throws IOException {
+        List<Vehicle> allByVehicleStateFalse = vehicleRepo.findAllByVehicleStateFalse();
+      List<ResponseVehicleDto> responseVehicleDtos=  mapper.map(allByVehicleStateFalse,new TypeToken<List<ResponseVehicleDto>>(){}.getType());
+        List<ResponseVehicleDto> responseVehicleDtos1 = importImagesAll(responseVehicleDtos, allByVehicleStateFalse);
+
+        if(responseVehicleDtos1.isEmpty()){
+            return null;
+        }else {
+            return  responseVehicleDtos1;
+        }
+    }
+
+
+    @Override
+    public void deleteById(String id) {
+        if(vehicleRepo.existsById(id)){
+            Optional<Vehicle> byId = vehicleRepo.findById(id);
+            if(byId.isPresent()){
+                deleteImage(byId);
+                vehicleRepo.deleteById(id);
+            }
+
+
+        }else {
+            throw new EntryNotFoundException("id not found");
+        }
+    }
+
 
 
     public void deleteImage(Optional<Vehicle> byId){
@@ -119,7 +155,7 @@ public class VehicleServiceImpl implements VehicleService {
         ArrayList<byte[]> images = dto.getVehicleImages();
        String dt = LocalDate.now().toString().replace("-", "_") + "__"
                 + LocalTime.now().toString().replace(":", "_");
-   //     String dt = "img";
+
 
         ArrayList<String> pathList = new ArrayList<>();
 
@@ -155,6 +191,10 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     public List<ResponseVehicleDto> importImagesAll(List<ResponseVehicleDto> vehicleDto,List<Vehicle>vehicles) throws IOException {
+        if(vehicleDto.isEmpty() && vehicles.isEmpty()){
+            throw new EntryNotFoundException("vehicle not found");
+        }
+
         Vehicle vehicle = new Vehicle();
 
         vehicles.forEach(data->{
@@ -179,7 +219,7 @@ public class VehicleServiceImpl implements VehicleService {
             arrayList.add(new ResponseVehicleDto(data.getVehicleId(),data.getVehicleName(),data.getVehiclePriceFor1Km(),
                     data.getVehicleCategory(),data.getVehicleType(),data.getVehiclePriceFor100Km(),data.getVehicleFuelType(),
                     data.getVehicleSeatCapacity(),data.getVehicleFuelUsage(),data.getVehicleHybrid(),data.getVehicleTransmission(),
-                    responseVehicleDto.getVehicleImages(),responseVehicleDto.getVehicleQty(),responseVehicleDto.isVehicleState()));
+                    responseVehicleDto.getVehicleImages(),data.getVehicleQty(),responseVehicleDto.isVehicleState()));
         }
         return arrayList;
     }
