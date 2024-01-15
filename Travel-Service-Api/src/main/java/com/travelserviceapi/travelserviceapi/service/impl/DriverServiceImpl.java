@@ -58,13 +58,13 @@ public class DriverServiceImpl implements DriverService {
         try {
             String generateKey = generator.generateKey("Driver");
             DriverDto driverDto = mapper.map(dto, DriverDto.class);
+            driverDto.setDriverId(generateKey);
 
             Vehicle vehicle1 = vehicleRepo.findById(driverDto.getVehicle()).get();
             vehicle1.setVehicleState(true);
             vehicleRepo.save(vehicle1);
 
 
-            driverDto.setDriverId(generateKey);
             Vehicle vehicle = new Vehicle();
             vehicle.setVehicleId(driverDto.getVehicle());
             Driver  driver = mapper.map(driverDto, Driver.class);
@@ -113,10 +113,24 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public void update(RequestDriverDto dto) {
-
         try {
             if(driverRepo.existsById(dto.getDriverId())){
                 DriverDto driverDto = mapper.map(dto, DriverDto.class);
+
+
+                System.out.println("old"+dto.getOldVehicleId());
+                System.out.println("new"+driverDto.getVehicle());
+
+               Vehicle vehicle1 = vehicleRepo.findById(dto.getOldVehicleId()).get();
+                vehicle1.setVehicleState(false);
+                vehicleRepo.save(vehicle1);
+
+
+                Vehicle vehicle2 = vehicleRepo.findById(driverDto.getVehicle()).get();
+                vehicle2.setVehicleState(true);
+                vehicleRepo.save(vehicle2);
+
+
                 Vehicle vehicle = new Vehicle();
                 vehicle.setVehicleId(driverDto.getVehicle());
                 Driver driver = mapper.map(driverDto, Driver.class);
@@ -157,9 +171,9 @@ public class DriverServiceImpl implements DriverService {
 
 
     public List<ResponseDriverDto> importImagesAllVehicle(List<ResponseDriverDto> driverDto,List<Driver>all) throws IOException {
-        /*if(vehicleDto.isEmpty() && vehicles.isEmpty()){
+        if(driverDto.isEmpty() && all.isEmpty()){
             throw new EntryNotFoundException("vehicle not found");
-        }*/
+        }
 
 
 

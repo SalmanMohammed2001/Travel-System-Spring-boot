@@ -25,4 +25,5 @@ public class RequestGuideDto {
     private byte[] guideProfilePicImage;
     private boolean guideStatus;
 
+
 }
