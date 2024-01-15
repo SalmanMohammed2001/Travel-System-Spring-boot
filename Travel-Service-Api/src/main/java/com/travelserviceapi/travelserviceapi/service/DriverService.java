@@ -7,6 +7,7 @@ import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface DriverService {
     public ResponseDriverDto save(RequestDriverDto dto) throws IOException;
@@ -16,4 +17,6 @@ public interface DriverService {
     public void update(RequestDriverDto dto);
 
     public void deleteDriver(String id);
+
+    public List<ResponseDriverDto> findAll();
 }

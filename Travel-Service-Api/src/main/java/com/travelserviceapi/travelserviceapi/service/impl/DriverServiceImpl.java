@@ -25,6 +25,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -143,6 +144,13 @@ public class DriverServiceImpl implements DriverService {
         }
     }
 
+    @Override
+    public List<ResponseDriverDto> findAll() {
+        List<Driver> all = driverRepo.findAll();
+    List<ResponseDriverDto> responseDriverDtos= mapper.map(all,new TypeToken<List<ResponseDriverDto>>(){}.getType());
+    return responseDriverDtos;
+    }
+
 
     public void exportImages(DriverDto dto, Driver driver) throws IOException {
         String dt = LocalDate.now().toString().replace("-", "_") + "__"
@@ -174,7 +182,6 @@ public class DriverServiceImpl implements DriverService {
 
     }
     public void importImages(ResponseDriverDto dto, Driver driver) throws IOException {
-
         BufferedImage read = ImageIO.read(new File(driver.getDriverImage()));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(read, "jpg", baos);

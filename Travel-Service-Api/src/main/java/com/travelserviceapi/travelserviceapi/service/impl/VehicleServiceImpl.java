@@ -111,7 +111,7 @@ public class VehicleServiceImpl implements VehicleService {
         List<ResponseVehicleDto> responseVehicleDtos1 = importImagesAll(responseVehicleDtos, allByVehicleStateFalse);
 
         if(responseVehicleDtos1.isEmpty()){
-            return null;
+            throw new EntryNotFoundException("vehicel not found");
         }else {
             return  responseVehicleDtos1;
         }

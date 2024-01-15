@@ -111,4 +111,13 @@ public class DriverController {
         );
     }
 
+    @GetMapping
+    public ResponseEntity<StandResponse> findAll(){
+        List<ResponseDriverDto> all = driverService.findAll();
+        return new ResponseEntity<>(
+                new StandResponse(201, "drive update", all), HttpStatus.CREATED
+        );
+    }
+
+
 }
