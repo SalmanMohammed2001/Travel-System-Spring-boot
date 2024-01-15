@@ -112,10 +112,10 @@ public class DriverController {
     }
 
     @GetMapping
-    public ResponseEntity<StandResponse> findAll(){
+    public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponseDriverDto> all = driverService.findAll();
         return new ResponseEntity<>(
-                new StandResponse(201, "drive update", all), HttpStatus.CREATED
+                new StandResponse(201, "all Driver ", all), HttpStatus.CREATED
         );
     }
 

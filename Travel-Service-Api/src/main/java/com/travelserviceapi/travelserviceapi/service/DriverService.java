@@ -18,5 +18,5 @@ public interface DriverService {
 
     public void deleteDriver(String id);
 
-    public List<ResponseDriverDto> findAll();
+    public List<ResponseDriverDto> findAll() throws IOException;
 }

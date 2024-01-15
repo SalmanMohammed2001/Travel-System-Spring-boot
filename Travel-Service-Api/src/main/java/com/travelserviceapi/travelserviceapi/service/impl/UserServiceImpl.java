@@ -240,6 +240,8 @@ public class UserServiceImpl implements UserService {
         responseUserDto.setNicRearImg(Base64.getEncoder().encodeToString(bytes));
         responseUserDto.setNicRearImgByte(bytes);
 
+
+
         List<ResponseUserDto> response =new ArrayList<>();
         for(ResponseUserDto dto1:dto){
             response.add(new ResponseUserDto(dto1.getUserId(),dto1.getUsername(),dto1.getPassword(),

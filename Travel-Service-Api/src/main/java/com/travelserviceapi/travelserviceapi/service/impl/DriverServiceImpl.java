@@ -5,6 +5,7 @@ import com.google.gson.reflect.TypeToken;
 import com.travelserviceapi.travelserviceapi.dto.core.DriverDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 import com.travelserviceapi.travelserviceapi.entity.Driver;
 import com.travelserviceapi.travelserviceapi.entity.Vehicle;
@@ -25,6 +26,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -145,10 +147,84 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public List<ResponseDriverDto> findAll() {
+    public List<ResponseDriverDto> findAll() throws IOException {
         List<Driver> all = driverRepo.findAll();
     List<ResponseDriverDto> responseDriverDtos= mapper.map(all,new TypeToken<List<ResponseDriverDto>>(){}.getType());
-    return responseDriverDtos;
+        List<ResponseDriverDto> responseDriverDtos1 = importImagesAllVehicle(responseDriverDtos, all);
+
+        return responseDriverDtos1;
+    }
+
+
+    public List<ResponseDriverDto> importImagesAllVehicle(List<ResponseDriverDto> driverDto,List<Driver>all) throws IOException {
+        /*if(vehicleDto.isEmpty() && vehicles.isEmpty()){
+            throw new EntryNotFoundException("vehicle not found");
+        }*/
+
+
+
+        ResponseDriverDto responseDriverDto = new ResponseDriverDto();
+        all.forEach(data->{
+
+            try {
+                BufferedImage read = ImageIO.read(new File(data.getDriverImage()));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(read, "jpg", baos);
+                byte[] bytes = baos.toByteArray();
+                responseDriverDto.setDriverImage(bytes);
+
+
+                read = ImageIO.read(new File(data.getLicenseImageFront()));
+                baos = new ByteArrayOutputStream();
+                ImageIO.write(read, "jpg", baos);
+                bytes = baos.toByteArray();
+                responseDriverDto.setLicenseImageFront(bytes);
+
+                read = ImageIO.read(new File(data.getLicenseImageRear()));
+                baos = new ByteArrayOutputStream();
+                ImageIO.write(read, "jpg", baos);
+                bytes = baos.toByteArray();
+                responseDriverDto.setLicenseImageRear(bytes);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+
+
+
+
+        Vehicle vehicle = new Vehicle();
+        all.forEach(data->{
+            vehicle.setVehicleImages(data.getVehicle().getVehicleImages());
+        });
+
+        String images = vehicle.getVehicleImages();
+        ResponseVehicleDto responseVehicleDto = new ResponseVehicleDto();
+        responseVehicleDto.setVehicleImages(new ArrayList<>());
+        ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());
+        for (int i = 0; i < imageList.size(); i++) {
+            BufferedImage r = ImageIO.read(new File(imageList.get(i)));
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ImageIO.write(r, "jpg", b);
+            byte[] imgData= b.toByteArray();
+            responseVehicleDto.getVehicleImages().add(imgData);
+        };
+
+
+
+        List<ResponseDriverDto> arrayList = new ArrayList<>();
+
+
+        for (ResponseDriverDto data:driverDto){
+          ResponseVehicleDto vehicle1 = data.getVehicle();
+            vehicle1.setVehicleImages(responseVehicleDto.getVehicleImages());
+            arrayList.add(new ResponseDriverDto(data.getDriverId(), data.getDriverName(),data.getDriverContact(),
+                    data.getDriverNic(), responseDriverDto.getDriverImage(), responseDriverDto.getLicenseImageFront(),
+                    responseDriverDto.getLicenseImageRear(),data.isDriverStatus(),vehicle1));
+        }
+        return arrayList;
     }
 
 
@@ -216,6 +292,8 @@ public class DriverServiceImpl implements DriverService {
             vehicleDto.getVehicleImages().add(imgData);
         }
     }
+
+
 
     private void deleteImages(DriverDto driverDto, Driver driver) {
         if (driverDto.getDriverImage()!=null){
