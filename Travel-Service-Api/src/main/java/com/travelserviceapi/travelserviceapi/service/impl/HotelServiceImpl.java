@@ -120,6 +120,16 @@ public class HotelServiceImpl implements HotelService {
 
     }
 
+    @Override
+    public List<ResponseHotelDto> findAllByHotelCategoryEquals(String category) throws IOException {
+      List<Hotel> allByHotelCategoryEquals = hotelRepo.findAllByHotelCategoryEquals(category);
+        List<ResponseHotelDto> responseHotelDto = mapper.map(allByHotelCategoryEquals, new TypeToken<List<ResponseHotelDto>>() {}.getType());
+        List<ResponseHotelDto> responseHotelDtos = importImagesAll(responseHotelDto, allByHotelCategoryEquals);
+    return responseHotelDtos;
+
+
+    }
+
     public void deleteImage(Hotel hotel){
         if (hotel!=null){
             String images = hotel.getImages();

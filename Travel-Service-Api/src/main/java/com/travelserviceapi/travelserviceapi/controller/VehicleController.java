@@ -176,12 +176,13 @@ public class VehicleController {
         );
     }
 
-    @GetMapping(path = "true")
-    public ResponseEntity<StandResponse>findAllVehicleStatesTrue() throws IOException {
-        List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesTrue("mid");
+    @GetMapping(path = "true/{category}")
+    public ResponseEntity<StandResponse>findAllVehicleStatesTrue(@PathVariable String category) throws IOException {
+        List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesTrue(category);
         return new ResponseEntity<>(
                 new StandResponse(201, "Vehicle all true", all), HttpStatus.CREATED
         );
     }
+
 
 }

@@ -187,6 +187,13 @@ public class HotelController {
                 new StandResponse(201, "hotel all", all), HttpStatus.CREATED
         );
     }
+   @GetMapping(path = "list/{category}")
+    public ResponseEntity<StandResponse> findAllCategory(@PathVariable String category) throws IOException {
+        List<ResponseHotelDto> all = hotelService.findAllByHotelCategoryEquals(category);
+        return new ResponseEntity<>(
+                new StandResponse(201, "hotel all", all), HttpStatus.CREATED
+        );
+    }
 
 
 }
