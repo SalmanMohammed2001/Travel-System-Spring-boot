@@ -94,9 +94,9 @@ public class DriverServiceImpl implements DriverService {
 
                 Vehicle vehicle = mapper.map(byDriverNic.getVehicle(), Vehicle.class);
                 System.out.println(vehicle.getVehicleImages());
-
                 ResponseVehicleDto responseVehicleDto = mapper.map(byDriverNic.getVehicle(), ResponseVehicleDto.class);
                 importImages(responseVehicleDto,vehicle);
+
 
                 ResponseDriverDto responseDriverDto = mapper.map(byDriverNic, ResponseDriverDto.class);
                 responseDriverDto.setVehicle(responseVehicleDto);
@@ -301,6 +301,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     public void importImages(ResponseVehicleDto vehicleDto,Vehicle vehicle) throws IOException {
+
         String images = vehicle.getVehicleImages();
         vehicleDto.setVehicleImages(new ArrayList<>());
         ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());

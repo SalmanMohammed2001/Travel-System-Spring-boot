@@ -68,7 +68,7 @@ public class PackageDetailsController {
     }
 
     @GetMapping(path = "{id}")
-    public ResponseEntity<StandResponse> findByNic(@PathVariable String id){
+    public ResponseEntity<StandResponse> findByNic(@PathVariable String id) throws IOException {
         ResponsePackageDetailsDto byId = packageDetailsService.findById(id);
         return new ResponseEntity<>(
                 new StandResponse(201, "driver data",byId ), HttpStatus.CREATED

@@ -78,7 +78,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
     }
 
     @Override
-    public ResponsePackageDetailsDto findById(String id) {
+    public ResponsePackageDetailsDto findById(String id) throws IOException {
         if(packageDetailsRepo.existsById(id)){
 
             System.out.println(id);
@@ -86,6 +86,8 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
             ResponseVehicleDto responseVehicleDto= mapper.map(packageDetails.getVehicle(),ResponseVehicleDto.class);
             ResponseHotelDto responseHotelDto = mapper.map(packageDetails.getHotel(), ResponseHotelDto.class);
            // responseHotelDto.setPackageDetails(null);
+            importImages(responseVehicleDto,packageDetails.getVehicle(),responseHotelDto,packageDetails.getHotel());
+
 
 
             ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(packageDetails, ResponsePackageDetailsDto.class);
@@ -144,6 +146,34 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
         List<ResponsePackageDetailsDto> responsePackageDetailsDtos = importImagesAll(responsePackageDetailsDto, all);
         return responsePackageDetailsDtos;
     }
+
+    public void importImages(ResponseVehicleDto vehicleDto,Vehicle vehicle,ResponseHotelDto responseHotelDto,Hotel hotel) throws IOException {
+
+        String images = vehicle.getVehicleImages();
+        vehicleDto.setVehicleImages(new ArrayList<>());
+        ArrayList<String> imageList = gson.fromJson(images, new com.google.gson.reflect.TypeToken<ArrayList<String>>() {}.getType());
+        for (int i = 0; i < imageList.size(); i++) {
+            BufferedImage r = ImageIO.read(new File(imageList.get(i)));
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ImageIO.write(r, "jpg", b);
+            byte[] imgData= b.toByteArray();
+            vehicleDto.getVehicleImages().add(imgData);
+        }
+
+
+        String images2 = hotel.getImages();
+        responseHotelDto.setImages(new ArrayList<>());
+        ArrayList<String> imageList1 = gson.fromJson(images2, new com.google.gson.reflect.TypeToken<ArrayList<String>>() {}.getType());
+        for (int i = 0; i < imageList1.size(); i++) {
+            BufferedImage r = ImageIO.read(new File(imageList.get(i)));
+            ByteArrayOutputStream b = new ByteArrayOutputStream();
+            ImageIO.write(r, "jpg", b);
+            byte[] imgData= b.toByteArray();
+            responseHotelDto.getImages().add(imgData);
+        };
+    }
+
+
 
 
     public List<ResponsePackageDetailsDto> importImagesAll(List<ResponsePackageDetailsDto> packageDetailsDto ,List<PackageDetails>all) throws IOException {

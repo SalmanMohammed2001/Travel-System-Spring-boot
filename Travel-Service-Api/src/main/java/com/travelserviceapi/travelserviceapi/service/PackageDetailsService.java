@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface PackageDetailsService {
     public ResponsePackageDetailsDto save(RequestPackageDetailsDto dto);
-    public ResponsePackageDetailsDto findById(String id);
+    public ResponsePackageDetailsDto findById(String id) throws IOException;
     public ResponsePackageDetailsDto update(RequestPackageDetailsDto dto);
     public void delete(String id);
     public List<ResponsePackageDetailsDto> findAll() throws IOException;
