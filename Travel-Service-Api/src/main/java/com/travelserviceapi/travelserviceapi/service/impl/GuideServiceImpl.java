@@ -30,7 +30,6 @@ import java.util.Base64;
 import java.util.List;
 
 @Service
-
 public class GuideServiceImpl implements GuideService {
 
     private final ModelMapper mapper;
@@ -53,8 +52,12 @@ public class GuideServiceImpl implements GuideService {
     public ResponseGuideDto saveGuide(RequestGuideDto dto) throws IOException {
         String generateKey = generator.generateKey("Guide");
 
-        GuideDto guideDto = new GuideDto(
-                generateKey,
+
+
+
+
+       GuideDto guideDto = new GuideDto(
+               generateKey,
                 dto.getGuideName(),
                 dto.getGuideAddress(),
                 dto.getGuideContact(),
@@ -69,11 +72,13 @@ public class GuideServiceImpl implements GuideService {
                 dto.isGuideStatus()
         );
 
-        if (!guideRepo.existsById(guideDto.getGuideId())) {
+
+      if (!guideRepo.existsById(guideDto.getGuideId())) {
             Guide guide = mapper.map(guideDto, Guide.class);
-            exportImages(guideDto, guide);
-            Guide save = guideRepo.save(guide);
-            ResponseGuideDto responseGuideDto = mapper.map(save, ResponseGuideDto.class);
+            System.out.println(guide);
+        exportImages(guideDto, guide);
+          Guide save = guideRepo.save(guide);
+           ResponseGuideDto responseGuideDto = mapper.map(save, ResponseGuideDto.class);
             importImages(responseGuideDto, save);
             return responseGuideDto;
 
@@ -81,6 +86,7 @@ public class GuideServiceImpl implements GuideService {
         } else {
             throw new DuplicateEntryException("duplicate Guide Id");
         }
+
 
     }
 

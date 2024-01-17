@@ -38,6 +38,7 @@ public class Hotel {
     )
     private Collection<Price> hotelPrices;
 
+    @Column(columnDefinition = "TEXT")
     private String images;
     private boolean hotelStatus;
 

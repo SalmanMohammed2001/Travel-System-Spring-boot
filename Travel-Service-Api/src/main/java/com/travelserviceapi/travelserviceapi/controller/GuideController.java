@@ -1,27 +1,31 @@
 package com.travelserviceapi.travelserviceapi.controller;
 
-import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestGuideDto;
-import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseDriverDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseGuideDto;
 import com.travelserviceapi.travelserviceapi.service.GuideService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/guide")
+@CrossOrigin
 public class GuideController {
 
     private final GuideService guideService;
 
-    public GuideController(GuideService guideService) {
+    private final ModelMapper mapper;
+
+    public GuideController(GuideService guideService, ModelMapper mapper) {
         this.guideService = guideService;
+        this.mapper = mapper;
     }
 
     @PostMapping
@@ -36,8 +40,8 @@ public class GuideController {
             @RequestPart byte[] guideIdRearImage,
             @RequestPart byte[] guideNicFrontImag,
             @RequestPart byte[] guideNicRearImage,
-            @RequestPart byte[] guideProfilePicImage,
-            @RequestParam boolean guideStatus
+            @RequestPart byte[] guideProfilePicImage
+//            @RequestParam boolean guideStatus
 
 
     ) throws IOException {
@@ -55,20 +59,29 @@ public class GuideController {
                 guideNicFrontImag,
                 guideNicRearImage,
                 guideProfilePicImage,
-                guideStatus
+                false
         );
 
-         guideService.saveGuide(requestGuideDto);
+
+        ResponseGuideDto responseGuideDto = guideService.saveGuide(requestGuideDto);
         return new ResponseEntity<>(
-                new StandResponse(201, "drive saved",   guideService.saveGuide(requestGuideDto)), HttpStatus.CREATED
+                new StandResponse(201, "drive saved",responseGuideDto), HttpStatus.CREATED
         );
     }
 
     @GetMapping(path = "{id}")
     public ResponseEntity<StandResponse> findById(@PathVariable String id) throws IOException {
-        ResponseGuideDto byNic = guideService.findId(id);
+        ResponseGuideDto data = guideService.findId(id);
+
+        List<ResponseGuideDto> responseGuideDtoList = new ArrayList<>();
+        responseGuideDtoList.add(new ResponseGuideDto(
+                data.getGuideId(),data.getGuideName(),data.getGuideAddress(),data.getGuideContact(),
+                data.getGuideBirthDate(),data.getGuideManDayValue(),data.getGuideExperience(),data.getGuideIdFrontImage(),
+                data.getGuideIdRearImage(),data.getGuideNicFrontImag(),data.getGuideNicRearImage(),data.getGuideProfilePicImage(),
+                data.isGuideStatus(),null
+        ));
         return new ResponseEntity<>(
-                new StandResponse(201, "driver data", byNic), HttpStatus.CREATED
+                new StandResponse(201, "driver data", responseGuideDtoList), HttpStatus.CREATED
         );
     }
 

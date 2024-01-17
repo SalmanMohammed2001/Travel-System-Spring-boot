@@ -25,6 +25,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/hotel")
+@CrossOrigin
 public class HotelController {
 
     private final HotelService hotelService;
@@ -47,13 +48,15 @@ public class HotelController {
             @RequestParam String contact2,
             @RequestParam String hotelEmail,
             @RequestParam List<MultipartFile> images,
-            @RequestParam boolean hotelStatus,
+//            @RequestParam boolean hotelStatus,
             @RequestParam String option1,
             @RequestParam String option2,
             @RequestParam String option3,
+            @RequestParam String option4,
             @RequestParam String price1,
             @RequestParam String price2,
-            @RequestParam String price3
+            @RequestParam String price3,
+            @RequestParam String price4
 
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -68,6 +71,7 @@ public class HotelController {
         Price p1 = new Price(option1, price1);
         Price p2 = new Price(option2, price2);
         Price p3 = new Price(option3, price3);
+        Price p4 = new Price(option4, price4);
 
         Contact contact = new Contact(contact1, contact2);
 
@@ -79,9 +83,9 @@ public class HotelController {
         requestHotelDto.setHotelPetAllowed(hotelPetAllowed);
         requestHotelDto.setHotelContact(contact);
         requestHotelDto.setHotelEmail(hotelEmail);
-        requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3));
+        requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3,p4));
         requestHotelDto.setImages(bytes);
-        requestHotelDto.setHotelStatus(hotelStatus);
+        requestHotelDto.setHotelStatus(false);
         hotelService.save(requestHotelDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel saved", null), HttpStatus.CREATED
@@ -92,14 +96,28 @@ public class HotelController {
    @GetMapping(path = "{id}")
     public ResponseEntity<StandResponse> findById(@PathVariable String id) throws IOException {
        ResponseHotelDto byId = hotelService.findById(id);
+
+       List<ResponseHotelDto> responseHotelDtos=new ArrayList<>();
+       responseHotelDtos.add(byId);
+/*
+       byId.getHotelId(),
+               byId.getHotelName(),
+               byId.getHotelCategory(),
+               byId.getHotelPetAllowed(),
+               byId.getHotelMapLink(),
+               byId.getHotelAddress(),
+               byId.getHotelContact(),
+               byId.getHotelEmail(),
+               byId.getHotelPrices(),
+               byId.getImages(),
+               byId.isHotelStatus()*/
        return new ResponseEntity<>(
-               new StandResponse(201, "hotel data", byId), HttpStatus.CREATED
+               new StandResponse(201, "hotel data", responseHotelDtos), HttpStatus.CREATED
        );
    }
 
     @PutMapping
     public ResponseEntity<StandResponse> update(
-
             @RequestParam String hotelCategory,
             @RequestParam String hotelName,
             @RequestParam String hotelPetAllowed,
@@ -113,9 +131,11 @@ public class HotelController {
             @RequestParam String option1,
             @RequestParam String option2,
             @RequestParam String option3,
+            @RequestParam String option4,
             @RequestParam String price1,
             @RequestParam String price2,
             @RequestParam String price3,
+            @RequestParam String price4,
             @RequestParam String hotelId
 
     ) throws IOException {
@@ -131,6 +151,7 @@ public class HotelController {
         Price p1 = new Price(option1, price1);
         Price p2 = new Price(option2, price2);
         Price p3 = new Price(option3, price3);
+        Price p4 = new Price(option4, price4);
 
         Contact contact = new Contact(contact1, contact2);
 
@@ -143,7 +164,7 @@ public class HotelController {
         requestHotelDto.setHotelPetAllowed(hotelPetAllowed);
         requestHotelDto.setHotelContact(contact);
         requestHotelDto.setHotelEmail(hotelEmail);
-        requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3));
+        requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3,p4));
         requestHotelDto.setImages(bytes);
         requestHotelDto.setHotelStatus(hotelStatus);
         hotelService.updateHotel(requestHotelDto);

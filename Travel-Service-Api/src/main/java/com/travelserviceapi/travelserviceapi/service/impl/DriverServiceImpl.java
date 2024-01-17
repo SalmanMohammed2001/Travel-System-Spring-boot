@@ -151,6 +151,12 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public void deleteDriver(String id) {
         if(driverRepo.existsById(id)){
+
+           Driver driverUpdate= driverRepo.findById(id).get();
+            Vehicle vehicle = driverUpdate.getVehicle();
+            vehicle.setVehicleState(false);
+            vehicleRepo.save(vehicle);
+
             Driver driver = driverRepo.findById(id).get();
             deleteImagesById(driver);
             driverRepo.deleteById(id);

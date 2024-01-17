@@ -129,7 +129,7 @@ public class PackageDetailsController {
     }
 
     @GetMapping()
-    public ResponseEntity<StandResponse> findAll(){
+    public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponsePackageDetailsDto> all = packageDetailsService.findAll();
         return new ResponseEntity<>(
                 new StandResponse(201, "delete package",all), HttpStatus.CREATED

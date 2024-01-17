@@ -14,7 +14,7 @@ public interface PackageDetailsService {
     public ResponsePackageDetailsDto findById(String id);
     public ResponsePackageDetailsDto update(RequestPackageDetailsDto dto);
     public void delete(String id);
-    public List<ResponsePackageDetailsDto> findAll();
+    public List<ResponsePackageDetailsDto> findAll() throws IOException;
 
 
 }

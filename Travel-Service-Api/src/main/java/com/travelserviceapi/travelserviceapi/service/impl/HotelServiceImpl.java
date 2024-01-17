@@ -72,12 +72,12 @@ public class HotelServiceImpl implements HotelService {
                 importImages(responseHotelDto,hotel);
                 return responseHotelDto;
             }else {
-                throw new EntryNotFoundException("Id Not Found");
+                throw new DuplicateEntryException("Id Not Found");
             }
         }catch (Exception e){
-            e.printStackTrace();
+            throw new DuplicateEntryException("Id Not Found");
         }
-        return null;
+
 
     }
 
@@ -122,7 +122,6 @@ public class HotelServiceImpl implements HotelService {
 
     public void deleteImage(Hotel hotel){
         if (hotel!=null){
-          //  Vehicle vehicle = byId.get();
             String images = hotel.getImages();
             if (images != null){
                 ArrayList<String> pathList = gson.fromJson(images, new TypeToken<ArrayList<String>>(){}.getType());
@@ -175,6 +174,8 @@ public class HotelServiceImpl implements HotelService {
     }
 
     List<ResponseHotelDto> importImagesAll(List<ResponseHotelDto> hotelDto,List<Hotel> hotels) throws IOException {
+
+        if(hotels ==null && hotelDto == null) return  null;
         Hotel hotel = new Hotel();
 
         hotels.forEach(data->{

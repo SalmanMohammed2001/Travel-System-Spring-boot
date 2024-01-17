@@ -25,7 +25,7 @@ public class Booking {
 
 
     @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH})
-    @JoinColumn(name = "guide_id",unique = true)
+    @JoinColumn(name = "guide_id",unique = true,referencedColumnName = "guideId",nullable = false)
     private Guide guide;
 
 
@@ -36,6 +36,8 @@ public class Booking {
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<BookingDetails> bookingDetailsLis;
+
+
 
 
 
