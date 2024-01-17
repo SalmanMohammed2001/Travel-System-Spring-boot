@@ -18,5 +18,6 @@ public interface VehicleService {
     public void deleteById(String id);
 
     public List<ResponseVehicleDto> findAllVehicleStatesFalse() throws IOException;
+    public List<ResponseVehicleDto> findAllVehicleStatesTrue(String category) throws IOException;
 
 }

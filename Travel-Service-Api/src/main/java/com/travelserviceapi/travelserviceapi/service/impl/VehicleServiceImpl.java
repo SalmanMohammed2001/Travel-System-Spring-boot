@@ -117,6 +117,18 @@ public class VehicleServiceImpl implements VehicleService {
         }
     }
 
+    @Override
+    public List<ResponseVehicleDto> findAllVehicleStatesTrue(String category) throws IOException {
+        List<Vehicle> allByVehicleStateTrue = vehicleRepo.findAllByVehicleStateTrueAndVehicleCategoryEquals(category);
+        List<ResponseVehicleDto> responseVehicleDtos=  mapper.map(allByVehicleStateTrue,new TypeToken<List<ResponseVehicleDto>>(){}.getType());
+        List<ResponseVehicleDto> responseVehicleDtos1 = importImagesAll(responseVehicleDtos, allByVehicleStateTrue);
+        if(responseVehicleDtos1.isEmpty()){
+            throw new EntryNotFoundException("vehicel not found");
+        }else {
+            return  responseVehicleDtos1;
+        }
+    }
+
 
     @Override
     public void deleteById(String id) {

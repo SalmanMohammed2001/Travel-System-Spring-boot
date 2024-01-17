@@ -172,9 +172,16 @@ public class VehicleController {
     public ResponseEntity<StandResponse>findAllVehicleStateFalse() throws IOException {
         List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesFalse();
         return new ResponseEntity<>(
-                new StandResponse(201, "Vehicle update", all), HttpStatus.CREATED
+                new StandResponse(201, "Vehicle all false", all), HttpStatus.CREATED
         );
     }
 
+    @GetMapping(path = "true")
+    public ResponseEntity<StandResponse>findAllVehicleStatesTrue() throws IOException {
+        List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesTrue("mid");
+        return new ResponseEntity<>(
+                new StandResponse(201, "Vehicle all true", all), HttpStatus.CREATED
+        );
+    }
 
 }

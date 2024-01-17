@@ -8,7 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface VehicleRepo extends JpaRepository<Vehicle,String> {
-
-
   public List<Vehicle>  findAllByVehicleStateFalse();
+  public List<Vehicle>  findAllByVehicleStateTrueAndVehicleCategoryEquals(String category);
+
+
+
+
 }
