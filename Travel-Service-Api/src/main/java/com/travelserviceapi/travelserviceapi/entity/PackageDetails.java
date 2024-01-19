@@ -30,13 +30,22 @@ public class PackageDetails {
     private double packageValue;
     private boolean packageStatus;
 
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+  /*  @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "hotel_id",referencedColumnName = "hotelId",nullable = false,unique = true)
+    private Hotel hotel;*/
+
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+    @JoinColumn(name = "hotel_id",referencedColumnName = "hotelId",nullable = false)
     private Hotel hotel;
 
-    @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+  /*  @OneToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "vehicle_id",referencedColumnName = "vehicleId",nullable = false,unique = true)
     private Vehicle vehicle;
+*/
+  @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
+  @JoinColumn(name = "vehicle_id",referencedColumnName = "vehicleId",nullable = false)
+  private Vehicle vehicle;
+
 
 
 

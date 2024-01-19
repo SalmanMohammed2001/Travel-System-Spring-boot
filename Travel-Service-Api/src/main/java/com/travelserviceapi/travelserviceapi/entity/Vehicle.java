@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.RequestPart;
 
 import java.awt.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -33,8 +34,11 @@ public class Vehicle {
     @OneToOne( mappedBy = "vehicle")
     private Driver driver;
 
-    @OneToOne(mappedBy = "vehicle")
-    private PackageDetails  packageDetails;
+   /* @OneToOne(mappedBy = "vehicle")
+    private PackageDetails  packageDetails*/;
+
+    @OneToMany(mappedBy = "vehicle")
+    private List<PackageDetails> packageDetails;
 
 
 }

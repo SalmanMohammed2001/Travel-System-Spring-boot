@@ -13,10 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/packageDetails")
+@CrossOrigin
 public class PackageDetailsController {
 
  private final PackageDetailsService packageDetailsService;
@@ -40,7 +42,7 @@ public class PackageDetailsController {
     @RequestParam String packageTotalHeadCount,
     @RequestParam String withPetOrNo,
     @RequestParam double packageValue,
-    @RequestParam boolean packageStatus,
+//    @RequestParam boolean packageStatus,
     @RequestParam String hotel,
     @RequestParam String vehicle
 
@@ -57,7 +59,7 @@ public class PackageDetailsController {
         requestPackageDetailsDto.setPackageTotalHeadCount(packageTotalHeadCount);
         requestPackageDetailsDto.setWithPetOrNo(withPetOrNo);
         requestPackageDetailsDto.setPackageValue(packageValue);
-        requestPackageDetailsDto.setPackageStatus(packageStatus);
+        requestPackageDetailsDto.setPackageStatus(false);
         requestPackageDetailsDto.setHotel(hotel);
         requestPackageDetailsDto.setVehicle(vehicle);
 
@@ -70,8 +72,11 @@ public class PackageDetailsController {
     @GetMapping(path = "{id}")
     public ResponseEntity<StandResponse> findByNic(@PathVariable String id) throws IOException {
         ResponsePackageDetailsDto byId = packageDetailsService.findById(id);
+
+        List<ResponsePackageDetailsDto> responsePackageDetailsDtos=new ArrayList<>();
+        responsePackageDetailsDtos.add(byId);
         return new ResponseEntity<>(
-                new StandResponse(201, "driver data",byId ), HttpStatus.CREATED
+                new StandResponse(201, "driver data",responsePackageDetailsDtos), HttpStatus.CREATED
         );
     }
 
@@ -131,8 +136,10 @@ public class PackageDetailsController {
     @GetMapping()
     public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponsePackageDetailsDto> all = packageDetailsService.findAll();
+
+
         return new ResponseEntity<>(
-                new StandResponse(201, "delete package",all), HttpStatus.CREATED
+                new StandResponse(201, "all package",all), HttpStatus.CREATED
         );
     }
 }
