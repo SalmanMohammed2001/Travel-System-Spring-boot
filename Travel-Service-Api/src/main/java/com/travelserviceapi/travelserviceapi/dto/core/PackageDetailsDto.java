@@ -29,9 +29,7 @@ public class PackageDetailsDto {
     private String withPetOrNo;
     private double packageValue;
     private String packageStatus;
-
     private String hotel;
-
     private String vehicle;
 
     private List<BookingDetails> bookingDetailsLis;

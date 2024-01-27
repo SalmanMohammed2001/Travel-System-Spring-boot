@@ -24,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/booking")
+@CrossOrigin
 public class BookingController {
 
     private final BookingService bookingService;
@@ -32,16 +33,14 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-
     @PostMapping
     public ResponseEntity<StandResponse> save(
     @RequestParam String bookingDate,
     @RequestParam double bookingPrice,
     @RequestPart byte[] bankSlip,
-    @RequestParam boolean bookingStatus,
-    @RequestParam String guide,
+    //@RequestParam boolean bookingStatus,
     @RequestParam String user,
-    @RequestParam ArrayList<RequestBookingDetailsDto> dto
+    @RequestParam ArrayList<RequestBookingDetailsDto> bookingDetails
 //  @RequestParam ArrayList<RequestBookingDetailsDto> data
     /*@RequestParam String bookingId,
     @RequestParam String packageId,
@@ -53,16 +52,21 @@ public class BookingController {
 
 
 
+        List<RequestBookingDetailsDto> requestBookingDetailsDtos=new ArrayList<>();
+        bookingDetails.forEach(data->{
+            requestBookingDetailsDtos.add(new RequestBookingDetailsDto(
+                    data.getPackageId(),data.getPackageCategory(),
+                    data.getPackageStartDate(),data.getPackageEndDate(),data.getPackageValue()
+            ));
+        });
 
-
-        RequestBookingDto requestBookingDto = new RequestBookingDto();
+      RequestBookingDto requestBookingDto = new RequestBookingDto();
         requestBookingDto.setBookingDate(bookingDate);
         requestBookingDto.setBookingPrice(bookingPrice);
         requestBookingDto.setBankSlip(bankSlip);
-        requestBookingDto.setBookingStatus(bookingStatus);
-        requestBookingDto.setGuide(guide);
+        requestBookingDto.setBookingStatus(true);
         requestBookingDto.setUser(user);
-        requestBookingDto.setBookingDetailsLis(dto);
+        requestBookingDto.setBookingDetailsLis(requestBookingDetailsDtos);
         bookingService.saveBooking(requestBookingDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "booking saved", null), HttpStatus.CREATED
@@ -70,10 +74,10 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<StandResponse> save() throws IOException {
+    public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponseBookingDto> all = bookingService.findAll();
         return new ResponseEntity<>(
-                new StandResponse(201, "booking saved", all), HttpStatus.CREATED
+                new StandResponse(201, "booking all", all), HttpStatus.CREATED
         );
 
     }

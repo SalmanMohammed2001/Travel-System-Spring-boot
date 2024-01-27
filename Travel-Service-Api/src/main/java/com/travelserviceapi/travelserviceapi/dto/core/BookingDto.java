@@ -1,9 +1,11 @@
 package com.travelserviceapi.travelserviceapi.dto.core;
 
 import com.travelserviceapi.travelserviceapi.entity.BookingDetails;
-import com.travelserviceapi.travelserviceapi.entity.Guide;
 import com.travelserviceapi.travelserviceapi.entity.User;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,9 +26,9 @@ public class BookingDto {
     private double bookingPrice;
     private byte[] bankSlip;
     private boolean bookingStatus;
-    private String guide;
     private String user;
     private List<BookingDetailsDto> bookingDetailsLis;
+
 
 
 

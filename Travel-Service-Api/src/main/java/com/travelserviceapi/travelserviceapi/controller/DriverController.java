@@ -89,7 +89,8 @@ public class DriverController {
                         dto.getVehicle().getVehicleTransmission(),
                         dto.getVehicle().getVehicleImages(),
                         dto.getVehicle().getVehicleQty(),
-                        dto.getVehicle().isVehicleState()
+                        dto.getVehicle().isVehicleState(),
+                        null
                 )
         ));
 

@@ -24,13 +24,8 @@ public class Booking {
     private boolean bookingStatus;
 
 
-    @OneToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH})
-    @JoinColumn(name = "guide_id",unique = true,referencedColumnName = "guideId",nullable = false)
-    private Guide guide;
-
-
     @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH})
-    @JoinColumn(name = "user_id",referencedColumnName = "userId",nullable = false)
+    @JoinColumn(name = "user_id",referencedColumnName = "userId")
     private User user;
 
 

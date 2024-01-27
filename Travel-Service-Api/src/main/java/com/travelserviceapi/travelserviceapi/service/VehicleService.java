@@ -11,7 +11,7 @@ public interface VehicleService {
 
     public ResponseVehicleDto findById(String id) throws IOException;
 
-    public void  update(RequestVehicleDto dto);
+    public void  update(RequestVehicleDto dto) throws IOException;
 
     public List<ResponseVehicleDto> findAll() throws IOException;
 

@@ -9,14 +9,14 @@ import java.util.List;
 
 public interface HotelService {
 
-    public void save(RequestHotelDto dto);
+    public void save(RequestHotelDto dto) throws IOException;
     public ResponseHotelDto findById(String id);
 
-    public void updateHotel(RequestHotelDto dto);
+    public void updateHotel(RequestHotelDto dto) throws IOException;
 
     public void deleteHotel(String id);
 
-    public List<ResponseHotelDto> findAll() throws IOException;
+    public List<ResponseHotelDto> findAll() throws Exception;
 
-    public List<ResponseHotelDto> findAllByHotelCategoryEquals(String category) throws IOException;
+    public List<ResponseHotelDto> findAllByHotelCategoryEquals(String category) throws Exception;
 }

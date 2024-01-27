@@ -37,7 +37,8 @@ public class VehicleController {
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages
+            @RequestParam List<MultipartFile> vehicleImages,
+                        @RequestPart byte[] vehicleFrontImg
            // @RequestParam boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -62,7 +63,8 @@ public class VehicleController {
                 vehicleTransmission,
                 bytes,
                 vehicleQty,
-                false
+                false,
+                vehicleFrontImg
 
         );
 
@@ -93,7 +95,8 @@ public class VehicleController {
                 byId.getVehicleTransmission()
                 ,byId.getVehicleImages(),
                 byId.getVehicleQty(),
-                byId.isVehicleState()
+                byId.isVehicleState(),
+                byId.getVehicleFrontImage()
 
         ));
 
@@ -117,7 +120,8 @@ public class VehicleController {
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages
+            @RequestParam List<MultipartFile> vehicleImages,
+            @RequestPart byte[] vehicleFrontImg
        //    @RequestParam  boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -142,7 +146,8 @@ public class VehicleController {
                 vehicleTransmission,
                 bytes,
                 vehicleQty,
-                false
+                false,
+                vehicleFrontImg
 
         );
 

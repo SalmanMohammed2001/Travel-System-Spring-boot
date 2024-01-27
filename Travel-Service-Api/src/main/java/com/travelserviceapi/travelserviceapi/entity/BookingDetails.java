@@ -17,14 +17,10 @@ public class BookingDetails {
 
     @Id
     private String packageId;
-
-    private String date;
-
-
-    private double total;
-
-    private String guideName;
-
+    private String packageCategory;
+    private String packageStartDate;
+    private String packageEndDate;
+    private double packageValue;
     private String userName;
 
     @ManyToOne()

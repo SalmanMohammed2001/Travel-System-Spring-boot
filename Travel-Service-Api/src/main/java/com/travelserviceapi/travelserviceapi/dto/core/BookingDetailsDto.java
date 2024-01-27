@@ -14,15 +14,11 @@ import lombok.*;
 
 public class BookingDetailsDto {
     private String bookingId;
-
     private String packageId;
-
-    private String date;
-
-    private double total;
-
-    private String guideName;
-
+    private String packageCategory;
+    private String packageStartDate;
+    private String packageEndDate;
+    private double packageValue;
     private String userName;
 
 

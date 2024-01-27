@@ -30,16 +30,14 @@ public class HotelDto {
     @Embedded
     private Contact hotelContact;
     private String hotelEmail;
-
     @ElementCollection(fetch = FetchType.EAGER)
     @JoinTable(
             name = "price_table",
             joinColumns = @JoinColumn(name = "hotelId" )
     )
     private Collection<Price> hotelPrices;
-
     private ArrayList<byte[]> images;
     private boolean hotelStatus;
-
+    private byte[] hotelFrontImage;
 
 }

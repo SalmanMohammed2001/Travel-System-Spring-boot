@@ -10,8 +10,10 @@ import lombok.*;
 
 public class RequestBookingDetailsDto {
     private String packageId;
-    private String date;
-    private double total;
+    private String packageCategory;
+    private String packageStartDate;
+    private String packageEndDate;
+    private double packageValue;
 
 }
 

@@ -36,6 +36,12 @@ public class User {
     private String userProfilePic;
     private boolean userState;
 
+    public boolean isAccountNonExpired;
+    public boolean isCredentialsNoExpired;
+    public boolean isAccountNonLock;
+    public boolean isEnable;
+
+
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 }

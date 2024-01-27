@@ -56,7 +56,9 @@ public class HotelController {
             @RequestParam String price1,
             @RequestParam String price2,
             @RequestParam String price3,
-            @RequestParam String price4
+            @RequestParam String price4,
+            @RequestPart byte[] hotelFrontImg
+
 
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -86,6 +88,7 @@ public class HotelController {
         requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3,p4));
         requestHotelDto.setImages(bytes);
         requestHotelDto.setHotelStatus(false);
+        requestHotelDto.setHotelFrontImage(hotelFrontImg);
         hotelService.save(requestHotelDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel saved", null), HttpStatus.CREATED
@@ -136,7 +139,8 @@ public class HotelController {
             @RequestParam String price2,
             @RequestParam String price3,
             @RequestParam String price4,
-            @RequestParam String hotelId
+            @RequestParam String hotelId,
+            @RequestPart byte[] hotelFrontImg
 
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -167,6 +171,7 @@ public class HotelController {
         requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3,p4));
         requestHotelDto.setImages(bytes);
         requestHotelDto.setHotelStatus(hotelStatus);
+        requestHotelDto.setHotelFrontImage(hotelFrontImg);
         hotelService.updateHotel(requestHotelDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel saved", null), HttpStatus.CREATED
@@ -181,16 +186,16 @@ public class HotelController {
     );
 }
     @GetMapping()
-    public ResponseEntity<StandResponse> findAll() throws IOException {
+    public ResponseEntity<StandResponse> findAll() throws Exception {
         List<ResponseHotelDto> all = hotelService.findAll();
+
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel all", all), HttpStatus.CREATED
         );
     }
    @GetMapping(path = "list/{category}")
-    public ResponseEntity<StandResponse> findAllCategory(@PathVariable String category) throws IOException {
+    public ResponseEntity<StandResponse> findAllCategory(@PathVariable String category) throws Exception {
         List<ResponseHotelDto> all = hotelService.findAllByHotelCategoryEquals(category);
-
        if(all.isEmpty())return null;
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel all", all), HttpStatus.CREATED

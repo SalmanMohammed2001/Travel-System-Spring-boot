@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.travelserviceapi.travelserviceapi.dto.core.VehicleDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseGuideDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseVehicleDto;
 import com.travelserviceapi.travelserviceapi.entity.Vehicle;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
@@ -21,6 +22,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,7 +75,7 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public void update(RequestVehicleDto dto) {
+    public void update(RequestVehicleDto dto) throws IOException {
         if(vehicleRepo.existsById(dto.getVehicleId())){
             VehicleDto vehicleDto = mapper.map(dto, VehicleDto.class);
             Vehicle vehicle = mapper.map(dto, Vehicle.class);
@@ -163,11 +165,10 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
 
-    public void exPortImage(VehicleDto dto,Vehicle vehicle){
+    public void exPortImage(VehicleDto dto,Vehicle vehicle) throws IOException {
         ArrayList<byte[]> images = dto.getVehicleImages();
        String dt = LocalDate.now().toString().replace("-", "_") + "__"
                 + LocalTime.now().toString().replace(":", "_");
-
 
         ArrayList<String> pathList = new ArrayList<>();
 
@@ -187,6 +188,16 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setVehicleImages(gson.toJson(pathList));
 
 
+        if (dto.getVehicleFrontImage() != null) {
+            InputStream is = new ByteArrayInputStream(dto.getVehicleFrontImage());
+            BufferedImage bi = ImageIO.read(is);
+            File outputfile = new File("images/vehicle/font/" + dt + ".jpg");
+            ImageIO.write(bi, "jpg", outputfile);
+            vehicle.setVehicleFrontImage(outputfile.getAbsolutePath());
+        }
+
+
+
     }
 
     public void importImages(ResponseVehicleDto vehicleDto,Vehicle vehicle) throws IOException {
@@ -200,6 +211,13 @@ public class VehicleServiceImpl implements VehicleService {
             byte[] imgData= b.toByteArray();
             vehicleDto.getVehicleImages().add(imgData);
         }
+
+        BufferedImage read = ImageIO.read(new File(vehicle.getVehicleFrontImage()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(read, "jpg", baos);
+        byte[] bytes = baos.toByteArray();
+    //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
+        vehicleDto.setVehicleFrontImage(bytes);
     }
 
     public List<ResponseVehicleDto> importImagesAll(List<ResponseVehicleDto> vehicleDto,List<Vehicle>vehicles) throws IOException {
@@ -209,14 +227,31 @@ public class VehicleServiceImpl implements VehicleService {
 
         Vehicle vehicle = new Vehicle();
 
+        ResponseVehicleDto vehicleDto1= new ResponseVehicleDto();
         vehicles.forEach(data->{
             vehicle.setVehicleImages(data.getVehicleImages());
+
+            try{
+                BufferedImage read = ImageIO.read(new File(vehicle.getVehicleFrontImage()));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(read, "jpg", baos);
+                byte[] bytes = baos.toByteArray();
+                //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
+                vehicleDto1.setVehicleFrontImage(bytes);
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+
+
+
+
+
         });
         String images = vehicle.getVehicleImages();
-
         ResponseVehicleDto responseVehicleDto = new ResponseVehicleDto();
         responseVehicleDto.setVehicleImages(new ArrayList<>());
-
         ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());
         for (int i = 0; i < imageList.size(); i++) {
             BufferedImage r = ImageIO.read(new File(imageList.get(i)));
@@ -231,7 +266,7 @@ public class VehicleServiceImpl implements VehicleService {
             arrayList.add(new ResponseVehicleDto(data.getVehicleId(),data.getVehicleName(),data.getVehiclePriceFor1Km(),
                     data.getVehicleCategory(),data.getVehicleType(),data.getVehiclePriceFor100Km(),data.getVehicleFuelType(),
                     data.getVehicleSeatCapacity(),data.getVehicleFuelUsage(),data.getVehicleHybrid(),data.getVehicleTransmission(),
-                    responseVehicleDto.getVehicleImages(),data.getVehicleQty(),responseVehicleDto.isVehicleState()));
+                    responseVehicleDto.getVehicleImages(),data.getVehicleQty(),responseVehicleDto.isVehicleState(),vehicleDto1.getVehicleFrontImage()));
         }
         return arrayList;
     }

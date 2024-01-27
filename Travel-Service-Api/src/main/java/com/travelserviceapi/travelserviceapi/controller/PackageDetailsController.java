@@ -61,6 +61,7 @@ public class PackageDetailsController {
         requestPackageDetailsDto.setPackageValue(packageValue);
         requestPackageDetailsDto.setPackageStatus(false);
         requestPackageDetailsDto.setHotel(hotel);
+
         requestPackageDetailsDto.setVehicle(vehicle);
 
         ResponsePackageDetailsDto save = packageDetailsService.save(requestPackageDetailsDto);
@@ -117,6 +118,7 @@ public class PackageDetailsController {
         requestPackageDetailsDto.setPackageValue(packageValue);
         requestPackageDetailsDto.setPackageStatus(packageStatus);
         requestPackageDetailsDto.setHotel(hotel);
+
         requestPackageDetailsDto.setVehicle(vehicle);
 
         ResponsePackageDetailsDto save = packageDetailsService.update(requestPackageDetailsDto);

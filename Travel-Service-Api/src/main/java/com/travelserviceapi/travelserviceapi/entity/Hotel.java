@@ -41,11 +41,12 @@ public class Hotel {
     @Column(columnDefinition = "TEXT")
     private String images;
     private boolean hotelStatus;
+    private String hotelFrontImage;
 
- /*   @OneToOne(mappedBy = "hotel")
-    private PackageDetails  packageDetails;*/
+    @OneToOne(mappedBy = "hotel")
+    private PackageDetails  packageDetails;
 
 
-    @OneToMany(mappedBy = "hotel")
-    private List<PackageDetails> packageDetails;
+/*    @OneToMany(mappedBy = "hotel")
+    private List<PackageDetails> packageDetails;*/
 }

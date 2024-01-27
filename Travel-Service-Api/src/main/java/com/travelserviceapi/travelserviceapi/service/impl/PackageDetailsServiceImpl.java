@@ -30,12 +30,15 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
 
     private final ModelMapper mapper;
 
+
+
     private final Gson gson;
 
     private final Generator generator;
     public PackageDetailsServiceImpl(PackageDetailsRepo packageDetailsRepo, ModelMapper mapper, Gson gson, Generator generator) {
         this.packageDetailsRepo = packageDetailsRepo;
         this.mapper = mapper;
+
         this.gson = gson;
         this.generator = generator;
     }
@@ -50,6 +53,9 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
             if(!packageDetailsRepo.existsById(packageDetailsDto.getPackageId())){
                 Hotel hotel = new Hotel();
                 hotel.setHotelId(packageDetailsDto.getHotel());
+
+
+
                 Vehicle vehicle = new Vehicle();
                 vehicle.setVehicleId(packageDetailsDto.getVehicle());
 
@@ -57,6 +63,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
                 PackageDetails packageDetails = mapper.map(packageDetailsDto, PackageDetails.class);
                 packageDetails.setHotel(hotel);
                 packageDetails.setVehicle(vehicle);
+
                 PackageDetails save = packageDetailsRepo.save(packageDetails);
 
                ResponseVehicleDto responseVehicleDto= mapper.map(save.getVehicle(),ResponseVehicleDto.class);
@@ -88,8 +95,6 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
            // responseHotelDto.setPackageDetails(null);
             importImages(responseVehicleDto,packageDetails.getVehicle(),responseHotelDto,packageDetails.getHotel());
 
-
-
             ResponsePackageDetailsDto responsePackageDetailsDto = mapper.map(packageDetails, ResponsePackageDetailsDto.class);
          responsePackageDetailsDto.setHotel(responseHotelDto);
       responsePackageDetailsDto.setVehicle(responseVehicleDto);
@@ -109,9 +114,11 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
             Vehicle vehicle = new Vehicle();
             vehicle.setVehicleId(packageDetailsDto.getVehicle());
 
+
             PackageDetails packageDetails = mapper.map(packageDetailsDto, PackageDetails.class);
             packageDetails.setHotel(hotel);
             packageDetails.setVehicle(vehicle);
+
             PackageDetails save = packageDetailsRepo.save(packageDetails);
 
 
@@ -245,12 +252,7 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
             responseHotelDto.getImages().add(imgData);
         };
 
-
-
-
-
         List<ResponsePackageDetailsDto> arrayList = new ArrayList<>();
-
         for (ResponsePackageDetailsDto data:packageDetailsDto){
             ResponseVehicleDto vehicle1 = data.getVehicle();
             vehicle1.setVehicleImages(responseVehicleDto.getVehicleImages());

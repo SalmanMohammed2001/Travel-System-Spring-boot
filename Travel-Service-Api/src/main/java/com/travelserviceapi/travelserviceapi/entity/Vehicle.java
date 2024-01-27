@@ -30,15 +30,16 @@ public class Vehicle {
     private String vehicleImages;
     private int vehicleQty;
     private  boolean vehicleState;
+    private String vehicleFrontImage;
 
     @OneToOne( mappedBy = "vehicle")
     private Driver driver;
 
-   /* @OneToOne(mappedBy = "vehicle")
-    private PackageDetails  packageDetails*/;
+    @OneToOne(mappedBy = "vehicle")
+    private PackageDetails  packageDetails;
 
-    @OneToMany(mappedBy = "vehicle")
-    private List<PackageDetails> packageDetails;
+/*    @OneToMany(mappedBy = "vehicle")
+    private List<PackageDetails> packageDetails;*/
 
 
 }
