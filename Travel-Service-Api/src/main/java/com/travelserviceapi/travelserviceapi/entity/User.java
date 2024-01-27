@@ -45,7 +45,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 
-    @OneToOne()
-    @JoinColumn(name = "role_id",unique = true)
+
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
     private UserRole userRole;
 }
