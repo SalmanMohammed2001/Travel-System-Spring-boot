@@ -40,4 +40,8 @@ public interface UserRepo  extends JpaRepository<User,String> {
     @Modifying
     @Query(value = "select * from user where user_email like ? || user_nic like ?  ",nativeQuery = true)
     public List<User> searchByEmailAndName(String email,String nic);
+
+
+    @Query(value ="SELECT * FROM user WHERE role_id=?",nativeQuery = true )
+    public List<User> findAllAdmins(String admin);
 }
