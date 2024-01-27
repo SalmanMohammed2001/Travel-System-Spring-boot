@@ -2,6 +2,7 @@ package com.travelserviceapi.travelserviceapi.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,7 @@ public class UserRole {
     private String  propertyId;
     private String roleName;
     private String roleDescription;
+
+    @OneToOne(mappedBy = "userRole")
+    private User user;
 }
