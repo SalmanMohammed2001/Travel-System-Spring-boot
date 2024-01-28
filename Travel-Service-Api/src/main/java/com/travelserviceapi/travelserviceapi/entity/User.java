@@ -41,7 +41,8 @@ public class User {
     public boolean isAccountNonLock;
     public boolean isEnable;
 
-
+    @Column(unique = true)
+    public  String prefix;
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 

@@ -31,6 +31,7 @@ public class UserDto {
     private byte[] nicFrontImgByte;
     private byte[] nicRearImgByte;
     private byte[] profilePicByte;
+    public  String prefix;
     private List<Booking> bookings;
 
 

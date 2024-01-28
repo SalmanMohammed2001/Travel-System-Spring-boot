@@ -1,5 +1,7 @@
 package com.travelserviceapi.travelserviceapi.service.impl;
 
+import com.travelserviceapi.travelserviceapi.embadded.Contact;
+import com.travelserviceapi.travelserviceapi.entity.User;
 import com.travelserviceapi.travelserviceapi.entity.UserRole;
 import com.travelserviceapi.travelserviceapi.repo.UserRepo;
 import com.travelserviceapi.travelserviceapi.repo.UserRoleRepo;
@@ -26,14 +28,41 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public void initializeRole() {
         List<UserRole> all = userRoleRepo.findAll();
+
+
         if (all.isEmpty()){
-            UserRole userRole1 = new UserRole("UR-1","ADMIN","Super Privilege",null);
-            UserRole userRole2 = new UserRole("UR-2","MANAGER","Management Privilege",null);
-            UserRole userRole3 = new UserRole("UR-3","USER","Regular User",null);
+            UserRole Admin=new UserRole("UR-1","ADMIN","Super Privileges",null);
+            UserRole Manager=new UserRole("UR-2","MANAGER","Manager Privileges",null);
+            UserRole User=new UserRole("UR-3","USER","Regular User ",null);
 
-            userRoleRepo.saveAll(List.of(userRole1,userRole2,userRole3));
+            userRoleRepo.saveAll(List.of(Admin,Manager,User));
         }
+        UserRole role1=new UserRole("UR-1","ADMIN","Super Privileges",null);
 
+        if(userRepo.findAllAdmins("UR-1").isEmpty()){
+            User user = new User(
+                    "1",
+                    "Anna",
+                    "Ana@gmail.com",
+                    "1234",
+                    "110",
+                    "2020-10-30",
+                    "female",
+                    new Contact("119","9654"),
+                    "colombo",
+                    null,
+                    null,
+                    null,
+                    true,
+                    true,
+                    true,
+                    true,
+                    true,
+                    "011",
+                    null,
+                    role1);
+          userRepo.save(user);
+        }
 
 
 

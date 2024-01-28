@@ -9,11 +9,14 @@ import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
 import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.UserRepo;
 import com.travelserviceapi.travelserviceapi.service.UserService;
+import com.travelserviceapi.travelserviceapi.service.process.impl.EmailService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -35,18 +38,39 @@ public class UserServiceImpl implements UserService {
 
     private final Generator generator;
 
+    private final EmailService emailService;
 
-    public UserServiceImpl(UserRepo userRepo, ModelMapper mapper, Generator generator) {
+
+    public UserServiceImpl(UserRepo userRepo, ModelMapper mapper, Generator generator, EmailService emailService) {
         this.userRepo = userRepo;
         this.mapper = mapper;
         this.generator = generator;
+        this.emailService = emailService;
     }
 
     @Override
     public ResponseUserDto saveUser(RequestUserDto dto) throws IOException {
         String generatePrefix = generator.generatePrefix(5, 16);
-        String primaryKey = generator.generatePrimaryKey("USER", generatePrefix);
-        UserDto userDto = mapper.map(dto, UserDto.class);
+
+        if(userRepo.findByPrefix(generatePrefix).isPresent()){
+            throw new ResponseStatusException(HttpStatus.CONFLICT);
+        }
+
+        String primaryKey = generator.generatePrimaryKey(generatePrefix, "U");
+        String verificationCode=generator.createVerificationCode();
+
+        emailService.createEmails(dto.getEmail(),
+                "Regarding Login",
+
+                "<h1>Verification Code ="+verificationCode+"</h1>"
+        );
+        /*send email=====>*/
+
+
+        return  null;
+
+
+       /* UserDto userDto = mapper.map(dto, UserDto.class);
         userDto.setUserState(true);
         userDto.setUserId(primaryKey);
 
@@ -67,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
         }else {
             throw new EntryNotFoundException("Duplicate email key");
-        }
+        }*/
 
 
 

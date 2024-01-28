@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/visitor/register")
     public ResponseEntity<StandResponse> saveUser(
             @RequestPart String username,
             @RequestPart String password,
@@ -81,8 +81,6 @@ public class UserController {
     @GetMapping(path = "{email}")
     public List<ResponseUserDto> findByUserEmail(@PathVariable String email) throws IOException {
         ResponseUserDto user = userService.findByUser(email);
-
-
 
        ArrayList<ResponseUserDto> responseUserDtos = new ArrayList<>();
             responseUserDtos.add(new ResponseUserDto(user.getUserId(),user.getUsername(),user.getPassword(),

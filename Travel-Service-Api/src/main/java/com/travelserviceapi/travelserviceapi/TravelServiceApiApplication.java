@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.travelserviceapi.travelserviceapi.entity.UserRole;
 import com.travelserviceapi.travelserviceapi.repo.UserRoleRepo;
 import com.travelserviceapi.travelserviceapi.service.UserRoleService;
+import com.travelserviceapi.travelserviceapi.service.impl.UserServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
