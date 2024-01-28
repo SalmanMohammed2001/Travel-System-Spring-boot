@@ -1,5 +1,6 @@
 package com.travelserviceapi.travelserviceapi.repo;
 
+import com.travelserviceapi.travelserviceapi.dto.securitycore.ApplicationUser;
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,4 +47,6 @@ public interface UserRepo  extends JpaRepository<User,String> {
     public List<User> findAllAdmins(String admin);
 
     public Optional<User> findByPrefix(String prefix);
+
+   public Optional<ApplicationUser>  findApplicationUserByUsername(String username);
 }
