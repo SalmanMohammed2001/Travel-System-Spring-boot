@@ -5,9 +5,11 @@ import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestUserDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.entity.User;
+import com.travelserviceapi.travelserviceapi.entity.UserRole;
 import com.travelserviceapi.travelserviceapi.exception.DuplicateEntryException;
 import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.UserRepo;
+import com.travelserviceapi.travelserviceapi.repo.UserRoleRepo;
 import com.travelserviceapi.travelserviceapi.service.UserService;
 import com.travelserviceapi.travelserviceapi.service.process.impl.EmailService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
@@ -37,37 +39,88 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper mapper;
 
     private final Generator generator;
+    
+    private final UserRoleRepo userRoleRepo;
 
     private final EmailService emailService;
 
 
-    public UserServiceImpl(UserRepo userRepo, ModelMapper mapper, Generator generator, EmailService emailService) {
+    public UserServiceImpl(UserRepo userRepo, ModelMapper mapper, Generator generator, UserRoleRepo userRoleRepo, EmailService emailService) {
         this.userRepo = userRepo;
         this.mapper = mapper;
         this.generator = generator;
+        this.userRoleRepo = userRoleRepo;
         this.emailService = emailService;
     }
 
     @Override
     public ResponseUserDto saveUser(RequestUserDto dto) throws IOException {
+
         String generatePrefix = generator.generatePrefix(5, 16);
 
         if(userRepo.findByPrefix(generatePrefix).isPresent()){
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
+
+        Optional<UserRole> selectUserRole = userRoleRepo.findByRoleName("USER");
+
+        if(selectUserRole.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+
+
         String primaryKey = generator.generatePrimaryKey(generatePrefix, "U");
         String verificationCode=generator.createVerificationCode();
+        /*send email=====>*/
 
-        emailService.createEmails(dto.getEmail(),
+        if( emailService.createEmails(dto.getEmail(),
                 "Regarding Login",
 
                 "<h1>Verification Code ="+verificationCode+"</h1>"
-        );
-        /*send email=====>*/
+        )){
+
+            //save data
+              UserDto userDto = mapper.map(dto, UserDto.class);
+              userDto.setPrefix(generatePrefix);
+        userDto.setUserState(true);
+        userDto.setUserId(primaryKey);
+
+        if(!userRepo.existsByUserEmail(dto.getEmail())){
+
+            if (!userRepo.existsById(userDto.getUserId())) {
+                User user = mapper.map(userDto, User.class);
+                user.setAccountNonExpired(true);
+                user.setAccountNonLock(true);
+                user.setCredentialsNoExpired(true);
+                user.setEnable(false);
+                user.setOtp(verificationCode);
+                user.setUserRole(selectUserRole.get());
+                exportImages(userDto, user);
+                User save = userRepo.save(user);
+
+                return new ResponseUserDto(save.getUserId(), save.getUsername(), save.getUserPassword(), save.getUserNic(),
+                        save.getUserDob(), save.getUserGender(), save.getUserContact(), save.getUserEmail(),
+                        save.getUserAddress(),null,null, null, save.isUserState(), null,null,null,null);
+
+            } else {
+                throw new DuplicateEntryException("Duplicate Primary key");
+            }
+
+        }else {
+            throw new EntryNotFoundException("Duplicate email key");
+        }
 
 
-        return  null;
+        }else {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+
+
+
+
 
 
        /* UserDto userDto = mapper.map(dto, UserDto.class);

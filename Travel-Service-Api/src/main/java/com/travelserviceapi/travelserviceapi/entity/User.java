@@ -43,6 +43,10 @@ public class User {
 
     @Column(unique = true)
     public  String prefix;
+
+    @Column(name = "otp")
+    private String otp;
+
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings;
 
@@ -50,4 +54,7 @@ public class User {
     @ManyToOne()
     @JoinColumn(name = "role_id")
     private UserRole userRole;
+
+
+
 }
