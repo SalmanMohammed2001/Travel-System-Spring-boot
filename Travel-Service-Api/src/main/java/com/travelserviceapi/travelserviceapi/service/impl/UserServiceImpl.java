@@ -229,6 +229,21 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public void VerifyAccount(String email, String otp) {
+        User byUserEmail = userRepo.findByUserEmail(email);
+        if(!userRepo.existsByUserEmail(email)){
+            throw new EntryNotFoundException("User Not found");
+        }
+        if(byUserEmail.isEnable()) throw new ResponseStatusException(HttpStatus.OK);
+        if (byUserEmail.getOtp().equals(otp)){
+            byUserEmail.setEnable(true);
+            userRepo.save(byUserEmail);
+        }else {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 
     public void exportImages(UserDto dto, User user) throws IOException {
         String dt = LocalDate.now().toString().replace("-", "_") + "__"

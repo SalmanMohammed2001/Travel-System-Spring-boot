@@ -161,6 +161,14 @@ public class UserController {
         );
     }
 
+    @PostMapping(value = "/visitor/verify/{otp}",params = "email")
+    public ResponseEntity<StandResponse> verifyOtp(@RequestParam String email,@PathVariable String otp) throws IOException {
+        userService.VerifyAccount(email,otp);
+        return new ResponseEntity<>(
+                new StandResponse(201, "Customer verified", ""), HttpStatus.CREATED
+        );
+    }
+
 
 
 

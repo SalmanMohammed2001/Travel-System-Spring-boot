@@ -20,4 +20,6 @@ public interface UserService {
 
     public List<ResponseUserDto> searchByEmailAndName(String email,String nic);
 
+    public void VerifyAccount(String email,String otp);
+
 }
