@@ -2,8 +2,10 @@ package com.travelserviceapi.travelserviceapi.config.security;
 
 
 
+import com.travelserviceapi.travelserviceapi.config.permission.ApplicationUserRole;
 import com.travelserviceapi.travelserviceapi.jwt_config.JwtAuthenticationFilter;
 import com.travelserviceapi.travelserviceapi.jwt_config.JwtTokenVerifier;
+import com.travelserviceapi.travelserviceapi.service.impl.ApplicationUserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -52,7 +54,6 @@ public class ApplicationSecurityConfig {
          http
                  //.csrf().disable()
                  .csrf(AbstractHttpConfigurer::disable)
-
                  .addFilter(new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))))
                  .addFilterAfter(new JwtTokenVerifier(),JwtAuthenticationFilter.class)
                  .authorizeHttpRequests(authz -> authz
@@ -63,8 +64,6 @@ public class ApplicationSecurityConfig {
             http.authenticationProvider(daoAuthenticationProvider());
         return http.build();
     }
-
-
 
 
     @Bean
