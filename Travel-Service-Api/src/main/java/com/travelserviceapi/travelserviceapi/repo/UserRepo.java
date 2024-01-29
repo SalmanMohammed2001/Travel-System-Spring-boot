@@ -17,6 +17,10 @@ public interface UserRepo  extends JpaRepository<User,String> {
     public User findByUserEmail(String email);
 
 
+
+  //  public Optional<User> findByUserEmail(String email);
+
+
 /*    @Modifying
     @Query(value = "UPDATE User u SET u.username = :username, u.UserPassword = :password, u.userAddress = :address, u.userDob = :dob, " +
             "u.userGender = :gender, u.userNic = :nic, u.userNicFrontImg = :nicFrontImg, u.userNicRearImg = :nicRearImg, " +
@@ -48,5 +52,5 @@ public interface UserRepo  extends JpaRepository<User,String> {
 
     public Optional<User> findByPrefix(String prefix);
 
-   public Optional<ApplicationUser>  findApplicationUserByUsername(String username);
+   //public Optional<ApplicationUser>  findApplicationUserByUsername(String username);
 }

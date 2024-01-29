@@ -117,12 +117,6 @@ public class UserServiceImpl implements UserService {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-
-
-
-
-
-
        /* UserDto userDto = mapper.map(dto, UserDto.class);
         userDto.setUserState(true);
         userDto.setUserId(primaryKey);
