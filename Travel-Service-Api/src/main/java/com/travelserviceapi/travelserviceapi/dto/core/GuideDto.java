@@ -1,9 +1,6 @@
 package com.travelserviceapi.travelserviceapi.dto.core;
 
-import com.travelserviceapi.travelserviceapi.entity.Booking;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+
 import lombok.*;
 
 @AllArgsConstructor

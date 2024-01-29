@@ -1,8 +1,6 @@
 package com.travelserviceapi.travelserviceapi.dto.core;
 
-import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestVehicleDto;
-import com.travelserviceapi.travelserviceapi.entity.Vehicle;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

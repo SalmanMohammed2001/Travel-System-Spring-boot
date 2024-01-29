@@ -1,22 +1,13 @@
 package com.travelserviceapi.travelserviceapi.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.travelserviceapi.travelserviceapi.dto.core.PricesDTO;
-import com.travelserviceapi.travelserviceapi.dto.core.SampleDto;
-import com.travelserviceapi.travelserviceapi.dto.core.VehicleDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDetailsDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDto;
-import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDetailsDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDto;
-import com.travelserviceapi.travelserviceapi.entity.Vehicle;
 import com.travelserviceapi.travelserviceapi.service.BookingService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
-import lombok.Getter;
-import org.mapstruct.ap.shaded.freemarker.template.SimpleDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;

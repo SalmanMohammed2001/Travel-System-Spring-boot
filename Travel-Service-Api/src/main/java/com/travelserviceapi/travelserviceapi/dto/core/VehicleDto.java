@@ -2,9 +2,7 @@ package com.travelserviceapi.travelserviceapi.dto.core;
 
 import com.travelserviceapi.travelserviceapi.entity.Driver;
 import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

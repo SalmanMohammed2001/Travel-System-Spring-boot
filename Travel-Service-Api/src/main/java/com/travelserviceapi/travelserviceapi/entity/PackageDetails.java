@@ -1,14 +1,14 @@
 package com.travelserviceapi.travelserviceapi.entity;
 
 import com.travelserviceapi.travelserviceapi.embadded.TravelDuration;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-
+import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

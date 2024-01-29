@@ -6,6 +6,7 @@ import com.travelserviceapi.travelserviceapi.entity.UserRole;
 import com.travelserviceapi.travelserviceapi.repo.UserRepo;
 import com.travelserviceapi.travelserviceapi.repo.UserRoleRepo;
 import com.travelserviceapi.travelserviceapi.service.UserRoleService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +19,14 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserRoleRepo userRoleRepo;
     private final UserRepo userRepo;
 
+    private final PasswordEncoder passwordEncoder;
 
 
-    public UserRoleServiceImpl(UserRoleRepo userRoleRepo, UserRepo userRepo) {
+
+    public UserRoleServiceImpl(UserRoleRepo userRoleRepo, UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRoleRepo = userRoleRepo;
         this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class UserRoleServiceImpl implements UserRoleService {
                     "1",
                     "Anna",
                     "Ana@gmail.com",
-                    "1234",
+                    passwordEncoder.encode("1234"),
                     "110",
                     "2020-10-30",
                     "female",

@@ -1,9 +1,11 @@
 package com.travelserviceapi.travelserviceapi.embadded;
 
-import jakarta.persistence.Embeddable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.Embeddable;
 
 @AllArgsConstructor
 @NoArgsConstructor

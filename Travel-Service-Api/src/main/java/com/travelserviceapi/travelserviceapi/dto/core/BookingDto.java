@@ -1,11 +1,6 @@
 package com.travelserviceapi.travelserviceapi.dto.core;
 
-import com.travelserviceapi.travelserviceapi.entity.BookingDetails;
-import com.travelserviceapi.travelserviceapi.entity.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

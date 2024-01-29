@@ -1,8 +1,7 @@
 package com.travelserviceapi.travelserviceapi.dto.requestDto;
 
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
-import com.travelserviceapi.travelserviceapi.entity.Booking;
-import jakarta.persistence.Embedded;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

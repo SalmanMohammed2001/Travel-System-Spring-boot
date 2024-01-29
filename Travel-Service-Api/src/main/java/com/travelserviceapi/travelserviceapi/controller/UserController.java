@@ -5,7 +5,7 @@ import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUserDto;
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.service.UserService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
-import jakarta.persistence.Embedded;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+
 
 @RestController
 @RequestMapping("api/v1/users")

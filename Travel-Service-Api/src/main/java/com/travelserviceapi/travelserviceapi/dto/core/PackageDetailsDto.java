@@ -2,9 +2,7 @@ package com.travelserviceapi.travelserviceapi.dto.core;
 
 import com.travelserviceapi.travelserviceapi.embadded.TravelDuration;
 import com.travelserviceapi.travelserviceapi.entity.BookingDetails;
-import com.travelserviceapi.travelserviceapi.entity.Hotel;
-import com.travelserviceapi.travelserviceapi.entity.Vehicle;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

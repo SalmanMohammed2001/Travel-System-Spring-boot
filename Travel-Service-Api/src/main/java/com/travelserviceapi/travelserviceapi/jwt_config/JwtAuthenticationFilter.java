@@ -3,10 +3,6 @@ package com.travelserviceapi.travelserviceapi.jwt_config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,14 +10,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
 
-
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
 
 
     private final AuthenticationManager authenticationManager;
@@ -42,17 +40,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         try {
-            UsernameAndPasswordRequest userNameAndPasswordRequest=
-                    new ObjectMapper().readValue(request.getInputStream(),UsernameAndPasswordRequest.class);
+            UserNameAndPasswordRequest userNameAndPasswordRequest=
+                    new ObjectMapper().readValue(request.getInputStream(),UserNameAndPasswordRequest.class);
 
             Authentication authentication= new UsernamePasswordAuthenticationToken(
                     userNameAndPasswordRequest.getUsername(),
                     userNameAndPasswordRequest.getPassword()
             );
 
-            return  authenticationManager.authenticate(authentication);
+        return  authenticationManager.authenticate(authentication);
 
-        } catch (IOException e) {
+         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -75,8 +73,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .signWith(Keys.hmacShaKeyFor(secretKey.getBytes())).compact();
 
         response.addHeader("Authorization","Bearer "+token);
-
-
-
     }
 }

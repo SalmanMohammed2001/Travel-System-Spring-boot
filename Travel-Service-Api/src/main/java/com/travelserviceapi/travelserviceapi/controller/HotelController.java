@@ -11,7 +11,7 @@ import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.embadded.Price;
 import com.travelserviceapi.travelserviceapi.service.HotelService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -2,10 +2,7 @@ package com.travelserviceapi.travelserviceapi.dto.core;
 
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.entity.Booking;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

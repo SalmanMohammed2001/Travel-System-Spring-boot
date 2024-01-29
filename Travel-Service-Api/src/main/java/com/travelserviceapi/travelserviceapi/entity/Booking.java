@@ -1,11 +1,12 @@
 package com.travelserviceapi.travelserviceapi.entity;
 
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.*;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class Booking {
     private boolean bookingStatus;
 
 
-    @ManyToOne(cascade = {CascadeType.REFRESH,CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "user_id",referencedColumnName = "userId")
     private User user;
 

@@ -1,7 +1,9 @@
 package com.travelserviceapi.travelserviceapi.entity;
 
-import jakarta.persistence.*;
+
 import lombok.*;
+
+import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor

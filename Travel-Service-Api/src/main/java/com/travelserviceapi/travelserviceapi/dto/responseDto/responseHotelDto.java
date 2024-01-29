@@ -2,8 +2,7 @@ package com.travelserviceapi.travelserviceapi.dto.responseDto;
 
 import com.travelserviceapi.travelserviceapi.embadded.Contact;
 import com.travelserviceapi.travelserviceapi.embadded.Price;
-import com.travelserviceapi.travelserviceapi.entity.PackageDetails;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;

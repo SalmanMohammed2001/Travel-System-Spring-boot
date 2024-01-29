@@ -16,6 +16,7 @@ import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,13 +45,16 @@ public class UserServiceImpl implements UserService {
 
     private final EmailService emailService;
 
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepo userRepo, ModelMapper mapper, Generator generator, UserRoleRepo userRoleRepo, EmailService emailService) {
+
+    public UserServiceImpl(UserRepo userRepo, ModelMapper mapper, Generator generator, UserRoleRepo userRoleRepo, EmailService emailService, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
         this.mapper = mapper;
         this.generator = generator;
         this.userRoleRepo = userRoleRepo;
         this.emailService = emailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -83,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
             //save data
               UserDto userDto = mapper.map(dto, UserDto.class);
+              userDto.setPassword(passwordEncoder.encode(dto.getPassword()));
               userDto.setPrefix(generatePrefix);
         userDto.setUserState(true);
         userDto.setUserId(primaryKey);
