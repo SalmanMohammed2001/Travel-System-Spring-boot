@@ -169,6 +169,7 @@ public class UserServiceImpl implements UserService {
             User byUserEmail = userRepo.findByUserEmail(userDto.getEmail());
             deleteImages(userDto,byUserEmail);
             User user = mapper.map(userDto, User.class);
+            user.setUserPassword(passwordEncoder.encode(dto.getPassword()));
             exportImages(userDto, user);
             Contact contact = new Contact(user.getUserContact().getContact1(),user.getUserContact().getContact2());
             userRepo.updateUser(

@@ -10,6 +10,7 @@ import com.travelserviceapi.travelserviceapi.service.PackageDetailsService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -28,8 +29,8 @@ public class PackageDetailsController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> save(
-
 
     @RequestParam String category,
     @RequestParam String startDate,
@@ -71,6 +72,7 @@ public class PackageDetailsController {
     }
 
     @GetMapping(path = "{id}")
+  //  @PreAuthorize("hasAuthority('package:read')")
     public ResponseEntity<StandResponse> findByNic(@PathVariable String id) throws IOException {
         ResponsePackageDetailsDto byId = packageDetailsService.findById(id);
 
@@ -83,6 +85,7 @@ public class PackageDetailsController {
 
 
     @PutMapping
+    @PreAuthorize("hasAuthority('package:write')")
     public ResponseEntity<StandResponse> update(
 
 
@@ -128,6 +131,8 @@ public class PackageDetailsController {
     }
 
     @DeleteMapping(params = {"packageId"})
+  //  @PreAuthorize("hasAuthority('package:write')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> delete(@RequestParam String packageId){
          packageDetailsService.delete(packageId);
         return new ResponseEntity<>(
@@ -136,6 +141,7 @@ public class PackageDetailsController {
     }
 
     @GetMapping()
+  //  @PreAuthorize("hasAuthority('package:read')")
     public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponsePackageDetailsDto> all = packageDetailsService.findAll();
 

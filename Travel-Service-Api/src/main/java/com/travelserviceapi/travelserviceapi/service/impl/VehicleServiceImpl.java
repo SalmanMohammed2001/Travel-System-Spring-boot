@@ -188,13 +188,7 @@ public class VehicleServiceImpl implements VehicleService {
         vehicle.setVehicleImages(gson.toJson(pathList));
 
 
-        if (dto.getVehicleFrontImage() != null) {
-            InputStream is = new ByteArrayInputStream(dto.getVehicleFrontImage());
-            BufferedImage bi = ImageIO.read(is);
-            File outputfile = new File("images/vehicle/font/" + dt + ".jpg");
-            ImageIO.write(bi, "jpg", outputfile);
-            vehicle.setVehicleFrontImage(outputfile.getAbsolutePath());
-        }
+
 
 
 
@@ -212,12 +206,7 @@ public class VehicleServiceImpl implements VehicleService {
             vehicleDto.getVehicleImages().add(imgData);
         }
 
-        BufferedImage read = ImageIO.read(new File(vehicle.getVehicleFrontImage()));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(read, "jpg", baos);
-        byte[] bytes = baos.toByteArray();
-    //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
-        vehicleDto.setVehicleFrontImage(bytes);
+
     }
 
     public List<ResponseVehicleDto> importImagesAll(List<ResponseVehicleDto> vehicleDto,List<Vehicle>vehicles) throws IOException {
@@ -231,17 +220,6 @@ public class VehicleServiceImpl implements VehicleService {
         vehicles.forEach(data->{
             vehicle.setVehicleImages(data.getVehicleImages());
 
-            try{
-                BufferedImage read = ImageIO.read(new File(vehicle.getVehicleFrontImage()));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(read, "jpg", baos);
-                byte[] bytes = baos.toByteArray();
-                //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
-                vehicleDto1.setVehicleFrontImage(bytes);
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
 
 
 
@@ -266,7 +244,7 @@ public class VehicleServiceImpl implements VehicleService {
             arrayList.add(new ResponseVehicleDto(data.getVehicleId(),data.getVehicleName(),data.getVehiclePriceFor1Km(),
                     data.getVehicleCategory(),data.getVehicleType(),data.getVehiclePriceFor100Km(),data.getVehicleFuelType(),
                     data.getVehicleSeatCapacity(),data.getVehicleFuelUsage(),data.getVehicleHybrid(),data.getVehicleTransmission(),
-                    responseVehicleDto.getVehicleImages(),data.getVehicleQty(),responseVehicleDto.isVehicleState(),vehicleDto1.getVehicleFrontImage()));
+                    responseVehicleDto.getVehicleImages(),data.getVehicleQty(),responseVehicleDto.isVehicleState()));
         }
         return arrayList;
     }

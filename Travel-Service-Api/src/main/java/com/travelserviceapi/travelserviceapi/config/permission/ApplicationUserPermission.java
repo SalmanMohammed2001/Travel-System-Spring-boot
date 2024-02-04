@@ -1,13 +1,18 @@
 package com.travelserviceapi.travelserviceapi.config.permission;
 
 public enum ApplicationUserPermission {
-    ORDER_READ("order:read"),
-    ORDER_WRITE("order:write"),
-    PRODUCT_READ("product:read"),
-    PRODUCT_WRITE("product:write"),
-
+    BOOKING_READ("booking:read"),
+    BOOKING_WRITE("booking:write"),
+    PACKAGE_READ("package:read"),
+    PACKAGE_WRITE("package:write"),
     CUSTOMER_READ("customer:read"),
-    CUSTOMER_WRITE("customer:write");
+    CUSTOMER_WRITE("customer:write"),
+    HOTEL_READ("hotel:read"),
+    HOTEL_WRITE("hotel:write"),
+    VEHICLE_READ("vehicle:read"),
+    VEHICLE_WRITE("vehicle:write"),
+    DRIVER_READ("driver:read"),
+    DRIVER_WRITE("driver:write");
 
     private final String permission;
 

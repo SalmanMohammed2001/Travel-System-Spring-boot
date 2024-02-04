@@ -62,5 +62,6 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
             // throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR)
             throw new IllegalStateException("Token was Rejected!");
         }
+        filterChain.doFilter(request,response);
     }
 }

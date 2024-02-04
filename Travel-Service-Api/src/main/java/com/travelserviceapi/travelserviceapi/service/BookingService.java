@@ -12,4 +12,6 @@ public interface BookingService {
 
     public List<ResponseBookingDto> findAll() throws IOException;
 
+    public ResponseBookingDto findId(String id);
+
 }

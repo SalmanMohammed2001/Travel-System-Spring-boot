@@ -30,7 +30,7 @@ public class Vehicle {
     private String vehicleImages;
     private int vehicleQty;
     private  boolean vehicleState;
-    private String vehicleFrontImage;
+
 
     @OneToOne( mappedBy = "vehicle")
     private Driver driver;

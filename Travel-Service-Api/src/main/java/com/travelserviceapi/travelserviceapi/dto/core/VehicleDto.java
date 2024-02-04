@@ -31,5 +31,5 @@ public class VehicleDto {
     private Driver driver;
     private PackageDetails packageDetails;
     private  boolean vehicleState;
-    private byte[] vehicleFrontImage;
+
 }

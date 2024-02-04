@@ -8,6 +8,7 @@ import com.travelserviceapi.travelserviceapi.service.DriverService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,7 @@ public class DriverController {
     }
 
 @PostMapping
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> save(
 
             @RequestParam String vehicleId,
@@ -62,6 +64,7 @@ public class DriverController {
     }
 
     @GetMapping(path = "{nic}")
+  //  @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public List<ResponseDriverDto> findByNic(@PathVariable String nic){
         ResponseDriverDto dto = driverService.findByNic(nic);
 
@@ -89,8 +92,8 @@ public class DriverController {
                         dto.getVehicle().getVehicleTransmission(),
                         dto.getVehicle().getVehicleImages(),
                         dto.getVehicle().getVehicleQty(),
-                        dto.getVehicle().isVehicleState(),
-                        null
+                        dto.getVehicle().isVehicleState()
+
                 )
         ));
 
@@ -107,6 +110,7 @@ public class DriverController {
 
 
     @PutMapping
+    @PreAuthorize("hasAuthority('driver:write')")
     public ResponseEntity<StandResponse> update(
             @RequestParam String driverId,
             @RequestParam String driverName,
@@ -142,6 +146,7 @@ public class DriverController {
     }
 
     @DeleteMapping(params = {"id"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> delete(@RequestParam String id){
         driverService.deleteDriver(id);
         return new ResponseEntity<>(
@@ -150,6 +155,7 @@ public class DriverController {
     }
 
     @GetMapping
+  //  @PreAuthorize("hasAuthority('driver:read')")
     public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponseDriverDto> all = driverService.findAll();
         return new ResponseEntity<>(

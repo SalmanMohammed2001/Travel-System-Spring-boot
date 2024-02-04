@@ -28,6 +28,6 @@ public class RequestVehicleDto {
     private ArrayList<byte[]> vehicleImages;
     private int vehicleQty;
     private  boolean vehicleState;
-    private byte[] vehicleFrontImage;
+
 
 }

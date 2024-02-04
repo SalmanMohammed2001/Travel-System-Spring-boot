@@ -33,7 +33,7 @@ public class ResponseHotelDto {
     private Collection<Price> hotelPrices;
 
     private ArrayList<byte[]> images;
-    private byte[] hotelFrontImage;
+
     private boolean hotelStatus;
     //private PackageDetails packageDetails;
 

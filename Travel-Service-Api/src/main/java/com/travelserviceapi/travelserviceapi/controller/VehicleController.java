@@ -6,6 +6,7 @@ import com.travelserviceapi.travelserviceapi.service.VehicleService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,6 +26,8 @@ public class VehicleController {
     }
 
     @PostMapping
+  //  @PreAuthorize("hasAuthority('vehicle:write')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> save(
             @RequestParam String vehicleName,
             @RequestParam double vehiclePriceFor1Km,
@@ -37,8 +40,8 @@ public class VehicleController {
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages,
-                        @RequestPart byte[] vehicleFrontImg
+            @RequestParam List<MultipartFile> vehicleImages
+
            // @RequestParam boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -63,8 +66,8 @@ public class VehicleController {
                 vehicleTransmission,
                 bytes,
                 vehicleQty,
-                false,
-                vehicleFrontImg
+                false
+
 
         );
 
@@ -77,6 +80,7 @@ public class VehicleController {
 
 
     @GetMapping(path = "{id}")
+ //   @PreAuthorize("hasAuthority('vehicle:read')")
     public List<ResponseVehicleDto> findByID(@PathVariable String id) throws IOException {
         ResponseVehicleDto byId = vehicleService.findById(id);
 
@@ -95,8 +99,8 @@ public class VehicleController {
                 byId.getVehicleTransmission()
                 ,byId.getVehicleImages(),
                 byId.getVehicleQty(),
-                byId.isVehicleState(),
-                byId.getVehicleFrontImage()
+                byId.isVehicleState()
+
 
         ));
 
@@ -107,6 +111,8 @@ public class VehicleController {
     }
 
     @PutMapping
+ //   @PreAuthorize("hasAuthority('vehicle:write')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> update(
             @RequestParam String vehicleId,
             @RequestParam String vehicleName,
@@ -120,8 +126,8 @@ public class VehicleController {
             @RequestParam String vehicleHybrid,
             @RequestParam String vehicleTransmission,
             @RequestParam int vehicleQty,
-            @RequestParam List<MultipartFile> vehicleImages,
-            @RequestPart byte[] vehicleFrontImg
+            @RequestParam List<MultipartFile> vehicleImages
+
        //    @RequestParam  boolean vehicleState
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -146,8 +152,8 @@ public class VehicleController {
                 vehicleTransmission,
                 bytes,
                 vehicleQty,
-                false,
-                vehicleFrontImg
+                false
+
 
         );
 
@@ -157,7 +163,7 @@ public class VehicleController {
         );
     }
     @GetMapping
-
+    //@PreAuthorize("hasAuthority('vehicle:read')")
     public ResponseEntity<StandResponse>findAll() throws IOException {
         List<ResponseVehicleDto> all = vehicleService.findAll();
         return new ResponseEntity<>(
@@ -166,6 +172,8 @@ public class VehicleController {
     }
 
     @DeleteMapping(params = {"vehicleId"})
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse>delete(@RequestParam String vehicleId) throws IOException {
                     vehicleService.deleteById(vehicleId);
         return new ResponseEntity<>(
@@ -174,6 +182,8 @@ public class VehicleController {
     }
 
     @GetMapping(path = "list")
+    //@PreAuthorize("hasAuthority('vehicle:read')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse>findAllVehicleStateFalse() throws IOException {
         List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesFalse();
         return new ResponseEntity<>(
@@ -182,6 +192,7 @@ public class VehicleController {
     }
 
     @GetMapping(path = "true/{category}")
+   // @PreAuthorize("hasAuthority('vehicle:read')")
     public ResponseEntity<StandResponse>findAllVehicleStatesTrue(@PathVariable String category) throws IOException {
         List<ResponseVehicleDto> all = vehicleService.findAllVehicleStatesTrue(category);
         return new ResponseEntity<>(

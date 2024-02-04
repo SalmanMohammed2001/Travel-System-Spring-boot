@@ -8,6 +8,7 @@ import com.travelserviceapi.travelserviceapi.util.StandResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -79,6 +80,8 @@ public class UserController {
     }
 
     @GetMapping(path = "{email}")
+   // @PreAuthorize("hasAuthority('customer:read')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public List<ResponseUserDto> findByUserEmail(@PathVariable String email) throws IOException {
         ResponseUserDto user = userService.findByUser(email);
 
@@ -95,6 +98,7 @@ public class UserController {
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('customer:write')")
     public ResponseEntity<StandResponse> updateUser(
             @RequestPart String username,
             @RequestPart String password,
@@ -135,6 +139,7 @@ public class UserController {
     }
 
     @DeleteMapping(params = {"email"})
+    @PreAuthorize("hasAuthority('customer:write')")
     public ResponseEntity<StandResponse> deleteUser( @RequestParam  String email){
         userService.deleteUser(email);
         return new ResponseEntity<>(
@@ -143,6 +148,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('customer:read')")
     public ResponseEntity<StandResponse> findAllUser() throws IOException {
         List<ResponseUserDto> allUser = userService.findAllUser();
 
@@ -152,6 +158,7 @@ public class UserController {
     }
 
     @GetMapping(params = {"text"})
+    @PreAuthorize("hasAuthority('customer:read')")
     public ResponseEntity<StandResponse> searchUser(@RequestParam String text) throws IOException {
         String searchText="%"+text+"%";
         List<ResponseUserDto> allUser = userService.searchByEmailAndName(text,text);

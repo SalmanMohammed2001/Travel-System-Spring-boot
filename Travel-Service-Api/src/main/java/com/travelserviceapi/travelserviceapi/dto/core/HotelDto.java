@@ -37,6 +37,6 @@ public class HotelDto {
     private Collection<Price> hotelPrices;
     private ArrayList<byte[]> images;
     private boolean hotelStatus;
-    private byte[] hotelFrontImage;
+
 
 }

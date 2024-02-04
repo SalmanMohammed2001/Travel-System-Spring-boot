@@ -7,6 +7,7 @@ import com.travelserviceapi.travelserviceapi.service.BookingService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -19,12 +20,12 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
-
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('booking:write')")
     public ResponseEntity<StandResponse> save(
     @RequestParam String bookingDate,
     @RequestParam double bookingPrice,
@@ -65,10 +66,21 @@ public class BookingController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponseBookingDto> all = bookingService.findAll();
         return new ResponseEntity<>(
                 new StandResponse(201, "booking all", all), HttpStatus.CREATED
+        );
+
+    }
+
+    @GetMapping(path = "{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<StandResponse> findId(@PathVariable String id ) throws IOException {
+        ResponseBookingDto responseBookingDto = bookingService.findId(id);
+        return new ResponseEntity<>(
+                new StandResponse(201, "booking all", responseBookingDto), HttpStatus.CREATED
         );
 
     }

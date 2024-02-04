@@ -14,6 +14,7 @@ import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import javax.persistence.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,8 +38,9 @@ public class HotelController {
     private String hotelName;
 
     @PostMapping
+  //  @PreAuthorize("hasAuthority('hotel:write')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> save(
-
             @RequestParam String hotelCategory,
             @RequestParam String hotelName,
             @RequestParam String hotelPetAllowed,
@@ -56,8 +58,8 @@ public class HotelController {
             @RequestParam String price1,
             @RequestParam String price2,
             @RequestParam String price3,
-            @RequestParam String price4,
-            @RequestPart byte[] hotelFrontImg
+            @RequestParam String price4
+
 
 
     ) throws IOException {
@@ -88,7 +90,7 @@ public class HotelController {
         requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3,p4));
         requestHotelDto.setImages(bytes);
         requestHotelDto.setHotelStatus(false);
-        requestHotelDto.setHotelFrontImage(hotelFrontImg);
+
         hotelService.save(requestHotelDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel saved", null), HttpStatus.CREATED
@@ -97,6 +99,8 @@ public class HotelController {
 
 
    @GetMapping(path = "{id}")
+ //  @PreAuthorize("hasAuthority('hotel:read')")
+
     public ResponseEntity<StandResponse> findById(@PathVariable String id) throws IOException {
        ResponseHotelDto byId = hotelService.findById(id);
 
@@ -120,6 +124,8 @@ public class HotelController {
    }
 
     @PutMapping
+//    @PreAuthorize("hasAuthority('hotel:write')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> update(
             @RequestParam String hotelCategory,
             @RequestParam String hotelName,
@@ -139,8 +145,8 @@ public class HotelController {
             @RequestParam String price2,
             @RequestParam String price3,
             @RequestParam String price4,
-            @RequestParam String hotelId,
-            @RequestPart byte[] hotelFrontImg
+            @RequestParam String hotelId
+         //   @RequestPart byte[] hotelFrontImg
 
     ) throws IOException {
         ArrayList<byte[]> bytes = new ArrayList<>();
@@ -171,7 +177,7 @@ public class HotelController {
         requestHotelDto.setHotelPrices(Arrays.asList(p1, p2, p3,p4));
         requestHotelDto.setImages(bytes);
         requestHotelDto.setHotelStatus(hotelStatus);
-        requestHotelDto.setHotelFrontImage(hotelFrontImg);
+      //  requestHotelDto.setHotelFrontImage(hotelFrontImg);
         hotelService.updateHotel(requestHotelDto);
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel saved", null), HttpStatus.CREATED
@@ -179,6 +185,8 @@ public class HotelController {
     }
 
 @DeleteMapping(params = {"hotelId"})
+//@PreAuthorize("hasAuthority('hotel:write')")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> delete(@RequestParam String hotelId){
         hotelService.deleteHotel(hotelId);
     return new ResponseEntity<>(
@@ -186,14 +194,17 @@ public class HotelController {
     );
 }
     @GetMapping()
+ //   @PreAuthorize("hasAuthority('hotel:read')")
+
     public ResponseEntity<StandResponse> findAll() throws Exception {
         List<ResponseHotelDto> all = hotelService.findAll();
-
         return new ResponseEntity<>(
                 new StandResponse(201, "hotel all", all), HttpStatus.CREATED
         );
     }
    @GetMapping(path = "list/{category}")
+ //  @PreAuthorize("hasAuthority('hotel:read')")
+   @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<StandResponse> findAllCategory(@PathVariable String category) throws Exception {
         List<ResponseHotelDto> all = hotelService.findAllByHotelCategoryEquals(category);
        if(all.isEmpty())return null;

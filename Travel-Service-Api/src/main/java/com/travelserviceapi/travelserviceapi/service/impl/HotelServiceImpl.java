@@ -115,11 +115,16 @@ public class HotelServiceImpl implements HotelService {
     public List<ResponseHotelDto> findAll() throws Exception {
         List<Hotel> all = hotelRepo.findAll();
         List<ResponseHotelDto> responseHotelDto = mapper.map(all, new TypeToken<List<ResponseHotelDto>>() {}.getType());
-
          importImagesAll(responseHotelDto, all);
          responseHotelDto.forEach(data->{
-             System.out.println(data.getHotelFrontImage());
+         System.out.println(data.getImages().toString());
+            // System.out.println(data.getHotelId());
          });
+
+         if(responseHotelDto.isEmpty()){
+            throw new DuplicateEntryException("null");
+
+         }
         return responseHotelDto;
 
     }
@@ -128,9 +133,9 @@ public class HotelServiceImpl implements HotelService {
     public List<ResponseHotelDto> findAllByHotelCategoryEquals(String category) throws Exception {
       List<Hotel> allByHotelCategoryEquals = hotelRepo.findAllByHotelCategoryEquals(category);
         List<ResponseHotelDto> responseHotelDto = mapper.map(allByHotelCategoryEquals, new TypeToken<List<ResponseHotelDto>>() {}.getType());
-       // List<ResponseHotelDto> responseHotelDtos = importImagesAll(responseHotelDto, allByHotelCategoryEquals);
-//    return responseHotelDtos;
-return null;
+        importImagesAll(responseHotelDto, allByHotelCategoryEquals);
+  return responseHotelDto;
+
 
     }
 
@@ -172,13 +177,7 @@ return null;
         hotel.setImages(gson.toJson(pathList));
 
 
-        if (dto.getHotelFrontImage() != null) {
-            InputStream is = new ByteArrayInputStream(dto.getHotelFrontImage());
-            BufferedImage bi = ImageIO.read(is);
-            File outputfile = new File("images/hotel/font/" + dt + ".jpg");
-            ImageIO.write(bi, "jpg", outputfile);
-            hotel.setHotelFrontImage(outputfile.getAbsolutePath());
-        }
+
 
     }
 
@@ -195,35 +194,18 @@ return null;
             hotelDto.getImages().add(imgData);
         }
 
-        BufferedImage read = ImageIO.read(new File(hotel.getHotelFrontImage()));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(read, "jpg", baos);
-        byte[] bytes = baos.toByteArray();
-        //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
-        hotelDto.setHotelFrontImage(bytes);
+
     }
 
- /*   List<ResponseHotelDto> importImagesAll(List<ResponseHotelDto> hotelDto,List<Hotel> hotels) throws Exception {
+/*    List<ResponseHotelDto> importImagesAll(List<ResponseHotelDto> hotelDto,List<Hotel> hotels) throws Exception {
 
         if(hotels ==null && hotelDto == null) return  null;
         Hotel hotel = new Hotel();
 
         ResponseHotelDto hotelDto1= new ResponseHotelDto();
         hotels.forEach(data->{
-
             hotel.setImages(data.getImages());
-            System.out.println(data.getHotelFrontImage());
-            try{
-                BufferedImage read = ImageIO.read(new File(data.getHotelFrontImage()));
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(read, "jpg", baos);
-                byte[] bytes = baos.toByteArray();
-                //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
-                hotelDto1.setHotelFrontImage(bytes);
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         });
 
 
@@ -253,65 +235,49 @@ return null;
         }
         return arrayList;
     }*/
-  public  void  importImagesAll(List<ResponseHotelDto> hotelDto,List<Hotel> hotels) throws Exception {
+ public  void  importImagesAll(List<ResponseHotelDto> hotelDto,List<Hotel> hotels) throws Exception {
 
      if(hotels ==null && hotelDto == null) return ;
      Hotel hotel = new Hotel();
 
-     ResponseHotelDto hotelDto1= new ResponseHotelDto();
+   //  ResponseHotelDto hotelDto1= new ResponseHotelDto();
      hotels.forEach(data->{
          hotel.setImages(data.getImages());
+        // System.out.println(data.getImages());
 
-        try{
-             BufferedImage read = ImageIO.read(new File(data.getHotelFrontImage()));
-             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             ImageIO.write(read, "jpg", baos);
-             byte[] bytes = baos.toByteArray();
-             //    dto.setProfilePic(Base64.getEncoder().encodeToString(bytes));
-             hotelDto1.setHotelFrontImage(bytes);
-           // System.out.println(hotelDto1.getHotelFrontImage());
-            hotelDto.forEach(data1->{
-                data1.setHotelFrontImage(hotelDto1.getHotelFrontImage());
-            });
-         }catch (Exception e){
-             e.printStackTrace();
-         }
+        // String images = hotel.getImages();
+       //  System.out.println(hotel.getImages());
+        ArrayList<byte[]> imageByte=new ArrayList<>();
+         ResponseHotelDto responseHotelDto = new ResponseHotelDto();
+         responseHotelDto.setImages(new ArrayList<>());
+         ArrayList<String> imageList = gson.fromJson(hotel.getImages(), new TypeToken<ArrayList<String>>() {}.getType());
+         for (int i = 0; i < imageList.size(); i++) {
+             BufferedImage r = null;
+             try {
+                 r = ImageIO.read(new File(imageList.get(i)));
+             } catch (IOException e) {
+                 throw new RuntimeException(e);
+             }
+             ByteArrayOutputStream b = new ByteArrayOutputStream();
+             try {
+                 ImageIO.write(r, "jpg", b);
+             } catch (IOException e) {
+                 throw new RuntimeException(e);
+             }
+             byte[] imgData= b.toByteArray();
+             imageByte.add(imgData);
+            System.out.println(imageByte);
+             System.out.println("-----------");
+
+             hotelDto.forEach(data1->{
+                 data1.setImages(imageByte);
+             });
+
+         };
+
      });
 
 
-
-
-     /* for (ResponseHotelDto dto : hotelDto) {
-          dto.setHotelFrontImage(hotelDto1.getHotelFrontImage());
-      }*/
-
-     String images = hotel.getImages();
-
-     ResponseHotelDto responseHotelDto = new ResponseHotelDto();
-     responseHotelDto.setImages(new ArrayList<>());
-     ArrayList<String> imageList = gson.fromJson(images, new TypeToken<ArrayList<String>>() {}.getType());
-     for (int i = 0; i < imageList.size(); i++) {
-         BufferedImage r = ImageIO.read(new File(imageList.get(i)));
-         ByteArrayOutputStream b = new ByteArrayOutputStream();
-         ImageIO.write(r, "jpg", b);
-         byte[] imgData= b.toByteArray();
-         responseHotelDto.getImages().add(imgData);
-
-     };
-      hotelDto.forEach(data1->{
-          data1.setImages(responseHotelDto.getImages());
-      });
-
-
-    /* List<ResponseHotelDto> arrayList = new ArrayList<>();
-     for (ResponseHotelDto data:hotelDto){
-
-         arrayList.add(new ResponseHotelDto(
-                 data.getHotelId(),data.getHotelName(),data.getHotelCategory(),data.getHotelPetAllowed(),
-                 data.getHotelMapLink(),data.getHotelAddress(),data.getHotelContact(),data.getHotelEmail(),
-                 data.getHotelPrices(),responseHotelDto.getImages(),hotelDto1.getHotelFrontImage(),data.isHotelStatus()
-         ));
-     }*/
 
  }
 

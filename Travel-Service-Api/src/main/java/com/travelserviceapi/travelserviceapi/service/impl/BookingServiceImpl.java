@@ -7,6 +7,7 @@ import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDetail
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.*;
 import com.travelserviceapi.travelserviceapi.entity.*;
+import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.*;
 import com.travelserviceapi.travelserviceapi.service.BookingService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -60,13 +62,13 @@ public class BookingServiceImpl implements BookingService {
         BookingDto bookingDto = mapper.map(dto, BookingDto.class);
         bookingDto.setBookingId(generateKey);
 
-        System.out.println(bookingDto.getBookingId());
+     /*   System.out.println(bookingDto.getBookingId());
         System.out.println(bookingDto.getBankSlip());
         System.out.println(bookingDto.getBookingDate());
         System.out.println(bookingDto.getBookingPrice());
         System.out.println(bookingDto.isBookingStatus());
         System.out.println(bookingDto.getUser());
-        System.out.println(bookingDto.getBookingDetailsLis());
+        System.out.println(bookingDto.getBookingDetailsLis());*/
 
        User user = userRepo.findById(bookingDto.getUser()).get();
 
@@ -131,8 +133,8 @@ public class BookingServiceImpl implements BookingService {
          responseBookingDtos=   mapper.map(b.getBookingDetailsLis(),new TypeToken<List<ResponseBookingDetailsDto>>(){}.getType());
 
             list.add(new ResponseBookingDto(
-                    b.getBookingId(),b.getBankSlip(),b.getBookingPrice(),null,b.isBookingStatus()
-                    ,b.getUser().getUsername(),responseBookingDtos
+                    b.getBookingId(),b.getBookingDate(),b.getBookingPrice(),null,b.isBookingStatus()
+                    ,b.getUser().getUserEmail(),responseBookingDtos
             ));
         }
   //    List<ResponseBookingDto> responseBookingDtos=  mapper.map(all,new TypeToken<List<ResponseBookingDto>>(){}.getType());
@@ -141,6 +143,35 @@ public class BookingServiceImpl implements BookingService {
            System.out.println(data.toString());
        });*/
         return responseBookingDtos1;
+    }
+
+    @Override
+    public ResponseBookingDto findId(String id) {
+
+       // bookingDetailsRepo.f
+
+          Booking booking = bookingRepo.findById(id).get();
+      List<ResponseBookingDetailsDto> responseBookingDetailsDto=  mapper.map(booking.getBookingDetailsLis(), new TypeToken<List<ResponseBookingDetailsDto>>() {}.getType());
+
+
+        ResponseBookingDto responseBookingDto = new ResponseBookingDto(
+                booking.getBookingId(),
+                booking.getBookingDate(),
+                booking.getBookingPrice(),
+                null,
+                booking.isBookingStatus(),
+                booking.getUser().getUserEmail(),
+                responseBookingDetailsDto
+        );
+
+
+//        System.out.println(booking.getBookingId());
+//        System.out.println(booking.getBookingDate());
+//        System.out.println(booking.getBookingPrice());
+
+
+
+        return  responseBookingDto;
     }
 
     public void exportImages(BookingDto dto, Booking booking) throws IOException {
