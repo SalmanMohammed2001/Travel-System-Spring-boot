@@ -163,5 +163,13 @@ public class DriverController {
         );
     }
 
+    @GetMapping("count")
+    public ResponseEntity<StandResponse> driverCount() throws IOException {
+        long allDriverCount = driverService.findAllDriverCount();
+        return new ResponseEntity<>(
+                new StandResponse(201, "all Driver ", allDriverCount), HttpStatus.CREATED
+        );
+    }
+
 
 }

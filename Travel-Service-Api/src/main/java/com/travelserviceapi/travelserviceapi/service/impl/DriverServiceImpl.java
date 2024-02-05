@@ -175,6 +175,11 @@ public class DriverServiceImpl implements DriverService {
         return responseDriverDtos1;
     }
 
+    @Override
+    public long findAllDriverCount() {
+      return   driverRepo.findAllDriverCount();
+    }
+
 
     public List<ResponseDriverDto> importImagesAllVehicle(List<ResponseDriverDto> driverDto,List<Driver>all) throws IOException {
         if(driverDto.isEmpty() && all.isEmpty()){
