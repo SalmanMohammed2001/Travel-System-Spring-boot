@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface BookingRepo extends JpaRepository<Booking,String> {
 
+    @Query(value = "SELECT  booking_date AS year, SUM(booking_price) AS yearly_income FROM booking GROUP BY booking_date ORDER BY booking_date",nativeQuery = true)
+    public Optional<Booking> findByYearlyIncome();
+
 }

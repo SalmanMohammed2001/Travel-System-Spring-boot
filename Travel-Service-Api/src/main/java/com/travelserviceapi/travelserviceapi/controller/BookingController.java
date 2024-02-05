@@ -5,6 +5,7 @@ import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUpdateBookingDto;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseYearAndIncome;
 import com.travelserviceapi.travelserviceapi.service.BookingService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
@@ -155,6 +156,16 @@ public class BookingController {
 
         return new ResponseEntity<>(
                 new StandResponse(201, "booking all", responseUpdateBookingDtos), HttpStatus.CREATED
+        );
+
+    }
+
+    @GetMapping(path = "year-income")
+  //  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<StandResponse> YearlyIncome() throws IOException {
+        ResponseYearAndIncome byYearlyIncome = bookingService.findByYearlyIncome();
+        return new ResponseEntity<>(
+                new StandResponse(201, "booking all",null), HttpStatus.CREATED
         );
 
     }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,6 +20,8 @@ public class Booking {
 
     @Id
     private String bookingId;
+
+
     private String bookingDate;
     private double bookingPrice;
     private String bankSlip;
