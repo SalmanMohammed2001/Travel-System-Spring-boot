@@ -3,10 +3,10 @@ package com.travelserviceapi.travelserviceapi.controller;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDetailsDto;
 import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDto;
-import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseHotelDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUpdateBookingDto;
-import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseYearAndIncome;
+import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseYearlyIncome;
 import com.travelserviceapi.travelserviceapi.service.BookingService;
+import com.travelserviceapi.travelserviceapi.service.YearlyIncomeService;
 import com.travelserviceapi.travelserviceapi.util.StandResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,11 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
-    public BookingController(BookingService bookingService) {
+
+    private final YearlyIncomeService yearlyIncomeService;
+    public BookingController(BookingService bookingService, YearlyIncomeService yearlyIncomeService) {
         this.bookingService = bookingService;
+        this.yearlyIncomeService = yearlyIncomeService;
     }
 
     @PostMapping
@@ -163,9 +166,9 @@ public class BookingController {
     @GetMapping(path = "year-income")
   //  @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<StandResponse> YearlyIncome() throws IOException {
-        ResponseYearAndIncome byYearlyIncome = bookingService.findByYearlyIncome();
+        List<ResponseYearlyIncome> yearlyIncome = yearlyIncomeService.findYearlyIncome();
         return new ResponseEntity<>(
-                new StandResponse(201, "booking all",null), HttpStatus.CREATED
+                new StandResponse(201, "booking all",yearlyIncome), HttpStatus.CREATED
         );
 
     }

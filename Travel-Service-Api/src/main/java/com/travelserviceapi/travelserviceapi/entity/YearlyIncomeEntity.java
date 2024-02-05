@@ -18,11 +18,9 @@ import javax.persistence.Id;
 public class YearlyIncomeEntity {
 
     @Id
-    private Integer year;
+    private String year;
 
     @Column(name = "yearly_income")
     private Double yearlyIncome;
-
-
 
 }

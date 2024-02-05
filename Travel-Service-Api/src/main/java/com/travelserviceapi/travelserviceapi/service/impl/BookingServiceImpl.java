@@ -252,13 +252,6 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    @Override
-    public ResponseYearAndIncome findByYearlyIncome() {
-       // Optional<Booking> byYearlyIncome = bookingRepo.findByYearlyIncome();
-    //    return mapper.map(byYearlyIncome.get(),ResponseYearAndIncome.class);
-        return null;
-    }
-
 
     public void importImages(ResponseUpdateBookingDto responseUpdateBookingDto,Booking booking) throws IOException {
 
