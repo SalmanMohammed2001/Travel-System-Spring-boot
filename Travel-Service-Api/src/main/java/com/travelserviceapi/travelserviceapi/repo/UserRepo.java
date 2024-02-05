@@ -52,5 +52,7 @@ public interface UserRepo  extends JpaRepository<User,String> {
 
     public Optional<User> findByPrefix(String prefix);
 
-   //public Optional<ApplicationUser>  findApplicationUserByUsername(String username);
+
+    @Query(value = "SELECT COUNT(*) AS customer_count FROM user",nativeQuery = true)
+    public long  findAllCustomerCount();
 }

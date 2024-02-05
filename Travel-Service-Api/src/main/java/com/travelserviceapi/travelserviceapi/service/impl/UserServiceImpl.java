@@ -244,6 +244,11 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public long findAllCustomerCount() {
+      return userRepo.findAllCustomerCount();
+    }
+
 
     public void exportImages(UserDto dto, User user) throws IOException {
         String dt = LocalDate.now().toString().replace("-", "_") + "__"

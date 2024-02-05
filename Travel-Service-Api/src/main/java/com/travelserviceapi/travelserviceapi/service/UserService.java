@@ -22,4 +22,6 @@ public interface UserService {
 
     public void VerifyAccount(String email,String otp);
 
+    public long  findAllCustomerCount();
+
 }

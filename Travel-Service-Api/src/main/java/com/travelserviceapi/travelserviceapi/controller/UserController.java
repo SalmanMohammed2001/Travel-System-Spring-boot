@@ -177,6 +177,15 @@ public class UserController {
     }
 
 
+    @GetMapping(path = "count")
+    public ResponseEntity<StandResponse> count() throws IOException {
+        long allCustomerCount = userService.findAllCustomerCount();
+        return new ResponseEntity<>(
+                new StandResponse(201, "Customer verified", allCustomerCount), HttpStatus.CREATED
+        );
+    }
+
+
 
 
 }
