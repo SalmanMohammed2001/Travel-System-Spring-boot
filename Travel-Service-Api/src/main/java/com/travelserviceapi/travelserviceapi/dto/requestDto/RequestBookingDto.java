@@ -16,7 +16,6 @@ import java.util.List;
 
 public class RequestBookingDto {
 
-
     private String bookingId;
     private String bookingDate;
     private double bookingPrice;

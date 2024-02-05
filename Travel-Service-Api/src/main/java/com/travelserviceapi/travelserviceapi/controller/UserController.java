@@ -89,7 +89,7 @@ public class UserController {
             responseUserDtos.add(new ResponseUserDto(user.getUserId(),user.getUsername(),user.getPassword(),
                     user.getNic(),user.getDob(),user.getGender(),user.getContact(),user.getEmail(),
                     user.getAddress(),user.getNicFrontImg(),user.getNicRearImg(),user.getProfilePic(),user.isUserState(),
-                    user.getNicFrontImgByte(),user.getNicRearImgByte(),user.getProfilePicByte(),null));
+                    user.getNicFrontImgByte(),user.getNicRearImgByte(),user.getProfilePicByte()));
        return responseUserDtos;
 
        /* return new ResponseEntity<>(

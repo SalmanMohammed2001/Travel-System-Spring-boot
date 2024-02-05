@@ -33,7 +33,7 @@ public class ResponseUserDto {
     private byte[] nicFrontImgByte;
     private byte[] nicRearImgByte;
     private byte[] profilePicByte;
-    private List<Booking> bookings;
+  //  private List<Booking> bookings;
 
 
 }

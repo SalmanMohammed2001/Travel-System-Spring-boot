@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
                 return new ResponseUserDto(save.getUserId(), save.getUsername(), save.getUserPassword(), save.getUserNic(),
                         save.getUserDob(), save.getUserGender(), save.getUserContact(), save.getUserEmail(),
-                        save.getUserAddress(),null,null, null, save.isUserState(), null,null,null,null);
+                        save.getUserAddress(),null,null, null, save.isUserState(), null,null,null);
 
             } else {
                 throw new DuplicateEntryException("Duplicate Primary key");
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
         users.forEach(data->{
             responseUserDtos.add(new ResponseUserDto( data.getUserId(),data.getUsername(),data.getUserPassword(),data.getUserNic(),
                     data.getUserDob(),data.getUserGender(),data.getUserContact(), data.getUserEmail(),
-                    data.getUserAddress(),null,null, null,data.isUserState(), null,null,null,null
+                    data.getUserAddress(),null,null, null,data.isUserState(), null,null,null
             ));
         });
         return  responseUserDtos;
@@ -340,7 +340,7 @@ public class UserServiceImpl implements UserService {
                     dto1.getNic(),dto1.getDob(),dto1.getGender(),dto1.getContact(),dto1.getEmail()
             ,dto1.getAddress(),responseUserDto.getNicFrontImg(),responseUserDto.getNicRearImg(),
                     responseUserDto.getProfilePic(),dto1.isUserState(),responseUserDto.getNicFrontImgByte(),
-                    responseUserDto.getNicRearImgByte(),responseUserDto.getProfilePicByte(),null));
+                    responseUserDto.getNicRearImgByte(),responseUserDto.getProfilePicByte()));
         }
 
         return  response;

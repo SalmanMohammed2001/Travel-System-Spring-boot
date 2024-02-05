@@ -87,7 +87,6 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
     @Override
     public ResponsePackageDetailsDto findById(String id) throws IOException {
         if(packageDetailsRepo.existsById(id)){
-
             System.out.println(id);
            PackageDetails packageDetails = packageDetailsRepo.findById(id).get();
             ResponseVehicleDto responseVehicleDto= mapper.map(packageDetails.getVehicle(),ResponseVehicleDto.class);
@@ -271,8 +270,8 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
                     data.getPackageValue(),
                     data.isPackageStatus(),
                     hotel1,
-                    vehicle1,
-                    null
+                    vehicle1
+
             ));
         }
         return arrayList;

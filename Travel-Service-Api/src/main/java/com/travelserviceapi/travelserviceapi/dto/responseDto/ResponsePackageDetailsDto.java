@@ -25,6 +25,5 @@ public class ResponsePackageDetailsDto {
     private boolean packageStatus;
     private ResponseHotelDto hotel;
     private ResponseVehicleDto vehicle;
-    private List<BookingDetails> bookingDetailsLis;
 
 }
