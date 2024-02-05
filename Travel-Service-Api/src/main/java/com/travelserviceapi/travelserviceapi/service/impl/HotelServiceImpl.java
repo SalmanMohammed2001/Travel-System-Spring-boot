@@ -139,6 +139,11 @@ public class HotelServiceImpl implements HotelService {
 
     }
 
+    @Override
+    public long findAllHotelCount() {
+     return hotelRepo.findAllHotelCount();
+    }
+
     public void deleteImage(Hotel hotel){
         if (hotel!=null){
             String images = hotel.getImages();

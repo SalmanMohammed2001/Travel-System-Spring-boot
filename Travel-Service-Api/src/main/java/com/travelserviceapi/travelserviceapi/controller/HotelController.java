@@ -213,5 +213,15 @@ public class HotelController {
         );
     }
 
+    @GetMapping(path = "count")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<StandResponse> hotelCount() throws IOException {
+        long allHotelCount = hotelService.findAllHotelCount();
+        return new ResponseEntity<>(
+                new StandResponse(201, "booking all",allHotelCount), HttpStatus.CREATED
+        );
+
+    }
+
 
 }

@@ -19,4 +19,6 @@ public interface HotelService {
     public List<ResponseHotelDto> findAll() throws Exception;
 
     public List<ResponseHotelDto> findAllByHotelCategoryEquals(String category) throws Exception;
+
+    public long  findAllHotelCount();
 }
