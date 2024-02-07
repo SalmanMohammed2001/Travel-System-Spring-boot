@@ -173,5 +173,15 @@ public class BookingController {
 
     }
 
+    @GetMapping(path = "count")
+      @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
+    public ResponseEntity<StandResponse> bookingCount() throws IOException {
+        long allBookingCount = bookingService.findAllBookingCount();
+        return new ResponseEntity<>(
+                new StandResponse(201, "booking all",allBookingCount), HttpStatus.CREATED
+        );
+
+    }
+
 
 }

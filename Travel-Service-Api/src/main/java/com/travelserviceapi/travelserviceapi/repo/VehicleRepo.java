@@ -11,6 +11,8 @@ public interface VehicleRepo extends JpaRepository<Vehicle,String> {
   public List<Vehicle>  findAllByVehicleStateFalse();
   public List<Vehicle>  findAllByVehicleStateTrueAndVehicleCategoryEquals(String category);
 
+  @Query(value = "SELECT COUNT(*) AS vehicle_count FROM vehicle",nativeQuery = true)
+  public long  findAllVehicleCount();
 
 
 

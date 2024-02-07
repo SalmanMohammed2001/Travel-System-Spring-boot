@@ -153,6 +153,11 @@ public class PackageDetailsServiceImpl implements PackageDetailsService {
         return responsePackageDetailsDtos;
     }
 
+    @Override
+    public long findAllPackageCount() {
+      return packageDetailsRepo.findAllPackageCount();
+    }
+
     public void importImages(ResponseVehicleDto vehicleDto,Vehicle vehicle,ResponseHotelDto responseHotelDto,Hotel hotel) throws IOException {
 
         String images = vehicle.getVehicleImages();

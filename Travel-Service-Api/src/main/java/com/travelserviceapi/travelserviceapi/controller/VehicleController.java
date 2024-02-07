@@ -200,5 +200,14 @@ public class VehicleController {
         );
     }
 
+    @GetMapping(path = "count")
+    public ResponseEntity<StandResponse>findAllVehicleCount() throws IOException {
+        long allVehicleCount = vehicleService.findAllVehicleCount();
+        return new ResponseEntity<>(
+                new StandResponse(201, "Vehicle all true", allVehicleCount), HttpStatus.CREATED
+        );
+    }
+
+
 
 }

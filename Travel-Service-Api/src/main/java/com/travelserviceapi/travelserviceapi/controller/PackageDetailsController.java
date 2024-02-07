@@ -144,10 +144,18 @@ public class PackageDetailsController {
   //  @PreAuthorize("hasAuthority('package:read')")
     public ResponseEntity<StandResponse> findAll() throws IOException {
         List<ResponsePackageDetailsDto> all = packageDetailsService.findAll();
-
-
         return new ResponseEntity<>(
                 new StandResponse(201, "all package",all), HttpStatus.CREATED
+        );
+    }
+
+    @GetMapping("count")
+    //  @PreAuthorize("hasAuthority('package:read')")
+    public ResponseEntity<StandResponse> findAllCount() throws IOException {
+        long allPackageCount = packageDetailsService.findAllPackageCount();
+
+        return new ResponseEntity<>(
+                new StandResponse(201, "all package",allPackageCount), HttpStatus.CREATED
         );
     }
 }

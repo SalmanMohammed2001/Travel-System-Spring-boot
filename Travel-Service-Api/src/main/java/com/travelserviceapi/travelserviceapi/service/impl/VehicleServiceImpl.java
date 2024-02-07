@@ -131,6 +131,11 @@ public class VehicleServiceImpl implements VehicleService {
         }
     }
 
+    @Override
+    public long findAllVehicleCount() {
+      return   vehicleRepo.findAllVehicleCount();
+    }
+
 
     @Override
     public void deleteById(String id) {

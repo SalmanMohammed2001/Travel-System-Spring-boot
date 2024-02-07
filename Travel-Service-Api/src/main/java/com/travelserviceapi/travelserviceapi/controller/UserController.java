@@ -81,7 +81,7 @@ public class UserController {
 
     @GetMapping(path = "{email}")
    // @PreAuthorize("hasAuthority('customer:read')")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public List<ResponseUserDto> findByUserEmail(@PathVariable String email) throws IOException {
         ResponseUserDto user = userService.findByUser(email);
 
@@ -139,7 +139,7 @@ public class UserController {
     }
 
     @DeleteMapping(params = {"email"})
-    @PreAuthorize("hasAuthority('customer:write')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     public ResponseEntity<StandResponse> deleteUser( @RequestParam  String email){
         userService.deleteUser(email);
         return new ResponseEntity<>(
@@ -148,7 +148,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAuthority('customer:read')")
+ //   @PreAuthorize("hasAuthority('customer:read')")
     public ResponseEntity<StandResponse> findAllUser() throws IOException {
         List<ResponseUserDto> allUser = userService.findAllUser();
 
@@ -158,7 +158,7 @@ public class UserController {
     }
 
     @GetMapping(params = {"text"})
-    @PreAuthorize("hasAuthority('customer:read')")
+    //@PreAuthorize("hasAuthority('customer:read')")
     public ResponseEntity<StandResponse> searchUser(@RequestParam String text) throws IOException {
         String searchText="%"+text+"%";
         List<ResponseUserDto> allUser = userService.searchByEmailAndName(text,text);

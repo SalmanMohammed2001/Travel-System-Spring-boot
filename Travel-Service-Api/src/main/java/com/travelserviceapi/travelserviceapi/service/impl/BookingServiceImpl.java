@@ -10,6 +10,7 @@ import com.travelserviceapi.travelserviceapi.entity.*;
 import com.travelserviceapi.travelserviceapi.exception.EntryNotFoundException;
 import com.travelserviceapi.travelserviceapi.repo.*;
 import com.travelserviceapi.travelserviceapi.service.BookingService;
+import com.travelserviceapi.travelserviceapi.service.process.impl.EmailService;
 import com.travelserviceapi.travelserviceapi.util.Generator;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -48,9 +49,11 @@ public class BookingServiceImpl implements BookingService {
 
     private final ModelMapper mapper;
 
+    private final EmailService emailService;
+
 
     @Autowired
-    public BookingServiceImpl(BookingRepo bookingRepo, PackageDetailsRepo packageDetailsRepo, BookingDetailsRepo bookingDetailsRepo, UserRepo userRepo, Generator generator, Gson gson, ModelMapper mapper) {
+    public BookingServiceImpl(BookingRepo bookingRepo, PackageDetailsRepo packageDetailsRepo, BookingDetailsRepo bookingDetailsRepo, UserRepo userRepo, Generator generator, Gson gson, ModelMapper mapper, EmailService emailService) {
         this.bookingRepo = bookingRepo;
         this.packageDetailsRepo = packageDetailsRepo;
         this.bookingDetailsRepo = bookingDetailsRepo;
@@ -58,6 +61,7 @@ public class BookingServiceImpl implements BookingService {
         this.generator = generator;
         this.gson = gson;
         this.mapper = mapper;
+        this.emailService = emailService;
     }
 
 
@@ -67,35 +71,51 @@ public class BookingServiceImpl implements BookingService {
         BookingDto bookingDto = mapper.map(dto, BookingDto.class);
         bookingDto.setBookingId(generateKey);
 
-     /*   System.out.println(bookingDto.getBookingId());
+        System.out.println(bookingDto.getBookingId());
         System.out.println(bookingDto.getBankSlip());
         System.out.println(bookingDto.getBookingDate());
         System.out.println(bookingDto.getBookingPrice());
         System.out.println(bookingDto.isBookingStatus());
         System.out.println(bookingDto.getUser());
-        System.out.println(bookingDto.getBookingDetailsLis());*/
+        System.out.println(bookingDto.getBookingDetailsLis());
 
-       User user = userRepo.findById(bookingDto.getUser()).get();
+
+    //   if(emailService.createEmails())
+
+      User user = userRepo.findById(bookingDto.getUser()).get();
 
        List<BookingDetails> bookingDetails=new ArrayList<>();
        bookingDto.getBookingDetailsLis().forEach(data->{
-           bookingDetails.add(new BookingDetails(
-                   bookingDto.getBookingId(),
-                   data.getPackageId(),
-                   data.getPackageCategory(),
-                   data.getPackageStartDate(),
-                   data.getPackageEndDate(),
-                   data.getPackageValue(),
-                   user.getUsername(),
-                   null,
-                   null
-           ));
+           if(emailService.createEmails(user.getUserEmail(),
+                   "Next Travel Booking Details",
+                   "<h1> Booking Code="+bookingDto.getBookingId()+"</h1> <br>" +
+                           "<h1> Package Value="+bookingDto.getBookingPrice()+"</h1> <br>" +
+                           "<h1> package Start Date="+data.getPackageStartDate()+"</h1> <br>" +
+                           "<h1> package Start Date="+data.getPackageEndDate()+"</h1>"
 
-           PackageDetails packageDetails = packageDetailsRepo.findById(data.getPackageId()).get();
-        //   packageDetails.setPackageStatus(true);
+
+                   )){
+               bookingDetails.add(new BookingDetails(
+                       bookingDto.getBookingId(),
+                       data.getPackageId(),
+                       data.getPackageCategory(),
+                       data.getPackageStartDate(),
+                       data.getPackageEndDate(),
+                       data.getPackageValue(),
+                       user.getUserEmail(),
+                       null,
+                       null
+               ));
+
+
+               PackageDetails packageDetails = packageDetailsRepo.findById(data.getPackageId()).get();
+               //   packageDetails.setPackageStatus(true);
+
+           }
+
        });
 
-        Booking booking = new Booking(
+       Booking booking = new Booking(
                 bookingDto.getBookingId(),
                 bookingDto.getBookingDate(),
                 bookingDto.getBookingPrice(),
@@ -110,16 +130,6 @@ public class BookingServiceImpl implements BookingService {
         exportImages(bookingDto, booking);
 
 
-      /* List<BookingDetailsDto> bookingDetailsDto = new ArrayList<>();
-        for (RequestBookingDetailsDto dto1 : dto.getBookingDetailsLis()) {
-            bookingDetailsDto.add(new BookingDetailsDto(bookingDto.getBookingId(), dto1.getPackageId(),dto1.getPackageCategory(), dto1.getPackageStartDate(),dto1.getPackageEndDate(),dto1.getPackageValue(), user.getUsername()));
-            PackageDetails packageDetails = packageDetailsRepo.findById(dto1.getPackageId()).get();
-            packageDetails.setPackageStatus(true);
-            //System.out.println(user.getUsername());
-
-
-        }*/
-      //  List<BookingDetails> bookingDetailss = mapper.map(bookingDetailsDto, new TypeToken<List<BookingDetails>>() {}.getType());
 
         booking.setBookingDetailsLis(bookingDetails);
        bookingRepo.save(booking);
@@ -250,6 +260,35 @@ public class BookingServiceImpl implements BookingService {
         }else {
             throw new EntryNotFoundException("Id not found");
         }
+    }
+
+    @Override
+    public long findAllBookingCount() {
+      return  bookingRepo.findAllBookingCount();
+    }
+
+    @Override
+    public List<ResponseBookingDto> findBookingByUserId(String userId) throws IOException {
+        List<Booking> all = bookingRepo.findBookingByUserId(userId);
+
+
+        List<ResponseBookingDto> list=new ArrayList<>();
+
+        List<ResponseBookingDetailsDto> responseBookingDtos;
+
+        for(Booking b:all){
+
+            responseBookingDtos=   mapper.map(b.getBookingDetailsLis(),new TypeToken<List<ResponseBookingDetailsDto>>(){}.getType());
+
+            list.add(new ResponseBookingDto(
+                    b.getBookingId(),b.getBookingDate(),b.getBookingPrice(),null,b.isBookingStatus()
+                    ,b.getUser().getUserEmail(),responseBookingDtos
+            ));
+        }
+
+        List<ResponseBookingDto> responseBookingDtos1 = importImagesAll(list, all);
+        return responseBookingDtos1;
+
     }
 
 

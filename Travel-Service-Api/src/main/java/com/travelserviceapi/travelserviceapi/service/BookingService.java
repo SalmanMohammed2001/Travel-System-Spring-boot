@@ -4,6 +4,7 @@ import com.travelserviceapi.travelserviceapi.dto.requestDto.RequestBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseUpdateBookingDto;
 import com.travelserviceapi.travelserviceapi.dto.responseDto.ResponseYearlyIncome;
+import com.travelserviceapi.travelserviceapi.entity.Booking;
 import com.travelserviceapi.travelserviceapi.entity.YearlyIncomeEntity;
 
 import java.io.IOException;
@@ -23,6 +24,10 @@ public interface BookingService {
     public ResponseUpdateBookingDto findUpdateId(String id) throws IOException;
 
 
+    public long  findAllBookingCount();
+
+
+    public List<ResponseBookingDto> findBookingByUserId(String userId) throws IOException;
 
 
 }

@@ -20,4 +20,6 @@ public interface VehicleService {
     public List<ResponseVehicleDto> findAllVehicleStatesFalse() throws IOException;
     public List<ResponseVehicleDto> findAllVehicleStatesTrue(String category) throws IOException;
 
+    public long  findAllVehicleCount();
+
 }

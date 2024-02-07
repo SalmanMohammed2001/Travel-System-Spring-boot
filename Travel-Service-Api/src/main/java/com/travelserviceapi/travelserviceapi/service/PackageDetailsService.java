@@ -16,5 +16,7 @@ public interface PackageDetailsService {
     public void delete(String id);
     public List<ResponsePackageDetailsDto> findAll() throws IOException;
 
+    public long  findAllPackageCount();
+
 
 }
